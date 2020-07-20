@@ -8,6 +8,12 @@
 #include <time.h>
 #include "hardwareAPI.h"
 
+void assert_failed(const char * file, uint32_t line)
+{
+	fprintf(stderr, "ERROR: Assert failed in %s at line %d\n", file, line);
+	exit(-1);
+}
+
 struct systemTime_t
 {
 	struct timespec thisTime;
@@ -19,40 +25,41 @@ errno_t initHardware(void)
 	return 0;
 }
 
-void seedPseudoRNG(uint32_t seed)
-{
-	srand((unsigned)seed);
-}
-
-uint32_t getRand(void)
-{
-	return rand();
-}
-
 p_systemTime_t systemTime_create(void)
 {
-	// TODO: Check for null pointer
-	return (p_systemTime_t)calloc(1, sizeof(struct systemTime_t));
+	p_systemTime_t this = calloc(1, sizeof(struct systemTime_t));
+	ASSERT(this != NULL);
+	
+	return this;
 }
 
 errno_t getSystemTime(p_systemTime_t p_thisTime)
 {
-	// TODO: Add null pointer checks
-	clock_gettime(CLOCK_THREAD_CPUTIME_ID, &(p_thisTime->thisTime));
-	return 0;
+	errno_t err = 0;
+
+	ASSERT(p_thisTime != NULL);
+
+	err = clock_gettime(CLOCK_THREAD_CPUTIME_ID, &(p_thisTime->thisTime));
+	
+	return err;
 }
 
-uint32_t elapsedSystemTime_ns(void)
+errno_t elapsedSystemTime_ns(uint32_t * time_ns)
 {
+	errno_t err = 0;
 	struct timespec now;
 
-	clock_gettime(CLOCK_THREAD_CPUTIME_ID, &now);
-	return ( 1000000000 * now.tv_sec + now.tv_nsec );
+	err = clock_gettime(CLOCK_THREAD_CPUTIME_ID, &now);
+	if (err == 0) *time_ns = 1000000000 * now.tv_sec + now.tv_nsec;
+
+	return err;
 }
 
 uint32_t systemTimeDiff_ns(p_systemTime_t p_startTime, p_systemTime_t p_endTime)
 {
-	// TODO: Add null pointer checks
+	ASSERT(p_startTime != NULL);
+	ASSERT(p_endTime != NULL);
+
 	return ( (1000000000 * (p_endTime->thisTime.tv_sec - p_startTime->thisTime.tv_sec)) + p_endTime->thisTime.tv_nsec - p_startTime->thisTime.tv_nsec );
 }
 

@@ -289,11 +289,14 @@ LDSCRIPT := hardware/source/STM32F1/linker-script/STM32F103C8Tx_FLASH.ld
 #                                                                            #
 ##############################################################################
 
-# Compiler/assembler flags common to all builds and targets.
-COMMON_FLAGS := \
+# Compiler/assembler flags common to all builds and targets. COMMON_FLAGS is recursively
+# expanded because it includes the variable for the first prerequisite ($<); the variable
+# __FILENAME__ is defined here in order for it to be used by an implementation of assert.
+COMMON_FLAGS = \
 	-std=c11 \
     -Wall \
     -ffunction-sections -fdata-sections \
+    -D__FILENAME__=\"$(notdir $<)\"
 
 # Check value of BUILD and MAKECMDGOALS to determine which CFLAGS we need
 # to add.

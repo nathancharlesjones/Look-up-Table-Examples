@@ -8,7 +8,8 @@
 
 int main(int argc, char * argv[])
 {
-	// TODO: Check for null pointers
+	errno_t err = 0;
+
 	p_systemTime_t p_start = systemTime_create();
 	p_systemTime_t p_end = systemTime_create();
 	double executionTime_sin_ns = 0;
@@ -20,41 +21,59 @@ int main(int argc, char * argv[])
 	double percentError_sin_LUT_sum = 0;
 	double percentError_sin_LUT_avg;
 
+	// First, check that p_start and p_end were allocated
+	//
+	ASSERT(p_start != NULL);
+	ASSERT(p_end != NULL);
+	
+	// Initialize any hardware dependencies
+	//
 	initHardware();
 
 	// Seed the pseudo-random number generator (PRNG)
-	seedPseudoRNG((unsigned) elapsedSystemTime_ns());
+	//
+	uint32_t time_ns;
+	// TODO: Check for error return value
+	elapsedSystemTime_ns(&time_ns);
+	srand((unsigned) time_ns);
 
 	// Execute library sin with timing
+	//
 	for( int idx = 0; idx < TEST_ITERATIONS; idx++ )
 	{
-		double input = (double) getRand() / (double) MY_RAND_MAX * 2.0 * PI;
+		double input = (double) rand() / (double) RAND_MAX * 2.0 * PI;
+		// TODO: Check for error return value
 		getSystemTime(p_start);
 		double output = sin( input );
+		// TODO: Check for error return value
 		getSystemTime(p_end);
 		executionTime_sin_ns += systemTimeDiff_ns(p_start, p_end);
 	}
 	executionTime_sin_ns_avg = executionTime_sin_ns / TEST_ITERATIONS;
 
 	// Execute sin LUT with timing
+	// 
 	for( int idx = 0; idx < TEST_ITERATIONS; idx++ )
 	{
-		double input = (double) getRand() / (double) MY_RAND_MAX * 360.0;
+		double input = (double) rand() / (double) RAND_MAX * 360.0;
+		// TODO: Check for error return value
 		getSystemTime(p_start);
 		double output = sin_LUT( input );
+		// TODO: Check for error return value
 		getSystemTime(p_end);
 		executionTime_sin_LUT_ns += systemTimeDiff_ns(p_start, p_end);	
 	}
 	executionTime_sin_LUT_ns_avg = executionTime_sin_LUT_ns / TEST_ITERATIONS;
 
 	// Determine average percent error	
+	//
 	for( int idx = 0; idx < TEST_ITERATIONS; idx++ )
 	{
 		double percentError;
 
-		// Compute inputs, in degrees and radians
+		// Compute input, in degrees and radians
 		//
-		double deg = (double) getRand() / (double) MY_RAND_MAX * 360.0;
+		double deg = (double) rand() / (double) RAND_MAX * 360.0;
 		double rad = deg * PI / 180.0;
 
 		// Compute outputs, for sin and sin_LUT

@@ -192,16 +192,6 @@ void assert_failed(uint8_t *file, uint32_t line)
 }
 #endif /* USE_FULL_ASSERT */
 
-void seedPseudoRNG(uint32_t seed)
-{
-    srand((unsigned) SysTick->VAL);
-}
-
-uint32_t getRand(void)
-{
-    return rand();
-}
-
 p_systemTime_t systemTime_create(void)
 {
     return (p_systemTime_t)calloc(1, sizeof(struct systemTime_t));

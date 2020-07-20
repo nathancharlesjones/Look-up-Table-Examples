@@ -96,7 +96,6 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/debug_x86/source/sin_lut.o
  .data          0x0000000000000000        0x0 build/debug_x86/source/sin_lut.o
  .bss           0x0000000000000000        0x0 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000000000      0x808 build/debug_x86/source/sin_lut.o
  .debug_macro   0x0000000000000000       0x22 build/debug_x86/source/sin_lut.o
  .debug_macro   0x0000000000000000       0x10 build/debug_x86/source/sin_lut.o
  .debug_macro   0x0000000000000000      0x10b build/debug_x86/source/sin_lut.o
@@ -184,7 +183,6 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/debug_x86/hardware/source/x86/x86.o
  .data          0x0000000000000000        0x0 build/debug_x86/hardware/source/x86/x86.o
  .bss           0x0000000000000000        0x0 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000000000      0x808 build/debug_x86/hardware/source/x86/x86.o
  .debug_macro   0x0000000000000000       0x22 build/debug_x86/hardware/source/x86/x86.o
  .debug_macro   0x0000000000000000       0x10 build/debug_x86/hardware/source/x86/x86.o
  .debug_macro   0x0000000000000000      0x168 build/debug_x86/hardware/source/x86/x86.o
@@ -282,180 +280,185 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
 .hash
  *(.hash)
 
-.gnu.hash       0x0000000000000298       0x1c
+.gnu.hash       0x0000000000000298       0x24
  *(.gnu.hash)
- .gnu.hash      0x0000000000000298       0x1c /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .gnu.hash      0x0000000000000298       0x24 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
 
-.dynsym         0x00000000000002b8      0x138
+.dynsym         0x00000000000002c0      0x180
  *(.dynsym)
- .dynsym        0x00000000000002b8      0x138 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .dynsym        0x00000000000002c0      0x180 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
 
-.dynstr         0x00000000000003f0       0xe5
+.dynstr         0x0000000000000440       0xff
  *(.dynstr)
- .dynstr        0x00000000000003f0       0xe5 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .dynstr        0x0000000000000440       0xff /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
 
-.gnu.version    0x00000000000004d6       0x1a
+.gnu.version    0x0000000000000540       0x20
  *(.gnu.version)
- .gnu.version   0x00000000000004d6       0x1a /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .gnu.version   0x0000000000000540       0x20 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
 
-.gnu.version_d  0x00000000000004f0        0x0
+.gnu.version_d  0x0000000000000560        0x0
  *(.gnu.version_d)
  .gnu.version_d
-                0x00000000000004f0        0x0 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+                0x0000000000000560        0x0 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
 
-.gnu.version_r  0x00000000000004f0       0x70
+.gnu.version_r  0x0000000000000560       0x70
  *(.gnu.version_r)
  .gnu.version_r
-                0x00000000000004f0       0x70 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+                0x0000000000000560       0x70 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
 
-.rela.dyn       0x0000000000000560       0xc0
+.rela.dyn       0x00000000000005d0       0xd8
  *(.rela.init)
  *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
- .rela.text     0x0000000000000560        0x0 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .rela.text.assert_failed
+                0x00000000000005d0        0x0 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .rela.text     0x00000000000005d0        0x0 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
  *(.rela.fini)
  *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
  *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
  .rela.data.rel.ro
-                0x0000000000000560        0x0 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+                0x00000000000005d0        0x0 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
  .rela.data.rel.local
-                0x0000000000000560       0x18 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+                0x00000000000005d0       0x18 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
  *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
  *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
  *(.rela.ctors)
  *(.rela.dtors)
  *(.rela.got)
- .rela.got      0x0000000000000578       0x78 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .rela.got      0x00000000000005e8       0x78 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
  *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
- .rela.bss      0x00000000000005f0        0x0 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .rela.bss      0x0000000000000660       0x18 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
  *(.rela.ldata .rela.ldata.* .rela.gnu.linkonce.l.*)
  *(.rela.lbss .rela.lbss.* .rela.gnu.linkonce.lb.*)
  *(.rela.lrodata .rela.lrodata.* .rela.gnu.linkonce.lr.*)
  *(.rela.ifunc)
- .rela.ifunc    0x00000000000005f0        0x0 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .rela.ifunc    0x0000000000000678        0x0 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
  .rela.fini_array
-                0x00000000000005f0       0x18 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+                0x0000000000000678       0x18 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
  .rela.init_array
-                0x0000000000000608       0x18 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+                0x0000000000000690       0x18 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
 
-.rela.plt       0x0000000000000620       0xa8
+.rela.plt       0x00000000000006a8       0xd8
  *(.rela.plt)
- .rela.plt      0x0000000000000620       0xa8 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .rela.plt      0x00000000000006a8       0xd8 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
                 [!provide]                        PROVIDE (__rela_iplt_start = .)
  *(.rela.iplt)
                 [!provide]                        PROVIDE (__rela_iplt_end = .)
 
-.init           0x00000000000006c8       0x17
+.init           0x0000000000000780       0x17
  *(SORT_NONE(.init))
- .init          0x00000000000006c8       0x12 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crti.o
-                0x00000000000006c8                _init
- .init          0x00000000000006da        0x5 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
+ .init          0x0000000000000780       0x12 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crti.o
+                0x0000000000000780                _init
+ .init          0x0000000000000792        0x5 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
 
-.plt            0x00000000000006e0       0x80
+.plt            0x00000000000007a0       0xa0
  *(.plt)
- .plt           0x00000000000006e0       0x80 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .plt           0x00000000000007a0       0xa0 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
  *(.iplt)
 
-.plt.got        0x0000000000000760        0x8
+.plt.got        0x0000000000000840        0x8
  *(.plt.got)
- .plt.got       0x0000000000000760        0x8 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .plt.got       0x0000000000000840        0x8 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
 
 .plt.sec
  *(.plt.sec)
 
-.text           0x0000000000000770      0x542
+.text           0x0000000000000850      0x622
  *(.text.unlikely .text.*_unlikely .text.unlikely.*)
  *(.text.exit .text.exit.*)
  *(.text.startup .text.startup.*)
  *(.text.hot .text.hot.*)
  *(.text .stub .text.* .gnu.linkonce.t.*)
- .text          0x0000000000000770       0x2b /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
-                0x0000000000000770                _start
- *fill*         0x000000000000079b        0x5 
- .text          0x00000000000007a0       0xb5 /usr/lib/gcc/x86_64-linux-gnu/8/crtbeginS.o
- .text.main     0x0000000000000855      0x252 build/debug_x86/source/main.o
-                0x0000000000000855                main
- .text.sin_LUT  0x0000000000000aa7       0x32 build/debug_x86/source/sin_lut.o
-                0x0000000000000aa7                sin_LUT
+ .text          0x0000000000000850       0x2b /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+                0x0000000000000850                _start
+ *fill*         0x000000000000087b        0x5 
+ .text          0x0000000000000880       0xb5 /usr/lib/gcc/x86_64-linux-gnu/8/crtbeginS.o
+ .text.main     0x0000000000000935      0x2b2 build/debug_x86/source/main.o
+                0x0000000000000935                main
+ .text.sin_LUT  0x0000000000000be7       0x32 build/debug_x86/source/sin_lut.o
+                0x0000000000000be7                sin_LUT
+ .text.assert_failed
+                0x0000000000000c19       0x31 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000000c19                assert_failed
  .text.initHardware
-                0x0000000000000ad9        0x6 build/debug_x86/hardware/source/x86/x86.o
-                0x0000000000000ad9                initHardware
- .text.seedPseudoRNG
-                0x0000000000000adf        0xe build/debug_x86/hardware/source/x86/x86.o
-                0x0000000000000adf                seedPseudoRNG
- .text.getRand  0x0000000000000aed        0xe build/debug_x86/hardware/source/x86/x86.o
-                0x0000000000000aed                getRand
+                0x0000000000000c4a        0x6 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000000c4a                initHardware
  .text.systemTime_create
-                0x0000000000000afb       0x18 build/debug_x86/hardware/source/x86/x86.o
-                0x0000000000000afb                systemTime_create
+                0x0000000000000c50       0x2e build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000000c50                systemTime_create
  .text.getSystemTime
-                0x0000000000000b13       0x1b build/debug_x86/hardware/source/x86/x86.o
-                0x0000000000000b13                getSystemTime
+                0x0000000000000c7e       0x2c build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000000c7e                getSystemTime
  .text.elapsedSystemTime_ns
-                0x0000000000000b2e       0x43 build/debug_x86/hardware/source/x86/x86.o
-                0x0000000000000b2e                elapsedSystemTime_ns
+                0x0000000000000caa       0x51 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000000caa                elapsedSystemTime_ns
  .text.systemTimeDiff_ns
-                0x0000000000000b71       0x13 build/debug_x86/hardware/source/x86/x86.o
-                0x0000000000000b71                systemTimeDiff_ns
+                0x0000000000000cfb       0x47 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000000cfb                systemTimeDiff_ns
  .text.printResults
-                0x0000000000000b84       0xbb build/debug_x86/hardware/source/x86/x86.o
-                0x0000000000000b84                printResults
- *fill*         0x0000000000000c3f        0x1 
- .text          0x0000000000000c40       0x72 /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
-                0x0000000000000c40                __libc_csu_init
-                0x0000000000000cb0                __libc_csu_fini
+                0x0000000000000d42       0xbb build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000000d42                printResults
+ *fill*         0x0000000000000dfd        0x3 
+ .text          0x0000000000000e00       0x72 /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
+                0x0000000000000e00                __libc_csu_init
+                0x0000000000000e70                __libc_csu_fini
  *(.gnu.warning)
 
-.fini           0x0000000000000cb4        0x9
+.fini           0x0000000000000e74        0x9
  *(SORT_NONE(.fini))
- .fini          0x0000000000000cb4        0x4 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crti.o
-                0x0000000000000cb4                _fini
- .fini          0x0000000000000cb8        0x5 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
+ .fini          0x0000000000000e74        0x4 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crti.o
+                0x0000000000000e74                _fini
+ .fini          0x0000000000000e78        0x5 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
                 [!provide]                        PROVIDE (__etext = .)
                 [!provide]                        PROVIDE (_etext = .)
                 [!provide]                        PROVIDE (etext = .)
 
-.rodata         0x0000000000000cc0      0xc50
+.rodata         0x0000000000000e80      0xc78
  *(.rodata .rodata.* .gnu.linkonce.r.*)
- .rodata.cst8   0x0000000000000cc0       0x38 build/debug_x86/source/main.o
- *fill*         0x0000000000000cf8        0x8 
- .rodata.cst16  0x0000000000000d00       0x10 build/debug_x86/source/main.o
- *fill*         0x0000000000000d10       0x10 
+ .rodata.main.str1.1
+                0x0000000000000e80        0x7 build/debug_x86/source/main.o
+ *fill*         0x0000000000000e87        0x1 
+ .rodata.cst8   0x0000000000000e88       0x38 build/debug_x86/source/main.o
+ .rodata.cst16  0x0000000000000ec0       0x10 build/debug_x86/source/main.o
+ *fill*         0x0000000000000ed0       0x10 
  .rodata.sin_table.3118
-                0x0000000000000d20      0xb40 build/debug_x86/source/sin_lut.o
- .rodata.cst8   0x0000000000001860        0x8 build/debug_x86/source/sin_lut.o
+                0x0000000000000ee0      0xb40 build/debug_x86/source/sin_lut.o
+ .rodata.cst8   0x0000000000001a20        0x8 build/debug_x86/source/sin_lut.o
+ .rodata.assert_failed.str1.8
+                0x0000000000001a28       0x27 build/debug_x86/hardware/source/x86/x86.o
+ .rodata.systemTime_create.str1.1
+                0x0000000000001a4f        0x6 build/debug_x86/hardware/source/x86/x86.o
  .rodata.printResults.str1.1
-                0x0000000000001868       0x5b build/debug_x86/hardware/source/x86/x86.o
- *fill*         0x00000000000018c3        0x5 
+                0x0000000000001a55       0x5b build/debug_x86/hardware/source/x86/x86.o
  .rodata.printResults.str1.8
-                0x00000000000018c8       0x48 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000001ab0       0x48 build/debug_x86/hardware/source/x86/x86.o
                                          0x47 (size before relaxing)
 
 .rodata1
  *(.rodata1)
 
-.eh_frame_hdr   0x0000000000001910       0x84
+.eh_frame_hdr   0x0000000000001af8       0x7c
  *(.eh_frame_hdr)
- .eh_frame_hdr  0x0000000000001910       0x84 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
-                0x0000000000001910                __GNU_EH_FRAME_HDR
+ .eh_frame_hdr  0x0000000000001af8       0x7c /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+                0x0000000000001af8                __GNU_EH_FRAME_HDR
  *(.eh_frame_entry .eh_frame_entry.*)
 
-.eh_frame       0x0000000000001998      0x208
+.eh_frame       0x0000000000001b78      0x1f8
  *(.eh_frame)
- .eh_frame      0x0000000000001998       0x30 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .eh_frame      0x0000000000001b78       0x30 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
                                          0x2c (size before relaxing)
- *fill*         0x00000000000019c8        0x0 
- .eh_frame      0x00000000000019c8       0x40 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
- .eh_frame      0x0000000000001a08       0x18 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ *fill*         0x0000000000001ba8        0x0 
+ .eh_frame      0x0000000000001ba8       0x40 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .eh_frame      0x0000000000001be8       0x18 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
                                          0x30 (size before relaxing)
- .eh_frame      0x0000000000001a20       0x38 build/debug_x86/source/main.o
+ .eh_frame      0x0000000000001c00       0x38 build/debug_x86/source/main.o
                                          0x50 (size before relaxing)
- .eh_frame      0x0000000000001a58       0x18 build/debug_x86/source/sin_lut.o
+ .eh_frame      0x0000000000001c38       0x18 build/debug_x86/source/sin_lut.o
                                          0x30 (size before relaxing)
- .eh_frame      0x0000000000001a70       0xd0 build/debug_x86/hardware/source/x86/x86.o
-                                         0xe8 (size before relaxing)
- .eh_frame      0x0000000000001b40       0x5c /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
+ .eh_frame      0x0000000000001c50       0xc0 build/debug_x86/hardware/source/x86/x86.o
+                                         0xd8 (size before relaxing)
+ .eh_frame      0x0000000000001d10       0x5c /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
                                          0x78 (size before relaxing)
- .eh_frame      0x0000000000001b9c        0x4 /usr/lib/gcc/x86_64-linux-gnu/8/crtendS.o
+ .eh_frame      0x0000000000001d6c        0x4 /usr/lib/gcc/x86_64-linux-gnu/8/crtendS.o
  *(.eh_frame.*)
 
 .gcc_except_table
@@ -466,7 +469,7 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
 
 .exception_ranges
  *(.exception_ranges .exception_ranges*)
-                0x0000000000201d78                . = DATA_SEGMENT_ALIGN (CONSTANT (MAXPAGESIZE), CONSTANT (COMMONPAGESIZE))
+                0x0000000000202d68                . = DATA_SEGMENT_ALIGN (CONSTANT (MAXPAGESIZE), CONSTANT (COMMONPAGESIZE))
 
 .eh_frame
  *(.eh_frame)
@@ -488,23 +491,23 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
  *(.tbss .tbss.* .gnu.linkonce.tb.*)
  *(.tcommon)
 
-.preinit_array  0x0000000000201d78        0x0
+.preinit_array  0x0000000000202d68        0x0
                 [!provide]                        PROVIDE (__preinit_array_start = .)
  *(.preinit_array)
                 [!provide]                        PROVIDE (__preinit_array_end = .)
 
-.init_array     0x0000000000201d78        0x8
-                0x0000000000201d78                PROVIDE (__init_array_start = .)
+.init_array     0x0000000000202d68        0x8
+                0x0000000000202d68                PROVIDE (__init_array_start = .)
  *(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*))
  *(.init_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .ctors)
- .init_array    0x0000000000201d78        0x8 /usr/lib/gcc/x86_64-linux-gnu/8/crtbeginS.o
-                0x0000000000201d80                PROVIDE (__init_array_end = .)
+ .init_array    0x0000000000202d68        0x8 /usr/lib/gcc/x86_64-linux-gnu/8/crtbeginS.o
+                0x0000000000202d70                PROVIDE (__init_array_end = .)
 
-.fini_array     0x0000000000201d80        0x8
+.fini_array     0x0000000000202d70        0x8
                 [!provide]                        PROVIDE (__fini_array_start = .)
  *(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*))
  *(.fini_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .dtors)
- .fini_array    0x0000000000201d80        0x8 /usr/lib/gcc/x86_64-linux-gnu/8/crtbeginS.o
+ .fini_array    0x0000000000202d70        0x8 /usr/lib/gcc/x86_64-linux-gnu/8/crtbeginS.o
                 [!provide]                        PROVIDE (__fini_array_end = .)
 
 .ctors
@@ -524,72 +527,73 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
 .jcr
  *(.jcr)
 
-.data.rel.ro    0x0000000000201d88        0x0
+.data.rel.ro    0x0000000000202d78        0x0
  *(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*)
  *(.data.rel.ro .data.rel.ro.* .gnu.linkonce.d.rel.ro.*)
- .data.rel.ro   0x0000000000201d88        0x0 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .data.rel.ro   0x0000000000202d78        0x0 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
 
-.dynamic        0x0000000000201d88      0x200
+.dynamic        0x0000000000202d78      0x200
  *(.dynamic)
- .dynamic       0x0000000000201d88      0x200 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
-                0x0000000000201d88                _DYNAMIC
+ .dynamic       0x0000000000202d78      0x200 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+                0x0000000000202d78                _DYNAMIC
 
-.got            0x0000000000201f88       0x78
+.got            0x0000000000202f78       0x88
  *(.got.plt)
- .got.plt       0x0000000000201f88       0x50 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
-                0x0000000000201f88                _GLOBAL_OFFSET_TABLE_
+ .got.plt       0x0000000000202f78       0x60 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+                0x0000000000202f78                _GLOBAL_OFFSET_TABLE_
  *(.igot.plt)
  *(.got)
- .got           0x0000000000201fd8       0x28 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .got           0x0000000000202fd8       0x28 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
  *(.igot)
-                0x0000000000202000                . = DATA_SEGMENT_RELRO_END (., 0x0)
+                0x0000000000203000                . = DATA_SEGMENT_RELRO_END (., 0x0)
 
-.data           0x0000000000202000        0x8
+.data           0x0000000000203000        0x8
  *(.data .data.* .gnu.linkonce.d.*)
  .data.rel.local
-                0x0000000000202000        0x8 /usr/lib/gcc/x86_64-linux-gnu/8/crtbeginS.o
-                0x0000000000202000                __dso_handle
+                0x0000000000203000        0x8 /usr/lib/gcc/x86_64-linux-gnu/8/crtbeginS.o
+                0x0000000000203000                __dso_handle
 
 .tm_clone_table
-                0x0000000000202008        0x0
+                0x0000000000203008        0x0
  .tm_clone_table
-                0x0000000000202008        0x0 /usr/lib/gcc/x86_64-linux-gnu/8/crtbeginS.o
+                0x0000000000203008        0x0 /usr/lib/gcc/x86_64-linux-gnu/8/crtbeginS.o
  .tm_clone_table
-                0x0000000000202008        0x0 /usr/lib/gcc/x86_64-linux-gnu/8/crtendS.o
+                0x0000000000203008        0x0 /usr/lib/gcc/x86_64-linux-gnu/8/crtendS.o
 
 .data1
  *(.data1)
-                0x0000000000202008                _edata = .
+                0x0000000000203008                _edata = .
                 [!provide]                        PROVIDE (edata = .)
-                0x0000000000202008                . = .
-                0x0000000000202008                __bss_start = .
+                0x0000000000203008                . = .
+                0x0000000000203008                __bss_start = .
 
-.bss            0x0000000000202008        0x8
+.bss            0x0000000000203020       0x10
  *(.dynbss)
- .dynbss        0x0000000000202008        0x0 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .dynbss        0x0000000000203020        0x8 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+                0x0000000000203020                stderr@@GLIBC_2.2.5
  *(.bss .bss.* .gnu.linkonce.b.*)
- .bss           0x0000000000202008        0x1 /usr/lib/gcc/x86_64-linux-gnu/8/crtbeginS.o
+ .bss           0x0000000000203028        0x1 /usr/lib/gcc/x86_64-linux-gnu/8/crtbeginS.o
  *(COMMON)
-                0x0000000000202010                . = ALIGN ((. != 0x0)?0x8:0x1)
- *fill*         0x0000000000202009        0x7 
+                0x0000000000203030                . = ALIGN ((. != 0x0)?0x8:0x1)
+ *fill*         0x0000000000203029        0x7 
 
 .lbss
  *(.dynlbss)
  *(.lbss .lbss.* .gnu.linkonce.lb.*)
  *(LARGE_COMMON)
-                0x0000000000202010                . = ALIGN (0x8)
-                0x0000000000202010                . = SEGMENT_START ("ldata-segment", .)
+                0x0000000000203030                . = ALIGN (0x8)
+                0x0000000000203030                . = SEGMENT_START ("ldata-segment", .)
 
 .lrodata
  *(.lrodata .lrodata.* .gnu.linkonce.lr.*)
 
-.ldata          0x0000000000602010        0x0
+.ldata          0x0000000000603030        0x0
  *(.ldata .ldata.* .gnu.linkonce.l.*)
-                0x0000000000602010                . = ALIGN ((. != 0x0)?0x8:0x1)
-                0x0000000000602010                . = ALIGN (0x8)
-                0x0000000000602010                _end = .
+                0x0000000000603030                . = ALIGN ((. != 0x0)?0x8:0x1)
+                0x0000000000603030                . = ALIGN (0x8)
+                0x0000000000603030                _end = .
                 [!provide]                        PROVIDE (end = .)
-                0x0000000000602010                . = DATA_SEGMENT_END (.)
+                0x0000000000603030                . = DATA_SEGMENT_END (.)
 
 .stab
  *(.stab)
@@ -630,53 +634,53 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x0000000000000000      0x100
+.debug_aranges  0x0000000000000000       0xf0
  *(.debug_aranges)
  .debug_aranges
                 0x0000000000000000       0x30 build/debug_x86/source/main.o
  .debug_aranges
                 0x0000000000000030       0x30 build/debug_x86/source/sin_lut.o
  .debug_aranges
-                0x0000000000000060       0xa0 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000000060       0x90 build/debug_x86/hardware/source/x86/x86.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x113c
+.debug_info     0x0000000000000000     0x1374
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x0000000000000000      0x51e build/debug_x86/source/main.o
- .debug_info    0x000000000000051e      0x380 build/debug_x86/source/sin_lut.o
- .debug_info    0x000000000000089e      0x89e build/debug_x86/hardware/source/x86/x86.o
+ .debug_info    0x0000000000000000      0x5db build/debug_x86/source/main.o
+ .debug_info    0x00000000000005db      0x380 build/debug_x86/source/sin_lut.o
+ .debug_info    0x000000000000095b      0xa19 build/debug_x86/hardware/source/x86/x86.o
 
-.debug_abbrev   0x0000000000000000      0x48e
+.debug_abbrev   0x0000000000000000      0x4ee
  *(.debug_abbrev)
- .debug_abbrev  0x0000000000000000      0x125 build/debug_x86/source/main.o
- .debug_abbrev  0x0000000000000125      0x134 build/debug_x86/source/sin_lut.o
- .debug_abbrev  0x0000000000000259      0x235 build/debug_x86/hardware/source/x86/x86.o
+ .debug_abbrev  0x0000000000000000      0x167 build/debug_x86/source/main.o
+ .debug_abbrev  0x0000000000000167      0x134 build/debug_x86/source/sin_lut.o
+ .debug_abbrev  0x000000000000029b      0x253 build/debug_x86/hardware/source/x86/x86.o
 
-.debug_line     0x0000000000000000      0xee6
+.debug_line     0x0000000000000000      0xff1
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x0000000000000000      0x533 build/debug_x86/source/main.o
- .debug_line    0x0000000000000533      0x35e build/debug_x86/source/sin_lut.o
- .debug_line    0x0000000000000891      0x655 build/debug_x86/hardware/source/x86/x86.o
+ .debug_line    0x0000000000000000      0x57e build/debug_x86/source/main.o
+ .debug_line    0x000000000000057e      0x35e build/debug_x86/source/sin_lut.o
+ .debug_line    0x00000000000008dc      0x715 build/debug_x86/hardware/source/x86/x86.o
 
 .debug_frame
  *(.debug_frame)
 
-.debug_str      0x0000000000000000     0x9889
+.debug_str      0x0000000000000000     0x992e
  *(.debug_str)
- .debug_str     0x0000000000000000     0x5d98 build/debug_x86/source/main.o
-                                       0x5f0b (size before relaxing)
- .debug_str     0x0000000000005d98      0xd57 build/debug_x86/source/sin_lut.o
-                                       0x611f (size before relaxing)
- .debug_str     0x0000000000006aef     0x2d9a build/debug_x86/hardware/source/x86/x86.o
-                                       0x8987 (size before relaxing)
+ .debug_str     0x0000000000000000     0x5e17 build/debug_x86/source/main.o
+                                       0x5f98 (size before relaxing)
+ .debug_str     0x0000000000005e17      0xd70 build/debug_x86/source/sin_lut.o
+                                       0x6138 (size before relaxing)
+ .debug_str     0x0000000000006b87     0x2da7 build/debug_x86/hardware/source/x86/x86.o
+                                       0x8a03 (size before relaxing)
 
-.debug_loc      0x0000000000000000      0xa0f
+.debug_loc      0x0000000000000000      0xd9b
  *(.debug_loc)
- .debug_loc     0x0000000000000000      0x6e2 build/debug_x86/source/main.o
- .debug_loc     0x00000000000006e2       0x64 build/debug_x86/source/sin_lut.o
- .debug_loc     0x0000000000000746      0x2c9 build/debug_x86/hardware/source/x86/x86.o
+ .debug_loc     0x0000000000000000      0x7c0 build/debug_x86/source/main.o
+ .debug_loc     0x00000000000007c0       0x64 build/debug_x86/source/sin_lut.o
+ .debug_loc     0x0000000000000824      0x577 build/debug_x86/hardware/source/x86/x86.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -696,96 +700,98 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x0000000000000000      0x190
+.debug_ranges   0x0000000000000000      0x180
  *(.debug_ranges)
  .debug_ranges  0x0000000000000000       0xe0 build/debug_x86/source/main.o
  .debug_ranges  0x00000000000000e0       0x20 build/debug_x86/source/sin_lut.o
- .debug_ranges  0x0000000000000100       0x90 build/debug_x86/hardware/source/x86/x86.o
+ .debug_ranges  0x0000000000000100       0x80 build/debug_x86/hardware/source/x86/x86.o
 
-.debug_macro    0x0000000000000000     0x2d5d
+.debug_macro    0x0000000000000000     0x3d7f
  *(.debug_macro)
  .debug_macro   0x0000000000000000      0x1d3 build/debug_x86/source/main.o
- .debug_macro   0x00000000000001d3      0x808 build/debug_x86/source/main.o
- .debug_macro   0x00000000000009db       0x22 build/debug_x86/source/main.o
- .debug_macro   0x00000000000009fd       0x10 build/debug_x86/source/main.o
- .debug_macro   0x0000000000000a0d      0x10b build/debug_x86/source/main.o
- .debug_macro   0x0000000000000b18      0x168 build/debug_x86/source/main.o
- .debug_macro   0x0000000000000c80       0x16 build/debug_x86/source/main.o
- .debug_macro   0x0000000000000c96       0x4a build/debug_x86/source/main.o
- .debug_macro   0x0000000000000ce0       0x58 build/debug_x86/source/main.o
- .debug_macro   0x0000000000000d38       0x34 build/debug_x86/source/main.o
- .debug_macro   0x0000000000000d6c       0x5e build/debug_x86/source/main.o
- .debug_macro   0x0000000000000dca       0xee build/debug_x86/source/main.o
- .debug_macro   0x0000000000000eb8      0x172 build/debug_x86/source/main.o
- .debug_macro   0x000000000000102a       0x2e build/debug_x86/source/main.o
- .debug_macro   0x0000000000001058       0x80 build/debug_x86/source/main.o
- .debug_macro   0x00000000000010d8       0x22 build/debug_x86/source/main.o
- .debug_macro   0x00000000000010fa       0x10 build/debug_x86/source/main.o
- .debug_macro   0x000000000000110a       0x12 build/debug_x86/source/main.o
- .debug_macro   0x000000000000111c       0x58 build/debug_x86/source/main.o
- .debug_macro   0x0000000000001174       0x3c build/debug_x86/source/main.o
- .debug_macro   0x00000000000011b0       0x43 build/debug_x86/source/main.o
- .debug_macro   0x00000000000011f3       0xac build/debug_x86/source/main.o
- .debug_macro   0x000000000000129f      0x14d build/debug_x86/source/main.o
- .debug_macro   0x00000000000013ec       0x3a build/debug_x86/source/main.o
- .debug_macro   0x0000000000001426       0x16 build/debug_x86/source/main.o
- .debug_macro   0x000000000000143c      0x10e build/debug_x86/source/main.o
- .debug_macro   0x000000000000154a       0x35 build/debug_x86/source/main.o
- .debug_macro   0x000000000000157f       0x10 build/debug_x86/source/main.o
- .debug_macro   0x000000000000158f       0x16 build/debug_x86/source/main.o
- .debug_macro   0x00000000000015a5      0x1bf build/debug_x86/source/main.o
- .debug_macro   0x0000000000001764      0x1d5 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000001939       0x10 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000001949       0x10 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000001959       0x97 build/debug_x86/source/sin_lut.o
- .debug_macro   0x00000000000019f0       0x16 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000001a06       0x20 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000001a26       0x28 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000001a4e       0x58 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000001aa6       0x10 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000001ab6      0x1cc build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000001c82       0x2e build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000001cb0       0x28 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000001cd8       0x27 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000001cff       0x11 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000001d10      0x3ae build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x00000000000020be      0x293 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002351       0x34 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002385       0x58 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x00000000000023dd       0x34 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002411       0x1f build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002430       0x3a build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x000000000000246a      0x2a6 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002710       0x97 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x00000000000027a7       0x52 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x00000000000027f9       0x4c build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002845       0x2e build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002873       0x28 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x000000000000289b       0x52 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x00000000000028ed       0x19 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002906       0x12 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002918       0x12 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x000000000000292a       0x1c build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002946       0x28 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x000000000000296e       0x10 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x000000000000297e       0x4c build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x00000000000029ca       0x22 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x00000000000029ec       0x10 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x00000000000029fc       0x46 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002a42       0x10 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002a52       0x1c build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002a6e       0x2e build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002a9c       0x5e build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002afa       0x27 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002b21       0x76 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002b97       0x17 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002bae       0x10 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002bbe       0x10 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002bce       0x16 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002be4       0x58 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002c3c      0x100 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002d3c       0x11 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002d4d       0x10 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000001d3      0x80e build/debug_x86/source/main.o
+ .debug_macro   0x00000000000009e1       0x22 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000a03       0x10 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000a13      0x10b build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000b1e      0x168 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000c86       0x16 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000c9c       0x4a build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000ce6       0x58 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000d3e       0x34 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000d72       0x5e build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000dd0       0xee build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000ebe      0x172 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000001030       0x2e build/debug_x86/source/main.o
+ .debug_macro   0x000000000000105e       0x80 build/debug_x86/source/main.o
+ .debug_macro   0x00000000000010de       0x22 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000001100       0x10 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000001110       0x12 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000001122       0x58 build/debug_x86/source/main.o
+ .debug_macro   0x000000000000117a       0x3c build/debug_x86/source/main.o
+ .debug_macro   0x00000000000011b6       0x43 build/debug_x86/source/main.o
+ .debug_macro   0x00000000000011f9       0xac build/debug_x86/source/main.o
+ .debug_macro   0x00000000000012a5      0x14d build/debug_x86/source/main.o
+ .debug_macro   0x00000000000013f2       0x3a build/debug_x86/source/main.o
+ .debug_macro   0x000000000000142c       0x16 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000001442      0x10e build/debug_x86/source/main.o
+ .debug_macro   0x0000000000001550       0x35 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000001585       0x10 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000001595       0x16 build/debug_x86/source/main.o
+ .debug_macro   0x00000000000015ab      0x1bf build/debug_x86/source/main.o
+ .debug_macro   0x000000000000176a      0x1d5 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x000000000000193f      0x80e build/debug_x86/source/sin_lut.o
+ .debug_macro   0x000000000000214d       0x10 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x000000000000215d       0x10 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x000000000000216d       0x97 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x0000000000002204       0x16 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x000000000000221a       0x20 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x000000000000223a       0x28 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x0000000000002262       0x58 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x00000000000022ba       0x10 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x00000000000022ca      0x1cc build/debug_x86/source/sin_lut.o
+ .debug_macro   0x0000000000002496       0x2e build/debug_x86/source/sin_lut.o
+ .debug_macro   0x00000000000024c4       0x28 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x00000000000024ec       0x27 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x0000000000002513       0x11 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x0000000000002524      0x3ae build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000028d2      0x80e build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000030e0      0x293 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003373       0x34 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000033a7       0x58 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000033ff       0x34 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003433       0x1f build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003452       0x3a build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x000000000000348c      0x2a6 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003732       0x97 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000037c9       0x52 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x000000000000381b       0x4c build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003867       0x2e build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003895       0x28 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000038bd       0x52 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x000000000000390f       0x19 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003928       0x12 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x000000000000393a       0x12 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x000000000000394c       0x1c build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003968       0x28 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003990       0x10 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000039a0       0x4c build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000039ec       0x22 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003a0e       0x10 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003a1e       0x46 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003a64       0x10 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003a74       0x1c build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003a90       0x2e build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003abe       0x5e build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003b1c       0x27 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003b43       0x76 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003bb9       0x17 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003bd0       0x10 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003be0       0x10 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003bf0       0x16 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003c06       0x58 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003c5e      0x100 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003d5e       0x11 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003d6f       0x10 build/debug_x86/hardware/source/x86/x86.o
 
 .debug_addr
  *(.debug_addr)
@@ -1153,6 +1159,8 @@ asinl@GLIBC_2.2.5                                 /lib/x86_64-linux-gnu/libm.so.
 asprintf                                          /lib/x86_64-linux-gnu/libc.so.6
 asprintf@@GLIBC_2.2.5                             /lib/x86_64-linux-gnu/libc.so.6
 asprintf@GLIBC_2.2.5                              /lib/x86_64-linux-gnu/libc.so.6
+assert_failed                                     build/debug_x86/hardware/source/x86/x86.o
+                                                  build/debug_x86/source/main.o
 atan                                              /lib/x86_64-linux-gnu/libm.so.6
 atan2                                             /lib/x86_64-linux-gnu/libm.so.6
 atan2@@GLIBC_2.2.5                                /lib/x86_64-linux-gnu/libm.so.6
@@ -2739,8 +2747,6 @@ gammaf@GLIBC_2.2.5                                /lib/x86_64-linux-gnu/libm.so.
 gammal                                            /lib/x86_64-linux-gnu/libm.so.6
 gammal@@GLIBC_2.2.5                               /lib/x86_64-linux-gnu/libm.so.6
 gammal@GLIBC_2.2.5                                /lib/x86_64-linux-gnu/libm.so.6
-getRand                                           build/debug_x86/hardware/source/x86/x86.o
-                                                  build/debug_x86/source/main.o
 getSystemTime                                     build/debug_x86/hardware/source/x86/x86.o
                                                   build/debug_x86/source/main.o
 get_avphys_pages                                  /lib/x86_64-linux-gnu/libc.so.6
@@ -4358,8 +4364,6 @@ secure_getenv@GLIBC_2.17                          /lib/x86_64-linux-gnu/libc.so.
 seed48_r                                          /lib/x86_64-linux-gnu/libc.so.6
 seed48_r@@GLIBC_2.2.5                             /lib/x86_64-linux-gnu/libc.so.6
 seed48_r@GLIBC_2.2.5                              /lib/x86_64-linux-gnu/libc.so.6
-seedPseudoRNG                                     build/debug_x86/hardware/source/x86/x86.o
-                                                  build/debug_x86/source/main.o
 select                                            /lib/x86_64-linux-gnu/libc.so.6
 select@@GLIBC_2.2.5                               /lib/x86_64-linux-gnu/libc.so.6
 select@GLIBC_2.2.5                                /lib/x86_64-linux-gnu/libc.so.6
@@ -4673,7 +4677,7 @@ sqrtl                                             /lib/x86_64-linux-gnu/libm.so.
 sqrtl@@GLIBC_2.2.5                                /lib/x86_64-linux-gnu/libm.so.6
 sqrtl@GLIBC_2.2.5                                 /lib/x86_64-linux-gnu/libm.so.6
 srand                                             /lib/x86_64-linux-gnu/libc.so.6
-                                                  build/debug_x86/hardware/source/x86/x86.o
+                                                  build/debug_x86/source/main.o
 srand48_r                                         /lib/x86_64-linux-gnu/libc.so.6
 srand48_r@@GLIBC_2.2.5                            /lib/x86_64-linux-gnu/libc.so.6
 srand48_r@GLIBC_2.2.5                             /lib/x86_64-linux-gnu/libc.so.6
@@ -4700,6 +4704,11 @@ statvfs64@@GLIBC_2.2.5                            /lib/x86_64-linux-gnu/libc.so.
 statvfs64@GLIBC_2.2.5                             /lib/x86_64-linux-gnu/libc.so.6
 statvfs@@GLIBC_2.2.5                              /lib/x86_64-linux-gnu/libc.so.6
 statvfs@GLIBC_2.2.5                               /lib/x86_64-linux-gnu/libc.so.6
+stderr                                            /lib/x86_64-linux-gnu/libc.so.6
+                                                  build/debug_x86/hardware/source/x86/x86.o
+stderr@@GLIBC_2.2.5                               /lib/x86_64-linux-gnu/libc.so.6
+stderr@GLIBC_2.2.5                                /lib/x86_64-linux-gnu/libc.so.6
+                                                  /lib/x86_64-linux-gnu/libm.so.6
 step@GLIBC_2.2.5                                  /lib/x86_64-linux-gnu/libc.so.6
 stpcpy                                            /lib/x86_64-linux-gnu/libc.so.6
 stpcpy@@GLIBC_2.2.5                               /lib/x86_64-linux-gnu/libc.so.6
