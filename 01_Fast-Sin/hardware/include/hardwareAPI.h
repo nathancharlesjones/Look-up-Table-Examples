@@ -19,6 +19,7 @@ uint32_t elapsedSystemTime_ns(void);
 uint32_t systemTimeDiff_ns(p_systemTime_t p_startTime, p_systemTime_t p_endTime);
 
 void printResults(uint32_t iterations, float executionTime_sin_ns_avg, 
-	float executionTime_sin_LUT_ns_avg, float percentError_sin_LUT_avg);
+	float executionTime_sin_LUT_ns_avg, float absoluteError_sin_LUT_avg,
+	float percentError_sin_LUT_avg);
 
 #endif // HARDWARE_H

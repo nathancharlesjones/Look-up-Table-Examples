@@ -15,6 +15,8 @@ int main(int argc, char * argv[])
 	double executionTime_sin_ns_avg;
 	double executionTime_sin_LUT_ns = 0;
 	double executionTime_sin_LUT_ns_avg;
+	double absoluteError_sin_LUT_sum = 0;
+	double absoluteError_sin_LUT_avg;
 	double percentError_sin_LUT_sum = 0;
 	double percentError_sin_LUT_avg;
 
@@ -48,17 +50,34 @@ int main(int argc, char * argv[])
 	// Determine average percent error	
 	for( int idx = 0; idx < TEST_ITERATIONS; idx++ )
 	{
+		double percentError;
+
+		// Compute inputs, in degrees and radians
+		//
 		double deg = (double) getRand() / (double) MY_RAND_MAX * 360.0;
 		double rad = deg * PI / 180.0;
+
+		// Compute outputs, for sin and sin_LUT
+		//
 		double output_sin = sin( rad );
 		double output_sin_LUT = sin_LUT( deg );
-		// TODO: Test for output_sin == 0
-		double percentError = fabs( output_sin - output_sin_LUT ) / fabs(output_sin) * 100.0;
+		
+		// Compute absolute error
+		//
+		double absoluteError = fabs( output_sin - output_sin_LUT );
+		absoluteError_sin_LUT_sum += absoluteError;
+
+		// Compute percent error. Make sure the divisor, the expected value, is not 0
+		//
+		double expected = fabs(output_sin);
+		if ( expected != 0 ) percentError = absoluteError / expected * 100.0;
+		else percentError = 100.0;
 		percentError_sin_LUT_sum += percentError;
 	}
+	absoluteError_sin_LUT_avg = absoluteError_sin_LUT_sum / TEST_ITERATIONS;
 	percentError_sin_LUT_avg = percentError_sin_LUT_sum / TEST_ITERATIONS;
 	
-	printResults(TEST_ITERATIONS, executionTime_sin_ns_avg, executionTime_sin_LUT_ns_avg, percentError_sin_LUT_avg);
+	printResults(TEST_ITERATIONS, executionTime_sin_ns_avg, executionTime_sin_LUT_ns_avg, absoluteError_sin_LUT_avg, percentError_sin_LUT_avg);
 
 	return EXIT_SUCCESS;
 }
