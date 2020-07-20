@@ -21,20 +21,20 @@ int main(int argc, char * argv[])
 	double percentError_sin_LUT_sum = 0;
 	double percentError_sin_LUT_avg;
 
-	// First, check that p_start and p_end were allocated
+	// Check that p_start and p_end were allocated
 	//
 	ASSERT(p_start != NULL);
 	ASSERT(p_end != NULL);
 	
-	// Initialize any hardware dependencies
+	// Initialize the underlying hardware (if necessary)
 	//
 	initHardware();
 
-	// Seed the pseudo-random number generator (PRNG)
+	// Seed the pseudo-random number generator
 	//
 	uint32_t time_ns;
-	// TODO: Check for error return value
-	elapsedSystemTime_ns(&time_ns);
+	err = elapsedSystemTime_ns(&time_ns);
+	ASSERT( err == 0 );
 	srand((unsigned) time_ns);
 
 	// Execute library sin with timing
@@ -42,11 +42,11 @@ int main(int argc, char * argv[])
 	for( int idx = 0; idx < TEST_ITERATIONS; idx++ )
 	{
 		double input = (double) rand() / (double) RAND_MAX * 2.0 * PI;
-		// TODO: Check for error return value
-		getSystemTime(p_start);
+		err = getSystemTime(p_start);
+		ASSERT( err == 0 );
 		double output = sin( input );
-		// TODO: Check for error return value
-		getSystemTime(p_end);
+		err = getSystemTime(p_end);
+		ASSERT( err == 0 );
 		executionTime_sin_ns += systemTimeDiff_ns(p_start, p_end);
 	}
 	executionTime_sin_ns_avg = executionTime_sin_ns / TEST_ITERATIONS;
@@ -56,11 +56,11 @@ int main(int argc, char * argv[])
 	for( int idx = 0; idx < TEST_ITERATIONS; idx++ )
 	{
 		double input = (double) rand() / (double) RAND_MAX * 360.0;
-		// TODO: Check for error return value
-		getSystemTime(p_start);
+		err = getSystemTime(p_start);
+		ASSERT( err == 0 );
 		double output = sin_LUT( input );
-		// TODO: Check for error return value
-		getSystemTime(p_end);
+		err = getSystemTime(p_end);
+		ASSERT( err == 0 );
 		executionTime_sin_LUT_ns += systemTimeDiff_ns(p_start, p_end);	
 	}
 	executionTime_sin_LUT_ns_avg = executionTime_sin_LUT_ns / TEST_ITERATIONS;

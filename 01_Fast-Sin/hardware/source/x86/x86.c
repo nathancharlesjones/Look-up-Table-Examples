@@ -49,6 +49,8 @@ errno_t elapsedSystemTime_ns(uint32_t * time_ns)
 	errno_t err = 0;
 	struct timespec now;
 
+	ASSERT( time_ns != NULL );
+
 	err = clock_gettime(CLOCK_THREAD_CPUTIME_ID, &now);
 	if (err == 0) *time_ns = 1000000000 * now.tv_sec + now.tv_nsec;
 
@@ -60,7 +62,13 @@ uint32_t systemTimeDiff_ns(p_systemTime_t p_startTime, p_systemTime_t p_endTime)
 	ASSERT(p_startTime != NULL);
 	ASSERT(p_endTime != NULL);
 
-	return ( (1000000000 * (p_endTime->thisTime.tv_sec - p_startTime->thisTime.tv_sec)) + p_endTime->thisTime.tv_nsec - p_startTime->thisTime.tv_nsec );
+	// NOTE: No checks are made for overflow, meaning the results of this function are undefined
+	// if the difference in nanoseconds between p_startTime and p_endTime is greater than UINT32_MAX
+	// (i.e. greater than 4,294,967,295, or 4.294967295 seconds).
+	uint32_t diff_sec = p_endTime->thisTime.tv_sec - p_startTime->thisTime.tv_sec;
+	uint32_t diff_ns = p_endTime->thisTime.tv_nsec - p_startTime->thisTime.tv_nsec;
+	
+	return ( ( 1000000000 * diff_sec ) + diff_ns );
 }
 
 void printResults(uint32_t iterations, float executionTime_sin_ns_avg, float executionTime_sin_LUT_ns_avg, float absoluteError_sin_LUT_avg, float percentError_sin_LUT_avg)

@@ -71,7 +71,7 @@ static void MX_GPIO_Init(void);
 errno_t initHardware(void)
 {
   /* USER CODE BEGIN 1 */
-
+  
   /* USER CODE END 1 */
   
 
@@ -192,6 +192,21 @@ void assert_failed(uint8_t *file, uint32_t line)
 }
 #endif /* USE_FULL_ASSERT */
 
+void assert_failed(const char * file, uint32_t line)
+{
+    // Turn on the on-board LED to indicate a failed assert
+    // TODO: Check that "RESET" turns it on
+    //
+    HAL_GPIO_WritePin(LED_BUILTIN_GPIO_Port, LED_BUILTIN_Pin, GPIO_PIN_RESET);
+    
+    // Enter infinite loop; halt the processor if a debugger is attached
+    //
+    while(1)
+    {
+        HALT_IF_DEBUGGING();
+    }
+}
+
 p_systemTime_t systemTime_create(void)
 {
     return (p_systemTime_t)calloc(1, sizeof(struct systemTime_t));
@@ -199,21 +214,43 @@ p_systemTime_t systemTime_create(void)
 
 errno_t getSystemTime(p_systemTime_t p_thisTime)
 {
-    // TODO: Check for null pointers
+    ASSERT(p_thisTime != NULL);
+
+    // START CRITICAL SECTION
+    //
     p_thisTime->ms = HAL_GetTick();
-    p_thisTime->ns = ( ( SysTick->LOAD - SysTick->VAL ) / SystemCoreClock * 1000000000 );
+    p_thisTime->ns = SysTick->VAL;
+    //
+    // END CRITICAL SECTION
+
+    p_thisTime->ns = ( ( SysTick->LOAD - p_thisTime->ns ) / SystemCoreClock * 1000000000 );
 
     return 0;
 }
 
-uint32_t elapsedSystemTime_ns(void)
+errno_t elapsedSystemTime_ns(uint32_t * time_ns)
 {
-    return ( ( 1000000 * HAL_GetTick() ) + ( SysTick->LOAD - SysTick->VAL ) );
+    errno_t err = 0;
+    uint32_t ms;
+    uint32_t ns;
+
+    ASSERT( time_ns != NULL );
+
+    // START CRITICAL SECTION
+    //
+    ms = HAL_GetTick();
+    ns = SysTick->VAL;
+    //
+    // END CRITICAL SECTION
+
+    return ( ( 1000000 * ms ) + ( SysTick->LOAD - ns ) );
 }
 
 uint32_t systemTimeDiff_ns(p_systemTime_t p_startTime, p_systemTime_t p_endTime)
 {
-    // TODO: Check for null pointers
+    ASSERT(p_startTime != NULL);
+    ASSERT(p_endTime != NULL);
+
     return ( 1000000 * ( p_endTime->ms - p_startTime->ms ) + ( p_endTime->ns - p_startTime->ns ) );
 }
 

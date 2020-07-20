@@ -12,8 +12,8 @@ void assert_failed(const char * file, uint32_t line);
 		}											\
 	} while (0)
 
-typedef int errno_t;
-typedef struct systemTime_t * p_systemTime_t;
+typedef int 					errno_t;
+typedef struct systemTime_t * 	p_systemTime_t;
 
 errno_t initHardware(void);
 

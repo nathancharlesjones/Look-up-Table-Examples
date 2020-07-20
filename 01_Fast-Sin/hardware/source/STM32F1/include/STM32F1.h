@@ -62,6 +62,16 @@ void Error_Handler(void);
 #define LED_BUILTIN_GPIO_Port GPIOC
 /* USER CODE BEGIN Private defines */
 
+// From: https://interrupt.memfault.com/blog/cortex-m-fault-debug
+#define HALT_IF_DEBUGGING()                                     \
+    do                                                          \
+    {                                                           \
+        if( CoreDebug->DHCSR & CoreDebug_DHCSR_C_DEBUGEN_Msk )  \
+        {                                                       \
+            __asm("bkpt 1");                                    \
+        }                                                       \
+    } while (0)
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
