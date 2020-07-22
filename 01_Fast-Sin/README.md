@@ -66,4 +66,6 @@ Program received signal SIGTRAP, Trace/breakpoint trap.
     at hardware/source/STM32F1/source/STM32F1.c:293
 ```
 
+For more information about how the Makefile works, see [here](https://github.com/nathancharlesjones/Generic-Makefile-based-Project-for-x86-and-STM32F1).
+
 ## How does it work?
