@@ -2,8 +2,10 @@
 #include <stdio.h>
 #include "sin_lut.h"
 
+#define SIN_LUT_SIZE 360
+
 // Sin look-up table using doubles at integer degrees
-static const double sin_table[360] =
+static const double sin_table[SIN_LUT_SIZE] =
 {
 	 0.00000000000000000,  0.01745240643728350,  0.03489949670250100,  0.05233595624294380,  0.06975647374412530,  0.08715574274765820,
 	 0.10452846326765300,  0.12186934340514700,  0.13917310096006500,  0.15643446504023100,  0.17364817766693000,  0.19080899537654500,
@@ -80,6 +82,6 @@ double sin_LUT(double degrees)
 	//
 	while( rounded_degrees >= 360 ) rounded_degrees -= 360;
 	while( rounded_degrees < 0 ) rounded_degrees += 360;
-	
+
 	return sin_table[ rounded_degrees ];
 }
