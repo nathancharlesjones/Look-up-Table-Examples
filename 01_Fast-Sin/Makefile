@@ -70,6 +70,18 @@ else
 Q := @
 endif
 
+# Check if the make goals contain all, clean, zip, or the default rule;
+# used to determine if the BUILD and TARGET variables need to be set.
+ifeq ($(MAKECMDGOALS),)
+MAKE_GOALS_INCLUDE_ALL_CLEAN_OR_ZIP = 1
+else ifneq ($(filter all clean zip, $(MAKECMDGOALS)),)
+MAKE_GOALS_INCLUDE_ALL_CLEAN_OR_ZIP = 1
+else ifeq ($(filter-out purify print, $(MAKECMDGOALS)),)
+MAKE_GOALS_INCLUDE_ALL_CLEAN_OR_ZIP = 0
+else
+$(error Unreachable)
+endif
+
 # BUILD starts empty and an error is thrown if it isn't defined on the command
 # line to be either "test", "debug", or "release" AND the make goals include
 # either "all", "clean", "zip" or is empty (which defaults to "all").
@@ -77,14 +89,12 @@ BUILD ?=
 # Check that BUILD only contains the keywords
 ifeq ($(BUILD),test)
 else ifeq ($(BUILD),debug)
-else ifeq ($(BIULD),release)
+else ifeq ($(BUILD),release)
 # Do nothing; these are valid targets for BUILD.
 # Check that the make goals do not contain all, clean, zip, or the default rule;
 # we only evaluate this if the first conditionals are false, so if either of
 # these are true then we need to throw an error.
-else ifeq ($(MAKECMDGOALS),)
-$(error ERROR: BUILD variable not set. Options are: test, debug, or release)
-else ifneq ($(filter all clean zip, $(MAKECMDGOALS)),)
+else ifeq ($(MAKE_GOALS_INCLUDE_ALL_CLEAN_OR_ZIP),1)
 $(error ERROR: BUILD variable not set. Options are: test, debug, or release)
 else ifeq ($(filter-out purify print, $(MAKECMDGOALS)),)
 # Do nothing; neither "purify" nor "print" use the BUILD variable
@@ -92,7 +102,9 @@ else
 $(error Unreachable)
 endif
 
-# Require that the user specify an architecture for the build target.
+# TARGET starts empty and an error is thrown if it isn't defined on the command
+# line to be either "test", "debug", or "release" AND the make goals include
+# either "all", "clean", "zip" or is empty (which defaults to "all").
 TARGET ?=
 # This is the embedded target, referenced throughout the rest of this Makefile.
 MCU := STM32F1
@@ -103,11 +115,9 @@ EXECUTABLE = $(BUILD_FOLDER)/$(BUILD).elf
 else ifeq ($(TARGET),$(MCU))
 EXECUTABLE = $(BUILD_FOLDER)/$(BUILD).bin
 # Check that the make goals do not contain all, clean, zip, or the default rule;
-# we only evaluate this if the first conditional is false, so if this is
+# we only evaluate this if the first conditionals are false, so if this is
 # true then we need to throw an error.
-else ifeq ($(MAKECMDGOALS),)
-$(error ERROR: TARGET variable not set. Options are: x86 or $(MCU))
-else ifneq ($(filter all clean zip, $(MAKECMDGOALS)),)
+else ifeq ($(MAKE_GOALS_INCLUDE_ALL_CLEAN_OR_ZIP),1)
 $(error ERROR: TARGET variable not set. Options are: x86 or $(MCU))
 else ifeq ($(filter-out purify print, $(MAKECMDGOALS)),)
 # Do nothing; neither "purify" nor "print" use the TARGET variable
@@ -146,7 +156,9 @@ SRC_FILES := \
 	source/sin_lut.c
 
 # Source and assembly files specific to one or more targets.
-ifeq ($(TARGET),x86)
+ifeq ($(MAKE_GOALS_INCLUDE_ALL_CLEAN_OR_ZIP),0)
+# Do nothing; we don't need a list of source files for the remaining goals
+else ifeq ($(TARGET),x86)
 SRC_FILES += \
     hardware/source/x86/x86.c
 else ifeq ($(TARGET),$(MCU))
@@ -171,8 +183,7 @@ SRC_FILES += \
 ASM_FILES := \
 	hardware/source/STM32F1/source/startup_stm32f103xb.s
 else
-# TODO: Restructure the above conditional to check for default, all, clean, and zip goals
-# $(error Unreachable)
+$(error Unreachable)
 endif
 
 # Generate a list of .o files from the .c files. Prefix them with the build
@@ -202,7 +213,9 @@ CFLAGS = \
 	$(COMMON_FLAGS)
 
 # Check which target we are building for, in order to set the proper compiler and CFLAGS.
-ifeq ($(TARGET),x86)
+ifeq ($(MAKE_GOALS_INCLUDE_ALL_CLEAN_OR_ZIP),0)
+# Do nothing; we don't need to specify a GCC prefix or CFLAGS for the remaining goals
+else ifeq ($(TARGET),x86)
 # Do nothing; default settings are fine for building for x86.
 else ifeq ($(TARGET),$(MCU))
 GCC_PREFIX := arm-none-eabi-
@@ -211,8 +224,7 @@ CFLAGS += \
 	-DSTM32F103xB \
 	$(MCU_FLAGS)
 else
-# TODO: Restructure the above conditional to check for default, all, clean, and zip goals
-# $(error Unreachable)
+$(error Unreachable)
 endif
 
 # List of include dirs. These are put into CFLAGS.
@@ -266,7 +278,9 @@ LDLIBS := \
     -lm
 
 # Check which target we are building for, in order to set the proper linker settings.
-ifeq ($(TARGET),x86)
+ifeq ($(MAKE_GOALS_INCLUDE_ALL_CLEAN_OR_ZIP),0)
+# Do nothing; we don't need to specify LDFLAGS or LDLIBS for the remaining goals
+else ifeq ($(TARGET),x86)
 # Do nothing; default settings are fine for building for x86.
 else ifeq ($(TARGET),$(MCU))
 LDFLAGS += \
@@ -277,8 +291,7 @@ LDLIBS += \
 	-lc \
     -lnosys
 else
-# TODO: Restructure the above conditional to check for default, all, clean, and zip goals
-# $(error Unreachable)
+$(error Unreachable)
 endif
 
 LDSCRIPT := hardware/source/STM32F1/linker-script/STM32F103C8Tx_FLASH.ld
@@ -328,7 +341,8 @@ MCU_FLAGS := \
 BUILD_FOLDER := build/$(BUILD)_$(TARGET)
 
 # File where build info (such as date and software versions) should be placed.
-# See the make target "$(BUILD_FOLDER)/$(BUILD).elf" for usage.
+# See the make target "$(BUILD_FOLDER)/$(BUILD).elf" for usage. This variable
+# is defined recursively because it references the target ($@).
 BUILD_INFO_FILE = $(dir $@)build-info.txt
 
 # Get the current date from the shell, in YYYY-MM-DD formate. Used to

@@ -95,6 +95,17 @@ errno_t initHardware(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 
+  // "Please pay special attention to the static variable SystemCoreClock. This variable might 
+  // be used throughout the whole system initialization and runtime to calculate frequency/time 
+  // related values. Thus one must assure that the variable always reflects the actual system 
+  // clock speed. Be aware that a value stored to SystemCoreClock during low level initializaton 
+  // (i.e. SystemInit()) might get overwritten by C libray startup code and/or .bss section 
+  // initialization. Thus its highly recommended to call SystemCoreClockUpdate at the beginning 
+  // of the user main() routine." (from CMSIS-Core (Cortex-M) System and Clock Configuration,
+  // https://www.keil.com/pack/doc/cmsis/Core/html/group__system__init__gr.html)
+  //
+  SystemCoreClockUpdate();
+
   /* USER CODE END 2 */
   return 0;
 
@@ -111,10 +122,13 @@ void SystemClock_Config(void)
 
   /** Initializes the CPU, AHB and APB busses clocks 
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -123,12 +137,12 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
     Error_Handler();
   }
@@ -145,10 +159,11 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_BUILTIN_GPIO_Port, LED_BUILTIN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_BUILTIN_GPIO_Port, LED_BUILTIN_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin : LED_BUILTIN_Pin */
   GPIO_InitStruct.Pin = LED_BUILTIN_Pin;
@@ -195,7 +210,6 @@ void assert_failed(uint8_t *file, uint32_t line)
 void assert_failed(const char * file, uint32_t line)
 {
     // Turn on the on-board LED to indicate a failed assert
-    // TODO: Check that "RESET" turns it on
     //
     HAL_GPIO_WritePin(LED_BUILTIN_GPIO_Port, LED_BUILTIN_Pin, GPIO_PIN_RESET);
     
@@ -214,16 +228,22 @@ p_systemTime_t systemTime_create(void)
 
 errno_t getSystemTime(p_systemTime_t p_thisTime)
 {
+    uint32_t SysTick_Value;
+
     ASSERT(p_thisTime != NULL);
 
-    // START CRITICAL SECTION
+    // Ensure uwTick (accessed through HAL_GetTick) isn't updated while retrieving SysTick->VAL
     //
-    p_thisTime->ms = HAL_GetTick();
-    p_thisTime->ns = SysTick->VAL;
-    //
-    // END CRITICAL SECTION
+    do
+    {
+        p_thisTime->ms = HAL_GetTick();
+        SysTick_Value = SysTick->VAL;
+    } while( p_thisTime->ms != HAL_GetTick() );
 
-    p_thisTime->ns = ( ( SysTick->LOAD - p_thisTime->ns ) / SystemCoreClock * 1000000000 );
+    // NOTE: Order of operations, currently enforced with parentheses, is CRITICAL to prevent
+    // overflow.
+    //
+    p_thisTime->ns = ( ( SysTick->LOAD - SysTick_Value ) * ( 1000000000.0 / (float)SystemCoreClock ) );
 
     return 0;
 }
@@ -232,18 +252,24 @@ errno_t elapsedSystemTime_ns(uint32_t * time_ns)
 {
     errno_t err = 0;
     uint32_t ms;
-    uint32_t ns;
+    uint32_t SysTick_Value;
 
     ASSERT( time_ns != NULL );
 
-    // START CRITICAL SECTION
+    // Ensure uwTick (accessed through HAL_GetTick) isn't updated while retrieving SysTick->VAL
     //
-    ms = HAL_GetTick();
-    ns = SysTick->VAL;
-    //
-    // END CRITICAL SECTION
+    do
+    {
+        ms = HAL_GetTick();
+        SysTick_Value = SysTick->VAL;
+    } while ( ms != HAL_GetTick() );
 
-    return ( ( 1000000 * ms ) + ( SysTick->LOAD - ns ) );
+    // NOTE: Order of operations, currently enforced with parentheses, is CRITICAL to prevent
+    // overflow.
+    //
+    *time_ns = ( ( 1000000 * ms ) + ( ( SysTick->LOAD - SysTick_Value ) * ( 1000000000.0 / (float)SystemCoreClock ) ) );
+
+    return err;
 }
 
 uint32_t systemTimeDiff_ns(p_systemTime_t p_startTime, p_systemTime_t p_endTime)
@@ -251,12 +277,21 @@ uint32_t systemTimeDiff_ns(p_systemTime_t p_startTime, p_systemTime_t p_endTime)
     ASSERT(p_startTime != NULL);
     ASSERT(p_endTime != NULL);
 
-    return ( 1000000 * ( p_endTime->ms - p_startTime->ms ) + ( p_endTime->ns - p_startTime->ns ) );
+    // NOTE: No checks are made for overflow, meaning the results of this function are undefined
+    // if the difference in nanoseconds between p_startTime and p_endTime is greater than UINT32_MAX
+    // (i.e. greater than 4,294,967,295, or 4.294967295 seconds).
+    uint32_t diff_ms = p_endTime->ms - p_startTime->ms;
+    uint32_t diff_ns = p_endTime->ns - p_startTime->ns;
+
+    return ( ( 1000000 * diff_ms ) + diff_ns );
 }
 
 void printResults(uint32_t iterations, float executionTime_sin_ns_avg, float executionTime_sin_LUT_ns_avg, float absoluteError_sin_LUT_avg, float percentError_sin_LUT_avg)
 {
-    while(1);
+    while(1)
+    {
+        HALT_IF_DEBUGGING();
+    }
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

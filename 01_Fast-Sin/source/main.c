@@ -1,10 +1,18 @@
+// Enforce -O0 optimization level (so that calls to sin and sin_LUT don't get optimized away)
+//
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
+
 #include <math.h>
 #include <stdlib.h>
 #include "sin_lut.h"
 #include "hardwareAPI.h"
 
-#define TEST_ITERATIONS 10000
 #define PI 3.14159265358979000f
+
+// testIterations is marked as "volatile" so that it can be updated with a debugger; otherwise
+// it could be const or #define.
+volatile uint32_t testIterations = 1000;
 
 int main(int argc, char * argv[])
 {
@@ -39,7 +47,7 @@ int main(int argc, char * argv[])
 
 	// Execute library sin with timing
 	//
-	for( int idx = 0; idx < TEST_ITERATIONS; idx++ )
+	for( int idx = 0; idx < testIterations; idx++ )
 	{
 		double input = (double) rand() / (double) RAND_MAX * 2.0 * PI;
 		err = getSystemTime(p_start);
@@ -49,11 +57,11 @@ int main(int argc, char * argv[])
 		ASSERT( err == 0 );
 		executionTime_sin_ns += systemTimeDiff_ns(p_start, p_end);
 	}
-	executionTime_sin_ns_avg = executionTime_sin_ns / TEST_ITERATIONS;
+	executionTime_sin_ns_avg = executionTime_sin_ns / testIterations;
 
 	// Execute sin LUT with timing
 	// 
-	for( int idx = 0; idx < TEST_ITERATIONS; idx++ )
+	for( int idx = 0; idx < testIterations; idx++ )
 	{
 		double input = (double) rand() / (double) RAND_MAX * 360.0;
 		err = getSystemTime(p_start);
@@ -63,11 +71,11 @@ int main(int argc, char * argv[])
 		ASSERT( err == 0 );
 		executionTime_sin_LUT_ns += systemTimeDiff_ns(p_start, p_end);	
 	}
-	executionTime_sin_LUT_ns_avg = executionTime_sin_LUT_ns / TEST_ITERATIONS;
+	executionTime_sin_LUT_ns_avg = executionTime_sin_LUT_ns / testIterations;
 
 	// Determine average percent error	
 	//
-	for( int idx = 0; idx < TEST_ITERATIONS; idx++ )
+	for( int idx = 0; idx < testIterations; idx++ )
 	{
 		double percentError;
 
@@ -93,10 +101,12 @@ int main(int argc, char * argv[])
 		else percentError = 100.0;
 		percentError_sin_LUT_sum += percentError;
 	}
-	absoluteError_sin_LUT_avg = absoluteError_sin_LUT_sum / TEST_ITERATIONS;
-	percentError_sin_LUT_avg = percentError_sin_LUT_sum / TEST_ITERATIONS;
+	absoluteError_sin_LUT_avg = absoluteError_sin_LUT_sum / testIterations;
+	percentError_sin_LUT_avg = percentError_sin_LUT_sum / testIterations;
 	
-	printResults(TEST_ITERATIONS, executionTime_sin_ns_avg, executionTime_sin_LUT_ns_avg, absoluteError_sin_LUT_avg, percentError_sin_LUT_avg);
+	printResults(testIterations, executionTime_sin_ns_avg, executionTime_sin_LUT_ns_avg, absoluteError_sin_LUT_avg, percentError_sin_LUT_avg);
 
 	return EXIT_SUCCESS;
 }
+
+#pragma GCC pop_options
