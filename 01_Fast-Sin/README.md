@@ -14,6 +14,7 @@ The following table summarizes the results. This code was compiled for an STM32F
 ### On my laptop
 1. After downloading the Git repo, navigate to the folder "01_Fast-Sin".
 2. Decide whether you want a "debug" or "release" build (the only difference which optimization flag is passed to the compiler) and type "make BUILD={debug or release} TARGET=x86" into a shell (replacing "{debug or release}" with either "debug" or "release", of course).
+
 `make BUILD=debug TARGET=x86`
 3. The executable is called "{debug or release}_x86.elf" and it will be placed in a folder called "build/{debug or release}_x86"
 4. Run the executable; the results of the code will be printed to the terminal.
@@ -26,15 +27,18 @@ sin		1562.535034		N/A			N/A
 sin_LUT		1380.771973		0.002858		2.041038
 ```
 5. Run "make BUILD={debug or release} TARGET=x86 clean" to remove the "build/{debug or release}_x86" folder.
+
 `make BUILD=debug TARGET=x86 clean`
 
 ### On an STM32
 1. Procure an STM32F103C8T6, sometimes called a "Blue Pill".
 2. After downloading the Git repo, navigate to the folder "01_Fast-Sin".
 2. Decide whether you want a "debug" or "release" build (the only difference which optimization flag is passed to the compiler) and type "make BUILD={debug or release} TARGET=STM32F1" into a shell (replacing "{debug or release}" with either "debug" or "release", of course).
+
 `make BUILD=debug TARGET=STM32F1`
 3. The executable is called "{debug or release}_STM32F1.elf" and it will be placed in a folder called "build/{debug or release}_STM32F1"
 4. Connect your STM32F1 to your computer using your debugger of choice (e.g. ST-Link, J-Link, etc) and start a GDB server. If you have previously downloaded STM32CubeIDE, you can start a GDB server from the command line using the script "Start-ST-Link-GDB-Server_v2" (after updating the file paths appropriately).
+
 `./Start-ST-Link-GDB-Server_v2.sh`
 5. Start GDB and then connect to your STM32.
 ```
