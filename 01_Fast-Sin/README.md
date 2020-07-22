@@ -1,5 +1,5 @@
 # Fast Sin
-Contents
+## Contents
 1. What is it?
 2. How do I use it?
 3. How does it work?
