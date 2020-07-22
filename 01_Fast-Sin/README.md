@@ -6,7 +6,7 @@
 The following table summarizes the results.
 |Function|Memory usage (bytes)|Absolute Error|Percent Error|Execution time|
 |---|---|---|---|---|
-|sin|5368|N/A|~63-64 us|
+|sin|5368|N/A|N/A|~63-64 us|
 |sin_LUT|2936|0.0028|1.8-2.0|~20.4 us|
 
 ## How do I use it?
