@@ -1,4 +1,7 @@
 # Fast Sin
+1. What is it?
+2. How do I use it?
+3. How does it work?
 
 ## What is it?
 "Fast Sin" is a demonstration of using a simple look-up table (LUT) to improve the execution time of the library sin function. It also demonstrates several aspects of professional quality code, such as using asserts, enforcing various compiler optimizations, building for multiple targets, and having a well-structured Makefile.
