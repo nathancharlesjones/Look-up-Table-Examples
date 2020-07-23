@@ -1,4 +1,8 @@
 # Fast Sin
+## Contents
+1. What is it?
+2. How do I use it?
+3. How does it work?
 
 ## What is it?
 "Fast Sin" is a demonstration of using a simple look-up table (LUT) to improve the execution time of the library sin function. It also demonstrates several aspects of professional quality code, such as using asserts, enforcing various compiler optimizations, building for multiple targets, and having a well-structured Makefile.
@@ -69,3 +73,10 @@ Program received signal SIGTRAP, Trace/breakpoint trap.
 For more information about how the Makefile works, see [here](https://github.com/nathancharlesjones/Generic-Makefile-based-Project-for-x86-and-STM32F1).
 
 ## How does it work?
+Let's start with "sin_LUT.c", the heart (if not the meat) of this little example. In lines 8-70, we define an array of doubles called "sin_table". At each index X is stored the value of sin(X*PI/180), allowing us to find the value of any integer degree from 0 to 359 simply by accessing the array (e.g. "sin[50]" is equivalent to "sin(50*PI/180)"; notice how the first statement is merely an array access while the second is a library function call). The sin_table array is made static and a function is written to access it so that no other code can depend on our implementation of sin_table; it can change in the future and as long as our function still takes a double as input and returns a double that is the sin of the input, then no other code needs to change. This function converts the input to an appropriate integer and also make sure that it falls within the array bounds (see the code comments for additional details).
+
+Now let's move to "main.c". The important stuff happens in lines 50-60 and 64-74. In those blocks, we're repeatedly creating a random input value, storing the current "system time" into a variable called p_start, calling the function we want to profile, storing the updated system time into a variable called p_end, and computing the difference between the two times (in nanoseconds). That process happens "testIterations" numbers of times and then the sum is divided by "testIterations" to determine the average execution time for the function. The time-related functions are defined elsewhere in the project, meaning that they are "hardware independent", so far as the main function is concerned. They are defined as returning an error value: 0 for success and non-zero for an error. So these blocks also ASSERT that the return value isn't an error code; the ASSERT macro is defined elsewhere (don't worry, we'll get to that too).
+
+Lines 78-105 compute the error associated with the sin LUT.
+
+At the top and bottom of this file are a few pragmas, or compiler directives, that instruct GCC to optimize this file at "-O0", the lowest level of optimization, regardless of how the rest of the project is being optimized. This is required so that the compiler doesn't accidentally optimize away later calls
