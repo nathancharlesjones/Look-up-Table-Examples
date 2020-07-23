@@ -17,12 +17,12 @@ The following table summarizes the results. This code was compiled for an STM32F
 
 ### On my laptop
 1. After downloading the Git repo, navigate to the folder "01_Fast-Sin".
-2. Decide whether you want a "debug" or "release" build (the only difference which optimization flag is passed to the compiler) and type "make BUILD={debug or release} TARGET=x86" into a shell (replacing "{debug or release}" with either "debug" or "release", of course).
+2. Decide whether you want a "debug" or "release" build (the only difference which optimization flag is passed to the compiler) and type `make BUILD={debug or release} TARGET=x86` into a shell (replacing "{debug or release}" with either "debug" or "release", of course). E.g.:
 ```
 $ make BUILD=debug TARGET=x86
 ```
-3. The executable is called "{debug or release}_x86.elf" and it will be placed in a folder called "build/{debug or release}_x86"
-4. Run the executable; the results of the code will be printed to the terminal.
+3. The executable is called "{debug or release}_x86.elf" and it will be placed in a folder called "build/{debug or release}_x86".
+4. Run the executable; the results of the code will be printed to the terminal. E.g.:
 ```
 $ ./build/debug_x86/debug.elf 
 -----Sin LUT Test-----
@@ -31,28 +31,28 @@ Function	Avg Execution Time (ns)	Avg Absolute Error	Avg Percent Error
 sin		1562.535034		N/A			N/A
 sin_LUT		1380.771973		0.002858		2.041038
 ```
-5. Run "make BUILD={debug or release} TARGET=x86 clean" to remove the "build/{debug or release}_x86" folder.
+5. Run `make BUILD={debug or release} TARGET=x86 clean` to remove the "build/{debug or release}_x86" folder. E.g.:
 ```
 $ make BUILD=debug TARGET=x86 clean
 ```
 ### On an STM32
 1. Procure an STM32F103C8T6, sometimes called a "Blue Pill".
 2. After downloading the Git repo, navigate to the folder "01_Fast-Sin".
-2. Decide whether you want a "debug" or "release" build (the only difference which optimization flag is passed to the compiler) and type "make BUILD={debug or release} TARGET=STM32F1" into a shell (replacing "{debug or release}" with either "debug" or "release", of course).
+2. Decide whether you want a "debug" or "release" build (the only difference which optimization flag is passed to the compiler) and type `make BUILD={debug or release} TARGET=STM32F1` into a shell (replacing "{debug or release}" with either "debug" or "release", of course). E.g.:
 ```
 $ make BUILD=debug TARGET=STM32F1
 ```
-3. The executable is called "{debug or release}_STM32F1.elf" and it will be placed in a folder called "build/{debug or release}_STM32F1"
-4. Connect your STM32F1 to your computer using your debugger of choice (e.g. ST-Link, J-Link, etc) and start a GDB server. If you have previously downloaded STM32CubeIDE, you can start a GDB server from the command line using the script "Start-ST-Link-GDB-Server_v2" (after updating the file paths appropriately).
+3. The executable is called "{debug or release}_STM32F1.elf" and it will be placed in a folder called "build/{debug or release}_STM32F1".
+4. Connect your STM32F1 to your computer using your debugger of choice (e.g. ST-Link, J-Link, etc) and start a GDB server. If you have previously downloaded STM32CubeIDE, you can start a GDB server from the command line using the script "Start-ST-Link-GDB-Server_v2.sh" (after updating the file paths appropriately). E.g.:
 ```
 $ ./Start-ST-Link-GDB-Server_v2.sh
 ```
-5. Start GDB and then connect to your STM32.
+5. Start GDB and then connect to your STM32. E.g.:
 ```
 $ arm-none-eabi-gdb build/debug_STM32F1/debug.elf --tui
 (gdb) target remote :61234
 ```
-6. Load and run the executable.
+6. Load and run the executable. E.g.:
 ```
 (gdb) load build/debug_STM32F1/debug.elf
 (gdb) c
@@ -73,7 +73,7 @@ Program received signal SIGTRAP, Trace/breakpoint trap.
 For more information about how the Makefile works, see [here](https://github.com/nathancharlesjones/Generic-Makefile-based-Project-for-x86-and-STM32F1).
 
 ## How does it work?
-Let's start with "sin_LUT.c", the heart (if not the meat) of this little example. In lines X-X, we define an array of doubles called "sin_table".
+Let's start with `sin_LUT.c`, the heart (if not the meat) of this little example. In lines X-X, we define an array of doubles called `sin_table`.
 ```
 #define SIN_LUT_SIZE 402
 static const double sin_table[SIN_LUT_SIZE] =
@@ -85,7 +85,7 @@ static const double sin_table[SIN_LUT_SIZE] =
     -0.09553936336253460, -0.07997480812332720, -0.06439072818171630, -0.04879092816731250, -0.03317921654755680, -0.01755940469793780
 };
 ```
-At each index X is stored the value of sin(X/64), allowing us to find the value of any radian angle from 0 to 2\*PI simply by accessing the array (e.g. "sin[50]" is equivalent to "sin(50/64)"; notice how the first statement is merely an array access while the second is a library function call). The array size (which may seem odd) was chosen to be a power-of-two multiple of 2\*PI (or as close to it as makes sense) whose value was in the low-hundreds. The power-of-two multiple criteria was imposed to make converting from radians to array indices easier (power-of-two multplies are far easier to execute in software than any of type of multiplication). The "value in the low-hundreds" criteria was imposed in order to have enough data points to keep the average overall error low. A table with only 10 elements will have much error, since the data points are so far apart; however, a table with 1000 or more elements would take up too much space in memory. The sin_table array is made static and a function is written to access it so that no other code can depend on our implementation of sin_table; it can change in the future and as long as our function still takes a double as input and returns a double that is the sin of the input, then no other code needs to change.
+At each index X is stored the value of sin(X/64), allowing us to find the value of any radian angle from 0 to 2\*PI simply by accessing the array (e.g. `sin[50]` is equivalent to `sin(50/64)`; notice how the first statement is merely an array access while the second is a library function call). The array size (which may seem odd) was chosen to be a power-of-two multiple of 2\*PI (or as close to it as makes sense) whose value was in the low-hundreds. The "power-of-two multiple" criteria was imposed to make converting from radians to array indices easier (power-of-two multplies are far easier to execute in software than any of type of multiplication). The "value in the low-hundreds" criteria was imposed in order to have enough data points to keep the average overall error low (a table with only 10 elements will have a lot of error for values that lie in between the elements, since the data points are so far apart; however, a table with 1000 or more elements would take up too much space in memory). The sin_table array is made `static` and a function is written to access it so that no other code can depend on our implementation of sin_table; it can change in the future and as long as our function still takes a double as input and returns a double that is the sin of the input, then no other code needs to change. The 
 ```
 double sin_LUT(double radians)
 {
@@ -97,8 +97,29 @@ double sin_LUT(double radians)
 ```
 This function converts the input to an appropriate integer and also make sure that it falls within the array bounds (see the code comments for additional details).
 
-Now let's move to "main.c". The important stuff happens in lines 50-60 and 64-74. In those blocks, we're repeatedly creating a random input value, storing the current "system time" into a variable called p_start, calling the function we want to profile, storing the updated system time into a variable called p_end, and computing the difference between the two times (in nanoseconds). That process happens "testIterations" numbers of times and then the sum is divided by "testIterations" to determine the average execution time for the function. The time-related functions are defined elsewhere in the project, meaning that they are "hardware independent", so far as the main function is concerned. They are defined as returning an error value: 0 for success and non-zero for an error. So these blocks also ASSERT that the return value isn't an error code; the ASSERT macro is defined elsewhere (don't worry, we'll get to that too).
+Now let's move to `main.c`. The important stuff happens in lines X-X and X-X.
+```
+for( int idx = 0; idx < testIterations; idx++ )
+{
+    double output __attribute__((unused));
+    double input = (double) rand() / (double) RAND_MAX * 2.0 * PI;
+    err = getSystemTime(p_start);
+    ASSERT( err == 0 );
+    output = sin( input );
+    err = getSystemTime(p_end);
+    ASSERT( err == 0 );
+    executionTime_sin_ns += systemTimeDiff_ns(p_start, p_end);
+}
+    executionTime_sin_ns_avg = executionTime_sin_ns / testIterations;
+```
+In those blocks, we're repeatedly creating a random input value, storing the current "system time" into a variable called p_start, calling the function we want to profile, storing the updated system time into a variable called p_end, and computing the difference between the two times (in nanoseconds). That process happens "testIterations" numbers of times and then the sum is divided by "testIterations" to determine the average execution time for the function. The time-related functions are defined elsewhere in the project, meaning that they are "hardware independent", so far as the main function is concerned. They are defined as returning an error value: 0 for success and non-zero for an error. So these blocks also ASSERT that the return value isn't an error code; the ASSERT macro is defined elsewhere (don't worry, we'll get to that too).
 
 Lines 78-105 compute the error associated with the sin LUT.
 
-At the top and bottom of this file are a few pragmas, or compiler directives, that instruct GCC to optimize this file at "-O0", the lowest level of optimization, regardless of how the rest of the project is being optimized. This is required so that the compiler doesn't accidentally optimize away later calls
+At the top and bottom of this file are a few pragmas, or compiler directives, that instruct GCC to optimize this file at "O0", the lowest level of optimization, regardless of how the rest of the project is being optimized. This is required so that the compiler doesn't accidentally optimize away later calls
+```
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
+...
+#pragma GCC pop_options
+```
