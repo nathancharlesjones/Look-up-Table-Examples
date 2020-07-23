@@ -223,7 +223,10 @@ void assert_failed(const char * file, uint32_t line)
 
 p_systemTime_t systemTime_create(void)
 {
-    return (p_systemTime_t)calloc(1, sizeof(struct systemTime_t));
+    p_systemTime_t this = (p_systemTime_t)calloc(1, sizeof(struct systemTime_t));
+    ASSERT( this != NULL);
+
+    return this;
 }
 
 errno_t getSystemTime(p_systemTime_t p_thisTime)

@@ -77,9 +77,10 @@ int main(int argc, char * argv[])
 	//
 	for( int idx = 0; idx < testIterations; idx++ )
 	{
+		double absoluteError;
 		double percentError;
 
-		// Compute input, in degrees and radians
+		// Compute input in radians
 		//
 		double rad = (double) rand() / (double) RAND_MAX * 2.0 * PI;
 
@@ -90,7 +91,7 @@ int main(int argc, char * argv[])
 		
 		// Compute absolute error
 		//
-		double absoluteError = fabs( output_sin - output_sin_LUT );
+		absoluteError = fabs( output_sin - output_sin_LUT );
 		absoluteError_sin_LUT_sum += absoluteError;
 
 		// Compute percent error. Make sure the divisor, the expected value, is not 0
