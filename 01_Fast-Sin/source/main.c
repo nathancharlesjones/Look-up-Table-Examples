@@ -8,8 +8,6 @@
 #include "sin_lut.h"
 #include "hardwareAPI.h"
 
-#define PI 3.14159265358979000f
-
 // testIterations is marked as "volatile" so that it can be updated with a debugger; otherwise
 // it could be const or #define.
 volatile uint32_t testIterations = 1000;
@@ -49,10 +47,11 @@ int main(int argc, char * argv[])
 	//
 	for( int idx = 0; idx < testIterations; idx++ )
 	{
+		double output __attribute__((unused));
 		double input = (double) rand() / (double) RAND_MAX * 2.0 * PI;
 		err = getSystemTime(p_start);
 		ASSERT( err == 0 );
-		double output = sin( input );
+		output = sin( input );
 		err = getSystemTime(p_end);
 		ASSERT( err == 0 );
 		executionTime_sin_ns += systemTimeDiff_ns(p_start, p_end);
@@ -63,10 +62,11 @@ int main(int argc, char * argv[])
 	// 
 	for( int idx = 0; idx < testIterations; idx++ )
 	{
-		double input = (double) rand() / (double) RAND_MAX * 360.0;
+		double output __attribute__((unused));
+		double input = (double) rand() / (double) RAND_MAX * 2.0 * PI;
 		err = getSystemTime(p_start);
 		ASSERT( err == 0 );
-		double output = sin_LUT( input );
+		output = sin_LUT( input );
 		err = getSystemTime(p_end);
 		ASSERT( err == 0 );
 		executionTime_sin_LUT_ns += systemTimeDiff_ns(p_start, p_end);	
@@ -81,13 +81,12 @@ int main(int argc, char * argv[])
 
 		// Compute input, in degrees and radians
 		//
-		double deg = (double) rand() / (double) RAND_MAX * 360.0;
-		double rad = deg * PI / 180.0;
+		double rad = (double) rand() / (double) RAND_MAX * 2.0 * PI;
 
 		// Compute outputs, for sin and sin_LUT
 		//
 		double output_sin = sin( rad );
-		double output_sin_LUT = sin_LUT( deg );
+		double output_sin_LUT = sin_LUT( rad );
 		
 		// Compute absolute error
 		//
