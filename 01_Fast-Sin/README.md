@@ -73,7 +73,29 @@ Program received signal SIGTRAP, Trace/breakpoint trap.
 For more information about how the Makefile works, see [here](https://github.com/nathancharlesjones/Generic-Makefile-based-Project-for-x86-and-STM32F1).
 
 ## How does it work?
-Let's start with "sin_LUT.c", the heart (if not the meat) of this little example. In lines 8-70, we define an array of doubles called "sin_table". At each index X is stored the value of sin(X*PI/180), allowing us to find the value of any integer degree from 0 to 359 simply by accessing the array (e.g. "sin[50]" is equivalent to "sin(50*PI/180)"; notice how the first statement is merely an array access while the second is a library function call). The sin_table array is made static and a function is written to access it so that no other code can depend on our implementation of sin_table; it can change in the future and as long as our function still takes a double as input and returns a double that is the sin of the input, then no other code needs to change. This function converts the input to an appropriate integer and also make sure that it falls within the array bounds (see the code comments for additional details).
+Let's start with "sin_LUT.c", the heart (if not the meat) of this little example. In lines X-X, we define an array of doubles called "sin_table".
+```
+#define SIN_LUT_SIZE 402
+static const double sin_table[SIN_LUT_SIZE] =
+{
+	 0.00000000000000000,  0.01562436422488340,  0.03124491398532610,  0.04685783574813420,  0.06245931784238020,  0.07804555138996730,
+	 0.09361273123551290,  0.10915705687532200,  0.12467473338522800,  0.14016197234706400,  0.15561499277355600,  0.17103002203139500,
+     // Many more rows
+    -0.18830433415331500, -0.17293649256293000, -0.15752643100814300, -0.14207791163447200, -0.12659470597635800, -0.11108059403640400,
+	-0.09553936336253460, -0.07997480812332720, -0.06439072818171630, -0.04879092816731250, -0.03317921654755680, -0.01755940469793780
+};
+```
+At each index X is stored the value of sin(X/64), allowing us to find the value of any radian angle from 0 to 2*PI simply by accessing the array (e.g. "sin[50]" is equivalent to "sin(50/64)"; notice how the first statement is merely an array access while the second is a library function call). The array size (which may seem odd) was chosen to be a power-of-two multiple of 2*PI (or as close to it as makes sense) whose value was in the low-hundreds. The power-of-two multiple criteria was imposed to make converting from radians to array indices easier (power-of-two multplies are far easier to execute in software than any of type of multiplication). The "value in the low-hundreds" criteria was imposed in order to have enough data points to keep the average overall error low. A table with only 10 elements will have much error, since the data points are so far apart; however, a table with 1000 or more elements would take up too much space in memory. The sin_table array is made static and a function is written to access it so that no other code can depend on our implementation of sin_table; it can change in the future and as long as our function still takes a double as input and returns a double that is the sin of the input, then no other code needs to change.
+```
+double sin_LUT(double radians)
+{
+	...
+    // Not shown: Converting "radians" to an array index and also ensuring that it's a valid index
+    ...
+	return sin_table[ idx ];
+}
+```
+This function converts the input to an appropriate integer and also make sure that it falls within the array bounds (see the code comments for additional details).
 
 Now let's move to "main.c". The important stuff happens in lines 50-60 and 64-74. In those blocks, we're repeatedly creating a random input value, storing the current "system time" into a variable called p_start, calling the function we want to profile, storing the updated system time into a variable called p_end, and computing the difference between the two times (in nanoseconds). That process happens "testIterations" numbers of times and then the sum is divided by "testIterations" to determine the average execution time for the function. The time-related functions are defined elsewhere in the project, meaning that they are "hardware independent", so far as the main function is concerned. They are defined as returning an error value: 0 for success and non-zero for an error. So these blocks also ASSERT that the return value isn't an error code; the ASSERT macro is defined elsewhere (don't worry, we'll get to that too).
 
