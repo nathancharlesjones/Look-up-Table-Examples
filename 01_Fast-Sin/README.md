@@ -162,8 +162,22 @@ At the top and bottom of this file are a few pragmas, or compiler directives, th
 At this point, you have all of the information you need to understand how the program works and what it's doing to compute the comparative execution times and absolute and percent errors. To see how we implement some of those hardware-specific functions, though, we need to look at `hardwareAPI.h` (in hardware/include). This file exposes the application programming interface (API; also simply "interface") that `main.c` can use to complete its actions. Each of the functions and data types not specified here (which are all hardware-specific) will need to be defined elsewhere for whichever processor for which we are compiling the program.
 
 Lines 6-13 define the ASSERT macro and declare a function called `assert_failed`. The ASSERT macro simply checks if `expr` ("expression") is true and, if it isn't, it calls `assert_failed` with the filename and line number where the ASSERT macro was called.
+```
+void assert_failed(const char * file, uint32_t line);
+
+#define ASSERT(expr)                                \
+    do {                                            \
+        if (!(expr)) {                              \
+            assert_failed(__FILENAME__, __LINE__);  \
+        }                                           \
+    } while (0)
+```
 
 Lines 15 and 16 define two data types: `errno_t` and `p_systemTime_t`. The first is simply a stand-in for an `int` and is used to make it exceedingly clear which functions return the result of an operation and which return an error code. The second represents a pointer to another data type called `systemTime`, which isn't defined here. The hardware implementations will need to define it and the `p_systemTime_t` data type is declared here so that `main.c` can refer to it without needing to know the full size or contents of `systemTime_t` (the C compiler will happily make room for and pass around pointers-to-structs, but if we tried to create a variable that was the struct itself, the C compiler would need to know how big it was, at a minimum, in order to compile our program).
+```
+typedef int                     errno_t;
+typedef struct systemTime_t *   p_systemTime_t;
+```
 
 Line 18 declares a function that allows the hardware to initialize anything it needs.
 
