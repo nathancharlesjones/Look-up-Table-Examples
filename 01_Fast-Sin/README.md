@@ -2,9 +2,9 @@
 
 ## Contents
 
-1. What is it?
-2. How do I use it?
-3. How does it work?
+1. [What is it?](https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/01_Fast-Sin/README.md#what-is-it)
+2. [How do I use it?](https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/01_Fast-Sin/README.md#how-do-i-use-it)
+3. [How does it work?](https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/01_Fast-Sin/README.md#how-does-it-work)
 
 ## What is it?
 
