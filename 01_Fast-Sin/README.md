@@ -21,7 +21,7 @@ The following table summarizes the results. This code was compiled for an STM32F
 ### On my laptop
 
 1. After downloading the Git repo, navigate to the folder "01_Fast-Sin".
-2. Decide whether you want a "debug" or "release" build (the only difference which optimization flag is passed to the compiler) and type `make BUILD={debug or release} TARGET=x86` into a shell (replacing "{debug or release}" with either "debug" or "release", of course). E.g.:
+2. Decide whether you want a "debug" or "release" build (the only difference being which optimization flag is passed to the compiler: "-Og" in the case of a "debug" build and "-O2" in the case of a release build) and type `make BUILD={debug or release} TARGET=x86` into a shell (replacing "{debug or release}" with either "debug" or "release", of course). E.g.:
 ```
 $ make BUILD=debug TARGET=x86
 ```
@@ -44,7 +44,7 @@ $ make BUILD=debug TARGET=x86 clean
 
 1. Procure an STM32F103C8T6, sometimes called a "Blue Pill".
 2. After downloading the Git repo, navigate to the folder "01_Fast-Sin".
-2. Decide whether you want a "debug" or "release" build (the only difference which optimization flag is passed to the compiler) and type `make BUILD={debug or release} TARGET=STM32F1` into a shell (replacing "{debug or release}" with either "debug" or "release", of course). E.g.:
+2. Decide whether you want a "debug" or "release" build (the only difference which optimization flag is passed to the compiler: "-Og" in the case of a "debug" build and "-O2" in the case of a release build) and type `make BUILD={debug or release} TARGET=STM32F1` into a shell (replacing "{debug or release}" with either "debug" or "release", of course). E.g.:
 ```
 $ make BUILD=debug TARGET=STM32F1
 ```
@@ -63,7 +63,7 @@ $ arm-none-eabi-gdb build/debug_STM32F1/debug.elf --tui
 (gdb) load build/debug_STM32F1/debug.elf
 (gdb) c
 ```
-7. The debugger will halt inside the function `printResults`. You'll be able to view the same parameters as above in the GDB output, as they are being passed to the function.
+7. The debugger will halt inside the function `printResults`. You'll be able to view the same parameters as above in the GDB output, as they are being passed to the function. E.g.: 
 ```
 (gdb) c
 Continuing.
@@ -94,7 +94,7 @@ static const double sin_table[SIN_LUT_SIZE] =
     -0.09553936336253460, -0.07997480812332720, -0.06439072818171630, -0.04879092816731250, -0.03317921654755680, -0.01755940469793780
 };
 ```
-At each index X is stored the value of sin(X/64), allowing us to find the value of any radian angle from zero to 2\*PI simply by accessing the array (e.g. `sin[50]` is equivalent to `sin(50/64)`; notice how the first statement is merely an array access while the second is a library function call). The array size (which may seem odd) was chosen to be a power-of-two multiple of 2\*PI (or as close to it as makes sense) whose value was in the low-hundreds. The "power-of-two multiple" criteria was imposed to make converting from radians to array indices easier (power-of-two multplies are far easier to execute in software than any of type of multiplication). The "value in the low-hundreds" criteria was imposed in order to have enough data points to keep the average overall error low (a table with only 10 elements will have a lot of error for values that lie in between the elements, since the data points are so far apart; however, a table with 1000 or more elements would take up too much space in memory). The array is made `const` so that it is stored in ROM, not RAM; either are fine, but RAM is more often smaller and in higher demand than ROM on an embedded system. The sin_table array is also made `static` and a function is written to access it so that no other code can depend on our implementation of sin_table; it can change in the future and as long as our function still takes a double as input and returns a double that is the sin of the input, then no other code needs to change.
+At each index X is stored the value of sin(X/64), allowing us to find the value of any radian angle from zero to 2\*PI simply by accessing the array (e.g. `sin[50]` is equivalent to `sin(50/64)`; notice how the first statement is merely an array access while the second is a library function call). The array size (which may seem odd) was chosen to be a power-of-two multiple of 2\*PI (or as close to it as makes sense) whose value was in the low-hundreds. The "power-of-two multiple" criteria was imposed to make converting from radians to array indices easier (power-of-two multplies or divides are far easier to execute in software than any of type of multiplication or division). The "value in the low-hundreds" criteria was imposed in order to have enough data points to keep the average error low (a table with only 10 elements will have a lot of error for values that lie in between the elements, since the data points are so far apart; however, a table with 1000 elements or more would take up too much space in memory). The array is made `const` so that it is stored in ROM, not RAM; either is fine, but RAM is more often smaller and in higher demand than ROM on an embedded system. The sin_table array is also made `static` and a function is written to access it so that no other code can depend on our implementation of sin_table; it can change in the future and as long as our function still takes a double as input and returns a double that is the sin of the input, then no other code needs to change.
 ```
 double sin_LUT(double radians)
 {
@@ -104,7 +104,7 @@ double sin_LUT(double radians)
 	return sin_table[ idx ];
 }
 ```
-This function converts the input to an appropriate integer and also make sure that it falls within the array bounds (see the code comments for additional details).
+This function converts the input to an appropriate integer and also makes sure that it falls within the array bounds (see the code comments for additional details).
 
 ### main.c
 
@@ -121,15 +121,35 @@ for( int idx = 0; idx < testIterations; idx++ )
     ASSERT( err == 0 );
     executionTime_sin_ns += systemTimeDiff_ns(p_start, p_end);
 }
-    executionTime_sin_ns_avg = executionTime_sin_ns / testIterations;
+executionTime_sin_ns_avg = executionTime_sin_ns / testIterations;
 ```
 In those blocks, we're repeatedly creating a random input value, storing the current "system time" into a variable called p_start, calling the function we want to profile, storing the updated system time into a variable called p_end, and computing the difference between the two times (in nanoseconds). That process happens "testIterations" numbers of times and then the sum is divided by "testIterations" to determine the average execution time for the function. The time-related functions are defined elsewhere in the project, meaning that they are "hardware independent", so far as the main function is concerned. They are defined as returning an error value: `0` for success and non-zero for an error. So these blocks also ASSERT that the return value isn't an error code; the ASSERT macro is defined elsewhere (don't worry, we'll get to that too). Following the definition of the `output` variable is a compiler directive, `__attribute__((unused))`, which suppresses warnings about this being an unused variable.
 
 Lines 78-105 compute the error associated with the sin LUT. We're not concerned with the time any of the function calls take so there's no timing code. After computing a random number from zero to 2\*PI, we compute the sin of that value using both the library function and our LUT. The absolute value of the difference between the two results is the absolute error; the absolute error divided by the expected value (the value returned by the library sin function) times 100 is the percent error. This block of code also checks if the expected value is zero and sets the percent error equal to 100 when it is (in order to avoid a deadly division by zero).
+```
+for( int idx = 0; idx < testIterations; idx++ )
+{
+    double absoluteError;
+    double percentError;
 
+    double rad = (double) rand() / (double) RAND_MAX * 2.0 * PI;
+    double output_sin = sin( rad );
+    double output_sin_LUT = sin_LUT( rad );
+        
+    absoluteError = fabs( output_sin - output_sin_LUT );
+    absoluteError_sin_LUT_sum += absoluteError;
+
+    double expected = fabs(output_sin);
+    if ( expected != 0 ) percentError = absoluteError / expected * 100.0;
+    else percentError = 100.0;
+    percentError_sin_LUT_sum += percentError;
+}
+absoluteError_sin_LUT_avg = absoluteError_sin_LUT_sum / testIterations;
+percentError_sin_LUT_avg = percentError_sin_LUT_sum / testIterations;
+```
 Lastly, `printResults` is called, which makes the results of the test available to the developer. It is hardware-specific and will be discussed below.
 
-At the top and bottom of this file are a few pragmas, or compiler directives, that instruct GCC to optimize this file at "O0", the lowest level of optimization, regardless of how the rest of the project is being optimized. This is required so that the compiler doesn't accidentally optimize away later calls
+At the top and bottom of this file are a few pragmas, or compiler directives, that instruct GCC to optimize this file at "O0", the lowest level of optimization, regardless of how the rest of the project is being optimized. This is required so that the compiler doesn't accidentally optimize away our various calls to `sin` and `sin_LUT`, whose outputs are not used and which appear to have no outward effect on the final result of the program.
 ```
 #pragma GCC push_options
 #pragma GCC optimize ("O0")
@@ -139,7 +159,7 @@ At the top and bottom of this file are a few pragmas, or compiler directives, th
 
 ### hardwareAPI.h
 
-At this point, you have all of the information you need to understand how the program works and what it's doing to compute the comparative execution times and absolute and percent errors. To see how we implement some of those hardware-specific functions, though, we need to look at `hardwareAPI.h` (in hardware/include). This file exposes the application programming interface (API; also simply "interface") that `main.c` can use to complete its actions. Each of the functions and data types not specified here (which are all hardware-specific) will need to be defined elsewhere for whatever processor we are compiler the program for.
+At this point, you have all of the information you need to understand how the program works and what it's doing to compute the comparative execution times and absolute and percent errors. To see how we implement some of those hardware-specific functions, though, we need to look at `hardwareAPI.h` (in hardware/include). This file exposes the application programming interface (API; also simply "interface") that `main.c` can use to complete its actions. Each of the functions and data types not specified here (which are all hardware-specific) will need to be defined elsewhere for whichever processor for which we are compiling the program.
 
 Lines 6-13 define the ASSERT macro and declare a function called `assert_failed`. The ASSERT macro simply checks if `expr` ("expression") is true and, if it isn't, it calls `assert_failed` with the filename and line number where the ASSERT macro was called.
 
@@ -161,15 +181,48 @@ This file defines all of the hardware-specific stuff that was declared in `hardw
 
 Lines 11-15 implement the `assert_failed` function, which simply writes a message to stdout (the terminal) and then terminates the program.
 
-Lines 17-20 defines the `systemTime_t` struct as containing another struct called `thisTime`. The data type `struct timespec` is used by `time.h` to store system times.
+Lines 17-20 defines the `systemTime_t` struct as containing another struct called `thisTime`. The data type `struct timespec` is used by `time.h` to store system times and has two data members: `tv_sec` (which holds a value for seconds) and `tv_nsec` (which holds a value for nanoseconds). For a variable of type `p_systemTime_t` named `p_mySystemTime` (the data type that `main` will use), we can access `thisTime` using `mySystemTime->thisTime` and we can access `tv_sec` and `tv_nsec` using `mySystemTime->thisTime.tv_sec` and `mySystemTime->thisTime.tv_nsec`, respectively.
+```
+struct systemTime_t
+{
+    struct timespec thisTime;
+};
+```
 
 Lines 22-26 define the `initHardware` function; there's nothing to initialize for x86 so this function is empty (except for a necessary return statement).
 
 Lines 28-72 define the timing functions.
 - `systemTime_create` calls `calloc` to create a pointer to an instance of `systemTime_t`.
 - `getSystemTime` uses the function `clock_gettime` from `time.h` to store the system time in the `struct timespec` part of `systemTime_t`.
+```
+errno_t getSystemTime(p_systemTime_t p_thisTime)
+{
+    errno_t err = 0;
+
+    ASSERT(p_thisTime != NULL);
+
+    err = clock_gettime(CLOCK_THREAD_CPUTIME_ID, &(p_thisTime->thisTime));
+    
+    return err;
+}
+```
 - `elapsedSystemTime_ns` uses the function `clock_gettime` as above and then accesses its two data members, `tv_sec` and `tv_nsec` to compute the elapsed system time in nanoseconds.
 - `systemTimeDiff_ns` uses `tv_sec` and `tv_nsec` from the `struct timespec` part of the two `systemTime_t` arguments to compute their difference.
+```
+uint32_t systemTimeDiff_ns(p_systemTime_t p_startTime, p_systemTime_t p_endTime)
+{
+    ASSERT(p_startTime != NULL);
+    ASSERT(p_endTime != NULL);
+
+    // NOTE: No checks are made for overflow, meaning the results of this function are undefined
+    // if the difference in nanoseconds between p_startTime and p_endTime is greater than UINT32_MAX
+    // (i.e. greater than 4,294,967,295, or 4.294967295 seconds).
+    uint32_t diff_sec = p_endTime->thisTime.tv_sec - p_startTime->thisTime.tv_sec;
+    uint32_t diff_ns = p_endTime->thisTime.tv_nsec - p_startTime->thisTime.tv_nsec;
+    
+    return ( ( 1000000000 * diff_sec ) + diff_ns );
+}
+```
 
 Lastly, `printResults` is defined as using `printf` to display the results of the test.
 
@@ -178,11 +231,41 @@ Lastly, `printResults` is defined as using `printf` to display the results of th
 This file defines all of the hardware-specific stuff that was declared in `hardwareAPI.h` for an STM32 processor; this is what allows us to compile and run the program on our "Blue Pills". Running our program on a real STM32 requires a few additional files (you can see them in the hardware/source/STM32F1 folder) which I obtained by first creating a project in STM32CubeMX with my desired settings (72 MHz CPU frequency, GPIO output on the build-in LED, etc) and setting the project type as "Makefile" before clicking "Generate code". The only files I changed from the project generated by STM32CubeMX were to their `main.c` and `main.h` files which, among other things, were renamed to `STM32F1.c` and `STM32F1.h` (to avoid conflicts with similarly named files in our current project).
 
 Lines 33-37 define the `systemTime_t` struct as containing two 32-bit unsigned integers called `ms` and `ns`. Since the STM32 HAL configures an on-board timer to generate 1 millisecond interrupts, we can use the millisecond counter and the timer value to determine the system time (since start-up) to with approximately nanosecond accuracy.
+```
+struct systemTime_t
+{
+    uint32_t ms;
+    uint32_t ns;
+};
+```
 
 On line 71, the signature for `main` is redefined to match the signature for `initHardware`. The `while(1)` loop is also deleted and a return statement is added. I also added a call to `SystemCoreClockUpdate` on line 107, since the variable `SystemCoreClock` is used later on to determine the CPU frequency (see the comments for more information).
 
 Lines 210-222 define the `assert_failed` function. In this case, all it does is turn on the built-in LED (as a warning light of sorts) and enter an infinite loop; if a debugger is attached, then the process halts (`HALT_IF_DEBUGGING` is a macro that's defined in `STM32F1.h`, which uses a special register on Cortex-M processors and an assembly instruction to determine if a debugger is connected and, if it is, to trigger a breakpoint).
 
 Lines 224-290 define the timing functions. They are (essentially) identical to the functions that were defined for the x86 with the exception of how we get the current "system time". As mentioned above, the STM32 HAL implements a millisecond counter using the SysTick timer; `HAL_GetTick()` returns the number of milliseconds that have transpired since the STM32 powered-on and the `SysTick` struct contains the information for the `SysTick` timer. `SysTick->LOAD` is the reload value for the timer and `SysTick->VAL` is the timer's current value; their difference is equal to the number of timer "ticks" since the last millisecond rollover. Dividing this number of "ticks" by the CPU's "ticks per second" (a.k.a. it's CPU frequency) results in the number of seconds that have elapsed since the last rollover; multiplying the number of seconds by 1 billion results in the number of nanoseconds since the last millisecond rollover. The calls to `HAL_GetTick()` and `SysTick->VAL` are placed within a `do...while` loop to catch the infrequent error where the SysTick interrupt triggers in between the two calls; if this were to occur without us checking, then it would be possible for the timer to rollover without us getting the updated value from `HAL_GetTick`.
+```
+errno_t getSystemTime(p_systemTime_t p_thisTime)
+{
+    uint32_t SysTick_Value;
 
-Lines 292-298 define the `printResults` function. Although we could have used any number of peripherals to display this information to the developer (the UART peripheral, in particular), I opted to keep the hardware requirements and development complexity to a minimum and implement none of them. The information is easily viewable with a debugger, which is exactly how I anticipated this program being run anyhow.
+    ASSERT(p_thisTime != NULL);
+
+    // Ensure uwTick (accessed through HAL_GetTick) isn't updated while retrieving SysTick->VAL
+    //
+    do
+    {
+        p_thisTime->ms = HAL_GetTick();
+        SysTick_Value = SysTick->VAL;
+    } while( p_thisTime->ms != HAL_GetTick() );
+
+    // NOTE: Order of operations, currently enforced with parentheses, is CRITICAL to prevent
+    // overflow.
+    //
+    p_thisTime->ns = ( ( SysTick->LOAD - SysTick_Value ) * ( 1000000000.0 / (float)SystemCoreClock ) );
+
+    return 0;
+}
+```
+
+Lines 292-298 define the `printResults` function. Although we could have used any number of peripherals to display this information to the developer (the UART peripheral, in particular), I opted to keep the hardware requirements and development complexity to a minimum and implemented none of them. The information is easily viewable with a debugger, which is exactly how I anticipated this program being run anyhow.
