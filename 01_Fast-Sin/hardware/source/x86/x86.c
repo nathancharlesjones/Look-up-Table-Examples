@@ -71,7 +71,8 @@ uint32_t systemTimeDiff_ns(p_systemTime_t p_startTime, p_systemTime_t p_endTime)
 	return ( ( 1000000000 * diff_sec ) + diff_ns );
 }
 
-void printResults(uint32_t iterations, float executionTime_sin_ns_avg, float executionTime_sin_LUT_ns_avg, float absoluteError_sin_LUT_avg, float percentError_sin_LUT_avg)
+void printResults(uint32_t iterations, float executionTime_sin_ns_avg, 
+	float executionTime_sin_LUT_ns_avg, float absoluteError_sin_LUT_avg, float percentError_sin_LUT_avg)
 {
 	printf("-----Sin LUT Test-----\n");
 	printf("Number of iterations: %d\n", iterations);
