@@ -90,6 +90,9 @@ double sin_LUT_double_interpolate(double radians)
 	while( x >= SIN_LUT_SIZE ) x -= SIN_LUT_SIZE;
 	while( x < 0 ) x += SIN_LUT_SIZE;
 
+	// First, check if our input value is greater than our last index (if this is the case, then we need to adjust our
+	// x0 and x1 values accordingly, so we don't accidentally reference past the end of our LUT).
+	//
 	if ( x > LAST_ELEMENT )
 	{
 		x0 = LAST_ELEMENT - 1;
@@ -101,6 +104,12 @@ double sin_LUT_double_interpolate(double radians)
 		x1 = x0 + 1;
 	}
 
+	// Next, compute the linear interpolation. The slope is merely the difference between the table values, since the difference
+	// in x is always 1. The "span" is the difference between our input and the lower table point, x0. The "offset" is the 
+	// amount our y-value changes as a result of our span. The final value is equal to the y-value of the lower point plus this
+	// offset. This algorithm constitutes one floating-point multiply and 3 floating-point additions/subtractions, and so is
+	// relatively fast.
+	//
 	double slope = sinTable_double[ x1 ] - sinTable_double[ x0 ];
 	double span = x - (double)( x0 );
 	double offset = slope * span;
@@ -114,9 +123,47 @@ double sin_LUT_double_nonUniform(double degrees)
 	//asdf
 }
 
-float sin_LUT_float_interpolate(float degrees)
+float sin_LUT_float_interpolate(float radians)
 {
-	//asdf
+	float ret;
+	int x0, x1;
+
+	// Multiply "radians" by 64 to map the range [0,2*PI] to the range [0,402] (the size of our LUT).
+	//
+	float x = radians * 64;
+
+	// Ensure "x" is within a valid range. Takes advantage of the fact that sin is periodic to merely "wrap" x to a valid 
+	// value instead of throwing an error.
+	//
+	while( x >= SIN_LUT_SIZE ) x -= SIN_LUT_SIZE;
+	while( x < 0 ) x += SIN_LUT_SIZE;
+
+	// First, check if our input value is greater than our last index (if this is the case, then we need to adjust our
+	// x0 and x1 values accordingly, so we don't accidentally reference past the end of our LUT).
+	//
+	if ( x > LAST_ELEMENT )
+	{
+		x0 = LAST_ELEMENT - 1;
+		x1 = LAST_ELEMENT; 
+	}
+	else
+	{
+		x0 = (int)( x );
+		x1 = x0 + 1;
+	}
+
+	// Next, compute the linear interpolation. The slope is merely the difference between the table values, since the difference
+	// in x is always 1. The "span" is the difference between our input and the lower table point, x0. The "offset" is the 
+	// amount our y-value changes as a result of our span. The final value is equal to the y-value of the lower point plus this
+	// offset. This algorithm constitutes one floating-point multiply and 3 floating-point additions/subtractions, and so is
+	// relatively fast.
+	//
+	float slope = sinTable_double[ x1 ] - sinTable_double[ x0 ];
+	float span = x - (float)( x0 );
+	float offset = slope * span;
+	ret = sinTable_double[ x0 ] + offset;
+
+	return ret;
 }
 
 float sin_LUT_float_nonUniform(float degrees)

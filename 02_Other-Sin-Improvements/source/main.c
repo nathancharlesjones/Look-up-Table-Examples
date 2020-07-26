@@ -49,6 +49,7 @@ int main(int argc, char * argv[])
 	sinLUT_implementation_t	sin_LUT_float_struct = {				"LUT Float",	fcn_sin_LUT_float,				{.fcn_float = sin_LUT_float},				0, 0, 0, 0, 0, 0 };
 	sinLUT_implementation_t sin_LUT_fixedPoint_struct = {			"LUT Fxd Pt",	fcn_sin_LUT_fixedPoint,			{.fcn_fixedPoint = sin_LUT_fixedPoint},		0, 0, 0, 0, 0, 0 };
 	sinLUT_implementation_t sin_LUT_double_interpolate_struct = {	"Dbl Interp",	fcn_sin_LUT_double_interpolate,	{.fcn_double = sin_LUT_double_interpolate},	0, 0, 0, 0, 0, 0 };
+	sinLUT_implementation_t sin_LUT_float_interpolate_struct = {	"Flt Interp",	fcn_sin_LUT_float_interpolate,	{.fcn_float = sin_LUT_float_interpolate},	0, 0, 0, 0, 0, 0 };
 
 	sinLUT_implementation_t codeUnderTest[] = 
 	{
@@ -58,6 +59,7 @@ int main(int argc, char * argv[])
 		sin_LUT_float_struct,
 		sin_LUT_fixedPoint_struct,
 		sin_LUT_double_interpolate_struct,
+		sin_LUT_float_interpolate_struct,
 		{0}
 	};
 
@@ -109,6 +111,7 @@ int main(int argc, char * argv[])
 				break;
 
 				case fcn_sin_LUT_float:
+				case fcn_sin_LUT_float_interpolate:
 					err = getSystemTime(p_start);
 					ASSERT( err == 0 );
 					output_float = codeUnderTest[idx_CUT].fcn_float( input_float );
