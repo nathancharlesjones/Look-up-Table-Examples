@@ -1,0 +1,11 @@
+sin_lut.c:12:6:init_sinLUT	16	static
+sin_lut.c:24:8:sin_LUT_double	8	static
+sin_lut.c:42:7:sin_LUT_float	8	static
+sin_lut.c:60:10:sin_LUT_fixedPoint	8	static
+sin_lut.c:71:8:sin_LUT_double_interpolate	8	static
+sin_lut.c:76:8:sin_LUT_double_nonUniform	8	static
+sin_lut.c:81:7:sin_LUT_float_interpolate	8	static
+sin_lut.c:86:7:sin_LUT_float_nonUniform	8	static
+sin_lut.c:91:10:sin_LUT_fixedPoint_interpolate	8	static
+sin_lut.c:96:10:sin_LUT_fixedPoint_nonUniform	8	static
+sin_lut.c:101:8:sin_LUT_double_rangeReduction	8	static
