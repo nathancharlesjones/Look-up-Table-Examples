@@ -43,11 +43,12 @@ int main(int argc, char * argv[])
 	p_systemTime_t p_start = systemTime_create();
 	p_systemTime_t p_end = systemTime_create();
 
-	sinLUT_implementation_t	scaffolding_struct = {			"Scaffolding",	fcn_scaffolding,		{.fcn_double = NULL}, 					0, 0, 0, 0, 0, 0 };
-	sinLUT_implementation_t	sin_library_struct = {			"Library Sin",	fcn_sin,				{.fcn_double = sin}, 					0, 0, 0, 0, 0, 0 };
-	sinLUT_implementation_t	sin_LUT_double_struct = {		"LUT Double",	fcn_sin_LUT_double,		{.fcn_double = sin_LUT_double},			0, 0, 0, 0, 0, 0 };
-	sinLUT_implementation_t	sin_LUT_float_struct = {		"LUT Float",	fcn_sin_LUT_float,		{.fcn_float = sin_LUT_float},			0, 0, 0, 0, 0, 0 };
-	sinLUT_implementation_t sin_LUT_fixedPoint_struct = {	"LUT Fxd Pt",	fcn_sin_LUT_fixedPoint,	{.fcn_fixedPoint = sin_LUT_fixedPoint},	0, 0, 0, 0, 0, 0 };
+	sinLUT_implementation_t	scaffolding_struct = {					"Scaffolding",	fcn_scaffolding,				{.fcn_double = NULL}, 						0, 0, 0, 0, 0, 0 };
+	sinLUT_implementation_t	sin_library_struct = {					"Library Sin",	fcn_sin,						{.fcn_double = sin}, 						0, 0, 0, 0, 0, 0 };
+	sinLUT_implementation_t	sin_LUT_double_struct = {				"LUT Double",	fcn_sin_LUT_double,				{.fcn_double = sin_LUT_double},				0, 0, 0, 0, 0, 0 };
+	sinLUT_implementation_t	sin_LUT_float_struct = {				"LUT Float",	fcn_sin_LUT_float,				{.fcn_float = sin_LUT_float},				0, 0, 0, 0, 0, 0 };
+	sinLUT_implementation_t sin_LUT_fixedPoint_struct = {			"LUT Fxd Pt",	fcn_sin_LUT_fixedPoint,			{.fcn_fixedPoint = sin_LUT_fixedPoint},		0, 0, 0, 0, 0, 0 };
+	sinLUT_implementation_t sin_LUT_double_interpolate_struct = {	"Dbl Interp",	fcn_sin_LUT_double_interpolate,	{.fcn_double = sin_LUT_double_interpolate},	0, 0, 0, 0, 0, 0 };
 
 	sinLUT_implementation_t codeUnderTest[] = 
 	{
@@ -56,6 +57,7 @@ int main(int argc, char * argv[])
 		sin_LUT_double_struct,
 		sin_LUT_float_struct,
 		sin_LUT_fixedPoint_struct,
+		sin_LUT_double_interpolate_struct,
 		{0}
 	};
 

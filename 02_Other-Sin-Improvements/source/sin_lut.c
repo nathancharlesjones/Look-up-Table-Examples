@@ -3,6 +3,7 @@
 #include "sin_lut.h"
 
 #define SIN_LUT_SIZE 402
+#define LAST_ELEMENT ( SIN_LUT_SIZE - 1 )
 
 // Sin look-up table using doubles and floats at integer steps of "radians * 64"
 static double sinTable_double[SIN_LUT_SIZE];
@@ -74,9 +75,38 @@ q15_16_t sin_LUT_fixedPoint(q15_16_t radians)
 	return sinTable_fixedPoint[ radians_shifted ];
 }
 
-double sin_LUT_double_interpolate(double degrees)
+double sin_LUT_double_interpolate(double radians)
 {
-	//asdf
+	double ret;
+	int x0, x1;
+
+	// Multiply "radians" by 64 to map the range [0,2*PI] to the range [0,402] (the size of our LUT).
+	//
+	double x = radians * 64;
+
+	// Ensure "x" is within a valid range. Takes advantage of the fact that sin is periodic to merely "wrap" x to a valid 
+	// value instead of throwing an error.
+	//
+	while( x >= SIN_LUT_SIZE ) x -= SIN_LUT_SIZE;
+	while( x < 0 ) x += SIN_LUT_SIZE;
+
+	if ( x > LAST_ELEMENT )
+	{
+		x0 = LAST_ELEMENT - 1;
+		x1 = LAST_ELEMENT; 
+	}
+	else
+	{
+		x0 = (int)( x );
+		x1 = x0 + 1;
+	}
+
+	double slope = sinTable_double[ x1 ] - sinTable_double[ x0 ];
+	double span = x - (double)( x0 );
+	double offset = slope * span;
+	ret = sinTable_double[ x0 ] + offset;
+
+	return ret;
 }
 
 double sin_LUT_double_nonUniform(double degrees)
