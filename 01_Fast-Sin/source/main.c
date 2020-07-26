@@ -17,7 +17,9 @@ int main(int argc, char * argv[])
 	errno_t err = 0;
 
 	p_systemTime_t p_start = systemTime_create();
-	p_systemTime_t p_end = systemTime_create();
+	p_systemTime_t p_end = systemTime_create();	
+	double executionTime_scaffolding_ns = 0;
+	double executionTime_scaffolding_ns_avg;
 	double executionTime_sin_ns = 0;
 	double executionTime_sin_ns_avg;
 	double executionTime_sin_LUT_ns = 0;
@@ -42,6 +44,21 @@ int main(int argc, char * argv[])
 	err = elapsedSystemTime_ns(&time_ns);
 	ASSERT( err == 0 );
 	srand((unsigned) time_ns);
+
+	// Execute scaffolding with timing
+	//
+	for( int idx = 0; idx < testIterations; idx++ )
+	{
+		double output __attribute__((unused));
+		double input = (double) rand() / (double) RAND_MAX * 2.0 * PI;
+		err = getSystemTime(p_start);
+		ASSERT( err == 0 );
+		output = 0;
+		err = getSystemTime(p_end);
+		ASSERT( err == 0 );
+		executionTime_scaffolding_ns += systemTimeDiff_ns(p_start, p_end);
+	}
+	executionTime_scaffolding_ns_avg = executionTime_scaffolding_ns / testIterations;
 
 	// Execute library sin with timing
 	//
@@ -105,7 +122,9 @@ int main(int argc, char * argv[])
 	absoluteError_sin_LUT_avg = absoluteError_sin_LUT_sum / testIterations;
 	percentError_sin_LUT_avg = percentError_sin_LUT_sum / testIterations;
 	
-	printResults(testIterations, executionTime_sin_ns_avg, executionTime_sin_LUT_ns_avg, absoluteError_sin_LUT_avg, percentError_sin_LUT_avg);
+	printResults(testIterations, executionTime_scaffolding_ns, executionTime_scaffolding_ns_avg,
+		executionTime_sin_ns_avg, executionTime_sin_LUT_ns_avg, 
+		absoluteError_sin_LUT_avg, percentError_sin_LUT_avg);
 
 	return EXIT_SUCCESS;
 }
