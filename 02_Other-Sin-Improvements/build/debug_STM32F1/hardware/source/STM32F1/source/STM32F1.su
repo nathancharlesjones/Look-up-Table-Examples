@@ -1,0 +1,10 @@
+STM32F1.c:156:13:MX_GPIO_Init	48	static
+STM32F1.c:118:6:SystemClock_Config	80	static
+STM32F1.c:71:9:initHardware	8	static
+STM32F1.c:185:6:Error_Handler	0	static
+STM32F1.c:210:6:assert_failed	8	static
+STM32F1.c:224:16:systemTime_create	8	static
+STM32F1.c:232:9:getSystemTime	24	static
+STM32F1.c:254:9:elapsedSystemTime_ns	24	static
+STM32F1.c:278:10:systemTimeDiff_ns	8	static
+STM32F1.c:292:6:printResults_CUT	0	static
