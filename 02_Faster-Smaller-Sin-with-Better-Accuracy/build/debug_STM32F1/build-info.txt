@@ -1,8 +1,0 @@
-Build date:			Sat Jul 25 20:59:25 EDT 2020
-Build account:		nathancharlesjones@JoshuaLawrenceChamberlain
-Build machine:		x86_64 running GNU/Linux, release 4.15.0-109-generic, version #110-Ubuntu SMP Tue Jun 23 02:39:32 UTC 2020.
-Make version info:	GNU Make 4.1 Built for x86_64-pc-linux-gnu
-GCC version info:	arm-none-eabi-gcc (15:6.3.1+svn253039-1build1) 6.3.1 20170620
-GNU binutils info:	GNU ar (2.27-9ubuntu1+9) 2.27
-					GNU size (2.27-9ubuntu1+9) 2.27
-					GNU objcopy (2.27-9ubuntu1+9) 2.27
