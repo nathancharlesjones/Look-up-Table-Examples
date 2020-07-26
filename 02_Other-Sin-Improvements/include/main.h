@@ -14,7 +14,8 @@ typedef enum sinLUT_function_t
 	fcn_sin_LUT_double_interpolate,
 	fcn_sin_LUT_double_nonUniform,
 	fcn_sin_LUT_double_rangeReduction,
-	fcn_sin_LUT_float_interpolate
+	fcn_sin_LUT_float_interpolate,
+	fcn_sin_LUT_fixedPoint_interpolate
 } sinLUT_function_t;
 
 typedef struct sinLUT_implementation_t

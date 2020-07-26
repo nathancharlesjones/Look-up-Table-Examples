@@ -158,7 +158,7 @@ float sin_LUT_float_interpolate(float radians)
 	// offset. This algorithm constitutes one floating-point multiply and 3 floating-point additions/subtractions, and so is
 	// relatively fast.
 	//
-	float slope = sinTable_double[ x1 ] - sinTable_double[ x0 ];
+	float slope = sinTable_float[ x1 ] - sinTable_float[ x0 ];
 	float span = x - (float)( x0 );
 	float offset = slope * span;
 	ret = sinTable_double[ x0 ] + offset;
@@ -171,9 +171,49 @@ float sin_LUT_float_nonUniform(float degrees)
 	//asdf
 }
 
-q15_16_t sin_LUT_fixedPoint_interpolate(q15_16_t degrees)
+q15_16_t sin_LUT_fixedPoint_interpolate(q15_16_t radians)
 {
-	//asdf
+	q15_16_t ret;
+	q25_6_t x0, x1;
+
+	// Convert "radians" from having 16 fractional bits to only having 6 fractional bits. The purpose of this is to get the lower
+	// 9 bits of "x" to align with the array indices (i.e. aligning the input to have 6 fractional bits is equivalent
+	// to multiplying the floating-point numbers by 64 (2^6) above).
+	//
+	q25_6_t x = FCONV(radians, 16, 6);
+
+	// Ensure "x" is within a valid range. Takes advantage of the fact that sin is periodic to merely "wrap" x to a valid 
+	// value instead of throwing an error.
+	//
+	while( x >= SIN_LUT_SIZE ) x = FSUB(x, SIN_LUT_SIZE);
+	while( x < 0 ) x = FADD(x, SIN_LUT_SIZE);
+
+	// First, check if our input value is greater than our last index (if this is the case, then we need to adjust our
+	// x0 and x1 values accordingly, so we don't accidentally reference past the end of our LUT).
+	//
+	if ( x > LAST_ELEMENT )
+	{
+		x0 = FSUB(x0, ( LAST_ELEMENT - 1 ) );
+		x1 = LAST_ELEMENT; 
+	}
+	else
+	{
+		x0 = (int)( x );
+		x1 = FADD(x1, ( x0 + 1 ) );
+	}
+
+	// Next, compute the linear interpolation. The slope is merely the difference between the table values, since the difference
+	// in x is always 1. The "span" is the difference between our input and the lower table point, x0. The "offset" is the 
+	// amount our y-value changes as a result of our span. The final value is equal to the y-value of the lower point plus this
+	// offset. This algorithm constitutes one floating-point multiply and 3 floating-point additions/subtractions, and so is
+	// relatively fast.
+	//
+	q15_16_t slope = FSUB( sinTable_double[ x1 ], sinTable_double[ x0 ] );
+	q25_6_t span = FSUB( x, (float)( x0 ) );
+	q15_16_t offset = FMULG( slope, span, 16, 6, 16 );
+	ret = FADD( sinTable_double[ x0 ], offset );
+
+	return ret;
 }
 
 q15_16_t sin_LUT_fixedPoint_nonUniform(q15_16_t degrees)

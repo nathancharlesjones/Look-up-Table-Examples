@@ -4,10 +4,10 @@ sin_lut.c:43:7:sin_LUT_float	8	static
 sin_lut.c:61:10:sin_LUT_fixedPoint	0	static
 sin_lut.c:78:8:sin_LUT_double_interpolate	32	static
 sin_lut.c:121:8:sin_LUT_double_nonUniform	0	static
-sin_lut.c:126:7:sin_LUT_float_interpolate	24	static
+sin_lut.c:126:7:sin_LUT_float_interpolate	16	static
 sin_lut.c:169:7:sin_LUT_float_nonUniform	0	static
-sin_lut.c:174:10:sin_LUT_fixedPoint_interpolate	0	static
-sin_lut.c:179:10:sin_LUT_fixedPoint_nonUniform	0	static
-sin_lut.c:184:8:sin_LUT_double_rangeReduction	0	static
-sin_lut.c:189:8:sin_LUT_float_rangeReduction	0	static
-sin_lut.c:194:8:sin_LUT_fixedPoint_rangeReduction	0	static
+sin_lut.c:174:10:sin_LUT_fixedPoint_interpolate	24	static
+sin_lut.c:219:10:sin_LUT_fixedPoint_nonUniform	0	static
+sin_lut.c:224:8:sin_LUT_double_rangeReduction	0	static
+sin_lut.c:229:8:sin_LUT_float_rangeReduction	0	static
+sin_lut.c:234:8:sin_LUT_fixedPoint_rangeReduction	0	static
