@@ -45,7 +45,4 @@ returning the result in q3 format */
 // Define a fixed-point type with 1 sign bit (implied), 15 integer bits, and 16 fractional bits
 typedef int32_t q15_16_t;
 
-// Define a fixed-point type with 1 sign bit (implied), 25 integer bits, and 6 fractional bits
-typedef int32_t q25_6_t;
-
 #endif // FIXED_POINT_H

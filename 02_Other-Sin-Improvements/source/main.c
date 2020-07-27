@@ -43,25 +43,16 @@ int main(int argc, char * argv[])
 	p_systemTime_t p_start = systemTime_create();
 	p_systemTime_t p_end = systemTime_create();
 
-	sinLUT_implementation_t	scaffolding_struct = {						"Scaffolding",	fcn_scaffolding,					{.fcn_double = NULL}, 								0, 0, 0, 0, 0, 0 };
-	sinLUT_implementation_t	sin_library_struct = {						"Library Sin",	fcn_sin,							{.fcn_double = sin}, 								0, 0, 0, 0, 0, 0 };
-	sinLUT_implementation_t	sin_LUT_double_struct = {					"LUT Double",	fcn_sin_LUT_double,					{.fcn_double = sin_LUT_double},						0, 0, 0, 0, 0, 0 };
-	sinLUT_implementation_t	sin_LUT_float_struct = {					"LUT Float",	fcn_sin_LUT_float,					{.fcn_float = sin_LUT_float},						0, 0, 0, 0, 0, 0 };
-	sinLUT_implementation_t sin_LUT_fixedPoint_struct = {				"LUT Fxd Pt",	fcn_sin_LUT_fixedPoint,				{.fcn_fixedPoint = sin_LUT_fixedPoint},				0, 0, 0, 0, 0, 0 };
-	sinLUT_implementation_t sin_LUT_double_interpolate_struct = {		"Dbl Interp",	fcn_sin_LUT_double_interpolate,		{.fcn_double = sin_LUT_double_interpolate},			0, 0, 0, 0, 0, 0 };
-	sinLUT_implementation_t sin_LUT_float_interpolate_struct = {		"Flt Interp",	fcn_sin_LUT_float_interpolate,		{.fcn_float = sin_LUT_float_interpolate},			0, 0, 0, 0, 0, 0 };
-	sinLUT_implementation_t sin_LUT_fixedPoint_interpolate_struct = {	"Fxd Interp",	fcn_sin_LUT_fixedPoint_interpolate,	{.fcn_fixedPoint = sin_LUT_fixedPoint_interpolate},	0, 0, 0, 0, 0, 0 };
-
 	sinLUT_implementation_t codeUnderTest[] = 
 	{
-		scaffolding_struct,
-		sin_library_struct,
-		sin_LUT_double_struct,
-		sin_LUT_float_struct,
-		sin_LUT_fixedPoint_struct,
-		sin_LUT_double_interpolate_struct,
-		sin_LUT_float_interpolate_struct,
-		sin_LUT_fixedPoint_interpolate_struct,
+		{ "Scaffolding",	fcn_scaffolding,	{.fcn_double = NULL}, 								0, 0, 0, 0, 0, 0 },
+		{ "Library Sin",	fcn_dbl_in_dbl_out,	{.fcn_double = sin}, 								0, 0, 0, 0, 0, 0 },
+		{ "LUT Double",		fcn_dbl_in_dbl_out,	{.fcn_double = sin_LUT_double},						0, 0, 0, 0, 0, 0 },
+		{ "LUT Float",		fcn_flt_in_flt_out,	{.fcn_float = sin_LUT_float},						0, 0, 0, 0, 0, 0 },
+		{ "LUT Fxd Pt",		fcn_fxd_in_fxd_out,	{.fcn_fixedPoint = sin_LUT_fixedPoint},				0, 0, 0, 0, 0, 0 },
+		{ "Dbl Interp",		fcn_dbl_in_dbl_out,	{.fcn_double = sin_LUT_double_interpolate},			0, 0, 0, 0, 0, 0 },
+		{ "Flt Interp",		fcn_flt_in_flt_out,	{.fcn_float = sin_LUT_float_interpolate},			0, 0, 0, 0, 0, 0 },
+		{ "Fxd Interp",		fcn_fxd_in_fxd_out,	{.fcn_fixedPoint = sin_LUT_fixedPoint_interpolate},	0, 0, 0, 0, 0, 0 },
 		{0}
 	};
 
@@ -87,9 +78,14 @@ int main(int argc, char * argv[])
 	{
 		for( int idx_test = 0; idx_test < testIterations; idx_test++ )
 		{
+			// Generate inputs for all three types of functions (double, float, fixed-point)
+			//
 			double output_CUT, input_double = (double) rand() / (double) RAND_MAX * 2.0 * PI;
 			float output_float, input_float = (float) input_double;
 			q15_16_t output_fixedPoint, input_fixedPoint = TOFIX(input_double, 16);
+
+			// Call the correct function with the correct input data type based on the fcnSignature_t enum
+			//
 			switch( codeUnderTest[idx_CUT].function_enum )
 			{
 				case fcn_scaffolding:
@@ -100,20 +96,15 @@ int main(int argc, char * argv[])
 					ASSERT( err == 0 );
 				break;
 
-				case fcn_sin:
-				case fcn_sin_LUT_double:
-				case fcn_sin_LUT_double_interpolate:
-				case fcn_sin_LUT_double_nonUniform:
-				case fcn_sin_LUT_double_rangeReduction:
+				case fcn_dbl_in_dbl_out:
 					err = getSystemTime(p_start);
 					ASSERT( err == 0 );
-					output_CUT = codeUnderTest[idx_CUT].fcn_double( input_double);
+					output_CUT = codeUnderTest[idx_CUT].fcn_double( input_double );
 					err = getSystemTime(p_end);
 					ASSERT( err == 0 );
 				break;
 
-				case fcn_sin_LUT_float:
-				case fcn_sin_LUT_float_interpolate:
+				case fcn_flt_in_flt_out:
 					err = getSystemTime(p_start);
 					ASSERT( err == 0 );
 					output_float = codeUnderTest[idx_CUT].fcn_float( input_float );
@@ -122,8 +113,7 @@ int main(int argc, char * argv[])
 					output_CUT = (double) output_float;
 				break;
 
-				case fcn_sin_LUT_fixedPoint:
-				case fcn_sin_LUT_fixedPoint_interpolate:
+				case fcn_fxd_in_fxd_out:
 					err = getSystemTime(p_start);
 					ASSERT( err == 0 );
 					output_fixedPoint = codeUnderTest[idx_CUT].fcn_fixedPoint( input_fixedPoint );
@@ -138,12 +128,18 @@ int main(int argc, char * argv[])
 				break;
 			}			
 			
+			// Add most recent computation time to the running total
+			//
 			codeUnderTest[idx_CUT].executionTime_ns += systemTimeDiff_ns(p_start, p_end);
 
+			// Add current absolute error to the running total
+			//
 			double output_sin = sin( input_double );
 			double absoluteError = fabs( output_sin - output_CUT );
 			codeUnderTest[idx_CUT].absoluteError_sum += absoluteError;
 
+			// Add current percent error to the running total
+			//
 			double percentError;
 			double expected = fabs( output_sin );
 			if ( expected != 0 ) percentError = absoluteError / expected * 100.0;
@@ -152,6 +148,8 @@ int main(int argc, char * argv[])
 
 		}
 
+		// Determine averages
+		//
 		codeUnderTest[idx_CUT].executionTime_ns_avg = codeUnderTest[idx_CUT].executionTime_ns / testIterations;
 		codeUnderTest[idx_CUT].absoluteError_avg = codeUnderTest[idx_CUT].absoluteError_sum / testIterations;
 		codeUnderTest[idx_CUT].percentError_avg = codeUnderTest[idx_CUT].percentError_sum / testIterations;

@@ -60,19 +60,25 @@ float sin_LUT_float(float radians)
 
 q15_16_t sin_LUT_fixedPoint(q15_16_t radians)
 {
+	q15_16_t tableSize = FCONV(SIN_LUT_SIZE, 0, 16);
+
+	// Multiply "radians" by 64 to map the range [0,2*PI] to the range [0,402] (the size of our LUT).
+	//
+	q15_16_t x = FMULI( radians, 64 );
+
 	// Convert "radians" from having 16 fractional bits to only having 6 fractional bits. The purpose of this is to get the lower
 	// 9 bits of "radians_shifted" to align with the array indices (i.e. aligning the input to have 6 fractional bits is equivalent
 	// to multiplying the floating-point numbers by 64 (2^6) above).
 	//
-	q25_6_t radians_shifted = FCONV(radians, 16, 6);
+	//q25_6_t radians_shifted = FCONV(radians, 16, 6);
 
 	// Ensure "radians_shifted" is within a valid range. Takes advantage of the fact that sin is periodic to merely "wrap" 
 	// radians_shifted to a valid value instead of throwing an error.
 	//
-	while( radians_shifted >= SIN_LUT_SIZE ) radians_shifted -= SIN_LUT_SIZE;
-	while( radians_shifted < 0 ) radians_shifted += SIN_LUT_SIZE;
+	while( x >= SIN_LUT_SIZE ) x = FSUB( x, tableSize );
+	while( x < 0 ) x = FADD( x, tableSize );
 
-	return sinTable_fixedPoint[ radians_shifted ];
+	return sinTable_fixedPoint[ FCONV( x, 16, 0 ) ];
 }
 
 double sin_LUT_double_interpolate(double radians)
