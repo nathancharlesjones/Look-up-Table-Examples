@@ -110,10 +110,11 @@ double sin_LUT_double_interpolate(double radians)
 	// offset. This algorithm constitutes one floating-point multiply and 3 floating-point additions/subtractions, and so is
 	// relatively fast.
 	//
-	double slope = sinTable_double[ x1 ] - sinTable_double[ x0 ];
+	double y0 = sinTable_double[ x0 ];
+	double slope = sinTable_double[ x1 ] - y0;
 	double span = x - (double)( x0 );
 	double offset = slope * span;
-	ret = sinTable_double[ x0 ] + offset;
+	ret = y0 + offset;
 
 	return ret;
 }
@@ -158,10 +159,11 @@ float sin_LUT_float_interpolate(float radians)
 	// offset. This algorithm constitutes one floating-point multiply and 3 floating-point additions/subtractions, and so is
 	// relatively fast.
 	//
-	float slope = sinTable_float[ x1 ] - sinTable_float[ x0 ];
+	float y0 = sinTable_float[ x0 ];
+	float slope = sinTable_float[ x1 ] - y0;
 	float span = x - (float)( x0 );
 	float offset = slope * span;
-	ret = sinTable_double[ x0 ] + offset;
+	ret = y0 + offset;
 
 	return ret;
 }
@@ -173,33 +175,34 @@ float sin_LUT_float_nonUniform(float degrees)
 
 q15_16_t sin_LUT_fixedPoint_interpolate(q15_16_t radians)
 {
-	q15_16_t ret;
-	q25_6_t x0, x1;
+	q15_16_t ret, tableSize = FCONV(SIN_LUT_SIZE, 0, 16);
+	int x0, x1;
 
-	// Convert "radians" from having 16 fractional bits to only having 6 fractional bits. The purpose of this is to get the lower
-	// 9 bits of "x" to align with the array indices (i.e. aligning the input to have 6 fractional bits is equivalent
-	// to multiplying the floating-point numbers by 64 (2^6) above).
+	// Multiply "radians" by 64 to map the range [0,2*PI] to the range [0,402] (the size of our LUT).
 	//
-	q25_6_t x = FCONV(radians, 16, 6);
+	q15_16_t x = FMULI( radians, 64 );
 
 	// Ensure "x" is within a valid range. Takes advantage of the fact that sin is periodic to merely "wrap" x to a valid 
-	// value instead of throwing an error.
+	// value instead of throwing an error. Uses "tableSize" instead of SIN_LUT_SIZE in order to match the radix position
+	// for the fixed-point value "x" (which is in q15_16 format).
 	//
-	while( x >= SIN_LUT_SIZE ) x = FSUB(x, SIN_LUT_SIZE);
-	while( x < 0 ) x = FADD(x, SIN_LUT_SIZE);
+	while( x >= SIN_LUT_SIZE ) x = FSUB( x, tableSize );
+	while( x < 0 ) x = FADD( x, tableSize );
 
-	// First, check if our input value is greater than our last index (if this is the case, then we need to adjust our
-	// x0 and x1 values accordingly, so we don't accidentally reference past the end of our LUT).
+	// First, check if our input value is equal to the last element in our table (if this is the case, then we need to 
+	// adjust our x0 and x1 values accordingly, so we don't accidentally reference past the end of our LUT). Otherwise,
+	// x0, the lower index, is just equal to our truncated input value and the x1, the upper index, is one greater than
+	// that.
 	//
-	if ( x > LAST_ELEMENT )
+	if ( x == LAST_ELEMENT )
 	{
-		x0 = FSUB(x0, ( LAST_ELEMENT - 1 ) );
+		x0 = LAST_ELEMENT - 1;
 		x1 = LAST_ELEMENT; 
 	}
 	else
 	{
-		x0 = (int)( x );
-		x1 = FADD(x1, ( x0 + 1 ) );
+		x0 = FCONV( x, 16, 0 );
+		x1 = x0 + 1;
 	}
 
 	// Next, compute the linear interpolation. The slope is merely the difference between the table values, since the difference
@@ -208,10 +211,11 @@ q15_16_t sin_LUT_fixedPoint_interpolate(q15_16_t radians)
 	// offset. This algorithm constitutes one floating-point multiply and 3 floating-point additions/subtractions, and so is
 	// relatively fast.
 	//
-	q15_16_t slope = FSUB( sinTable_double[ x1 ], sinTable_double[ x0 ] );
-	q25_6_t span = FSUB( x, (float)( x0 ) );
-	q15_16_t offset = FMULG( slope, span, 16, 6, 16 );
-	ret = FADD( sinTable_double[ x0 ], offset );
+	q15_16_t y0 = sinTable_fixedPoint[ x0 ];
+	q15_16_t slope = FSUB( sinTable_fixedPoint[ x1 ], y0 );
+	q15_16_t span = FSUBG( x, x0, 16, 0, 16 );
+	q15_16_t offset = FMUL( slope, span, 16 );
+	ret = FADD( y0, offset );
 
 	return ret;
 }

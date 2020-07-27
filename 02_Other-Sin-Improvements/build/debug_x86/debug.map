@@ -106,11 +106,7 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 build/debug_x86/source/sin_lut.o
  .text.sin_LUT_double_nonUniform
                 0x0000000000000000        0x1 build/debug_x86/source/sin_lut.o
- .text.sin_LUT_float_interpolate
-                0x0000000000000000        0x1 build/debug_x86/source/sin_lut.o
  .text.sin_LUT_float_nonUniform
-                0x0000000000000000        0x1 build/debug_x86/source/sin_lut.o
- .text.sin_LUT_fixedPoint_interpolate
                 0x0000000000000000        0x1 build/debug_x86/source/sin_lut.o
  .text.sin_LUT_fixedPoint_nonUniform
                 0x0000000000000000        0x1 build/debug_x86/source/sin_lut.o
@@ -391,7 +387,7 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
 .plt.sec
  *(.plt.sec)
 
-.text           0x0000000000000840     0x1232
+.text           0x0000000000000840     0x14e2
  *(.text.unlikely .text.*_unlikely .text.unlikely.*)
  *(.text.exit .text.exit.*)
  *(.text.startup .text.startup.*)
@@ -401,104 +397,110 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
                 0x0000000000000840                _start
  *fill*         0x000000000000086b        0x5 
  .text          0x0000000000000870       0xb5 /usr/lib/gcc/x86_64-linux-gnu/8/crtbeginS.o
- .text.main     0x0000000000000925      0xd5e build/debug_x86/source/main.o
+ .text.main     0x0000000000000925      0xf36 build/debug_x86/source/main.o
                 0x0000000000000925                main
  .text.init_sinLUT
-                0x0000000000001683       0x63 build/debug_x86/source/sin_lut.o
-                0x0000000000001683                init_sinLUT
+                0x000000000000185b       0x63 build/debug_x86/source/sin_lut.o
+                0x000000000000185b                init_sinLUT
  .text.sin_LUT_double
-                0x00000000000016e6       0x3a build/debug_x86/source/sin_lut.o
-                0x00000000000016e6                sin_LUT_double
+                0x00000000000018be       0x3a build/debug_x86/source/sin_lut.o
+                0x00000000000018be                sin_LUT_double
  .text.sin_LUT_float
-                0x0000000000001720       0x3e build/debug_x86/source/sin_lut.o
-                0x0000000000001720                sin_LUT_float
+                0x00000000000018f8       0x3e build/debug_x86/source/sin_lut.o
+                0x00000000000018f8                sin_LUT_float
  .text.sin_LUT_fixedPoint
-                0x000000000000175e       0x2b build/debug_x86/source/sin_lut.o
-                0x000000000000175e                sin_LUT_fixedPoint
+                0x0000000000001936       0x2b build/debug_x86/source/sin_lut.o
+                0x0000000000001936                sin_LUT_fixedPoint
  .text.sin_LUT_double_interpolate
-                0x0000000000001789       0x7b build/debug_x86/source/sin_lut.o
-                0x0000000000001789                sin_LUT_double_interpolate
+                0x0000000000001961       0x7b build/debug_x86/source/sin_lut.o
+                0x0000000000001961                sin_LUT_double_interpolate
+ .text.sin_LUT_float_interpolate
+                0x00000000000019dc       0x78 build/debug_x86/source/sin_lut.o
+                0x00000000000019dc                sin_LUT_float_interpolate
+ .text.sin_LUT_fixedPoint_interpolate
+                0x0000000000001a54       0x59 build/debug_x86/source/sin_lut.o
+                0x0000000000001a54                sin_LUT_fixedPoint_interpolate
  .text.assert_failed
-                0x0000000000001804       0x31 build/debug_x86/hardware/source/x86/x86.o
-                0x0000000000001804                assert_failed
+                0x0000000000001aad       0x31 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000001aad                assert_failed
  .text.initHardware
-                0x0000000000001835        0x6 build/debug_x86/hardware/source/x86/x86.o
-                0x0000000000001835                initHardware
+                0x0000000000001ade        0x6 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000001ade                initHardware
  .text.systemTime_create
-                0x000000000000183b       0x2e build/debug_x86/hardware/source/x86/x86.o
-                0x000000000000183b                systemTime_create
+                0x0000000000001ae4       0x2e build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000001ae4                systemTime_create
  .text.getSystemTime
-                0x0000000000001869       0x2c build/debug_x86/hardware/source/x86/x86.o
-                0x0000000000001869                getSystemTime
+                0x0000000000001b12       0x2c build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000001b12                getSystemTime
  .text.elapsedSystemTime_ns
-                0x0000000000001895       0x67 build/debug_x86/hardware/source/x86/x86.o
-                0x0000000000001895                elapsedSystemTime_ns
+                0x0000000000001b3e       0x67 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000001b3e                elapsedSystemTime_ns
  .text.systemTimeDiff_ns
-                0x00000000000018fc       0x49 build/debug_x86/hardware/source/x86/x86.o
-                0x00000000000018fc                systemTimeDiff_ns
+                0x0000000000001ba5       0x49 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000001ba5                systemTimeDiff_ns
  .text.printResults_CUT
-                0x0000000000001945       0xb6 build/debug_x86/hardware/source/x86/x86.o
-                0x0000000000001945                printResults_CUT
- *fill*         0x00000000000019fb        0x5 
- .text          0x0000000000001a00       0x72 /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
-                0x0000000000001a00                __libc_csu_init
-                0x0000000000001a70                __libc_csu_fini
+                0x0000000000001bee       0xb6 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000001bee                printResults_CUT
+ *fill*         0x0000000000001ca4        0xc 
+ .text          0x0000000000001cb0       0x72 /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
+                0x0000000000001cb0                __libc_csu_init
+                0x0000000000001d20                __libc_csu_fini
  *(.gnu.warning)
 
-.fini           0x0000000000001a74        0x9
+.fini           0x0000000000001d24        0x9
  *(SORT_NONE(.fini))
- .fini          0x0000000000001a74        0x4 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crti.o
-                0x0000000000001a74                _fini
- .fini          0x0000000000001a78        0x5 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
+ .fini          0x0000000000001d24        0x4 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crti.o
+                0x0000000000001d24                _fini
+ .fini          0x0000000000001d28        0x5 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
                 [!provide]                        PROVIDE (__etext = .)
                 [!provide]                        PROVIDE (_etext = .)
                 [!provide]                        PROVIDE (etext = .)
 
-.rodata         0x0000000000001a80      0x1f8
+.rodata         0x0000000000001d30      0x218
  *(.rodata .rodata.* .gnu.linkonce.r.*)
- .rodata        0x0000000000001a80       0x88 build/debug_x86/source/main.o
- .rodata.main   0x0000000000001b08       0x24 build/debug_x86/source/main.o
- *fill*         0x0000000000001b2c        0x4 
- .rodata.cst8   0x0000000000001b30       0x30 build/debug_x86/source/sin_lut.o
- .rodata.cst4   0x0000000000001b60        0x4 build/debug_x86/source/sin_lut.o
- *fill*         0x0000000000001b64        0x4 
+ .rodata        0x0000000000001d30       0x98 build/debug_x86/source/main.o
+ .rodata.main   0x0000000000001dc8       0x2c build/debug_x86/source/main.o
+ *fill*         0x0000000000001df4        0x4 
+ .rodata.cst8   0x0000000000001df8       0x30 build/debug_x86/source/sin_lut.o
+ .rodata.cst4   0x0000000000001e28        0xc build/debug_x86/source/sin_lut.o
+ *fill*         0x0000000000001e34        0x4 
  .rodata.assert_failed.str1.8
-                0x0000000000001b68       0x27 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000001e38       0x27 build/debug_x86/hardware/source/x86/x86.o
  .rodata.systemTime_create.str1.1
-                0x0000000000001b8f        0x6 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000001e5f        0x6 build/debug_x86/hardware/source/x86/x86.o
  .rodata.printResults_CUT.str1.1
-                0x0000000000001b95       0x42 build/debug_x86/hardware/source/x86/x86.o
- *fill*         0x0000000000001bd7        0x1 
+                0x0000000000001e65       0x42 build/debug_x86/hardware/source/x86/x86.o
+ *fill*         0x0000000000001ea7        0x1 
  .rodata.printResults_CUT.str1.8
-                0x0000000000001bd8       0xa0 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000001ea8       0xa0 build/debug_x86/hardware/source/x86/x86.o
                                          0x9b (size before relaxing)
 
 .rodata1
  *(.rodata1)
 
-.eh_frame_hdr   0x0000000000001c78       0x9c
+.eh_frame_hdr   0x0000000000001f48       0xac
  *(.eh_frame_hdr)
- .eh_frame_hdr  0x0000000000001c78       0x9c /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
-                0x0000000000001c78                __GNU_EH_FRAME_HDR
+ .eh_frame_hdr  0x0000000000001f48       0xac /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+                0x0000000000001f48                __GNU_EH_FRAME_HDR
  *(.eh_frame_entry .eh_frame_entry.*)
 
-.eh_frame       0x0000000000001d18      0x240
+.eh_frame       0x0000000000001ff8      0x268
  *(.eh_frame)
- .eh_frame      0x0000000000001d18       0x30 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .eh_frame      0x0000000000001ff8       0x30 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
                                          0x2c (size before relaxing)
- *fill*         0x0000000000001d48        0x0 
- .eh_frame      0x0000000000001d48       0x40 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
- .eh_frame      0x0000000000001d88       0x18 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ *fill*         0x0000000000002028        0x0 
+ .eh_frame      0x0000000000002028       0x40 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .eh_frame      0x0000000000002068       0x18 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
                                          0x30 (size before relaxing)
- .eh_frame      0x0000000000001da0       0x20 build/debug_x86/source/main.o
+ .eh_frame      0x0000000000002080       0x20 build/debug_x86/source/main.o
                                          0x38 (size before relaxing)
- .eh_frame      0x0000000000001dc0       0x70 build/debug_x86/source/sin_lut.o
+ .eh_frame      0x00000000000020a0       0x98 build/debug_x86/source/sin_lut.o
                                         0x128 (size before relaxing)
- .eh_frame      0x0000000000001e30       0xc8 build/debug_x86/hardware/source/x86/x86.o
+ .eh_frame      0x0000000000002138       0xc8 build/debug_x86/hardware/source/x86/x86.o
                                          0xe0 (size before relaxing)
- .eh_frame      0x0000000000001ef8       0x5c /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
+ .eh_frame      0x0000000000002200       0x5c /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
                                          0x78 (size before relaxing)
- .eh_frame      0x0000000000001f54        0x4 /usr/lib/gcc/x86_64-linux-gnu/8/crtendS.o
+ .eh_frame      0x000000000000225c        0x4 /usr/lib/gcc/x86_64-linux-gnu/8/crtendS.o
  *(.eh_frame.*)
 
 .gcc_except_table
@@ -697,41 +699,41 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x1c43
+.debug_info     0x0000000000000000     0x1dda
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x0000000000000000      0x8d9 build/debug_x86/source/main.o
- .debug_info    0x00000000000008d9      0x78d build/debug_x86/source/sin_lut.o
- .debug_info    0x0000000000001066      0xbdd build/debug_x86/hardware/source/x86/x86.o
+ .debug_info    0x0000000000000000      0x905 build/debug_x86/source/main.o
+ .debug_info    0x0000000000000905      0x8ec build/debug_x86/source/sin_lut.o
+ .debug_info    0x00000000000011f1      0xbe9 build/debug_x86/hardware/source/x86/x86.o
 
-.debug_abbrev   0x0000000000000000      0x638
+.debug_abbrev   0x0000000000000000      0x649
  *(.debug_abbrev)
  .debug_abbrev  0x0000000000000000      0x1f9 build/debug_x86/source/main.o
- .debug_abbrev  0x00000000000001f9      0x195 build/debug_x86/source/sin_lut.o
- .debug_abbrev  0x000000000000038e      0x2aa build/debug_x86/hardware/source/x86/x86.o
+ .debug_abbrev  0x00000000000001f9      0x1a6 build/debug_x86/source/sin_lut.o
+ .debug_abbrev  0x000000000000039f      0x2aa build/debug_x86/hardware/source/x86/x86.o
 
-.debug_line     0x0000000000000000     0x1530
+.debug_line     0x0000000000000000     0x1675
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x0000000000000000      0x6e9 build/debug_x86/source/main.o
- .debug_line    0x00000000000006e9      0x696 build/debug_x86/source/sin_lut.o
- .debug_line    0x0000000000000d7f      0x7b1 build/debug_x86/hardware/source/x86/x86.o
+ .debug_line    0x0000000000000000      0x6fd build/debug_x86/source/main.o
+ .debug_line    0x00000000000006fd      0x7c7 build/debug_x86/source/sin_lut.o
+ .debug_line    0x0000000000000ec4      0x7b1 build/debug_x86/hardware/source/x86/x86.o
 
 .debug_frame
  *(.debug_frame)
 
-.debug_str      0x0000000000000000     0x9f15
+.debug_str      0x0000000000000000     0x9f6e
  *(.debug_str)
- .debug_str     0x0000000000000000     0x6221 build/debug_x86/source/main.o
-                                       0x63a2 (size before relaxing)
- .debug_str     0x0000000000006221      0xf25 build/debug_x86/source/sin_lut.o
-                                       0x6d4c (size before relaxing)
- .debug_str     0x0000000000007146     0x2dcf build/debug_x86/hardware/source/x86/x86.o
-                                       0x8e44 (size before relaxing)
+ .debug_str     0x0000000000000000     0x62a9 build/debug_x86/source/main.o
+                                       0x642a (size before relaxing)
+ .debug_str     0x00000000000062a9      0xef6 build/debug_x86/source/sin_lut.o
+                                       0x6d56 (size before relaxing)
+ .debug_str     0x000000000000719f     0x2dcf build/debug_x86/hardware/source/x86/x86.o
+                                       0x8e85 (size before relaxing)
 
-.debug_loc      0x0000000000000000     0x12d2
+.debug_loc      0x0000000000000000     0x15ae
  *(.debug_loc)
  .debug_loc     0x0000000000000000      0x850 build/debug_x86/source/main.o
- .debug_loc     0x0000000000000850      0x4a2 build/debug_x86/source/sin_lut.o
- .debug_loc     0x0000000000000cf2      0x5e0 build/debug_x86/hardware/source/x86/x86.o
+ .debug_loc     0x0000000000000850      0x77e build/debug_x86/source/sin_lut.o
+ .debug_loc     0x0000000000000fce      0x5e0 build/debug_x86/hardware/source/x86/x86.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -4635,11 +4637,13 @@ sin_LUT_double_rangeReduction                     build/debug_x86/source/sin_lut
 sin_LUT_fixedPoint                                build/debug_x86/source/sin_lut.o
                                                   build/debug_x86/source/main.o
 sin_LUT_fixedPoint_interpolate                    build/debug_x86/source/sin_lut.o
+                                                  build/debug_x86/source/main.o
 sin_LUT_fixedPoint_nonUniform                     build/debug_x86/source/sin_lut.o
 sin_LUT_fixedPoint_rangeReduction                 build/debug_x86/source/sin_lut.o
 sin_LUT_float                                     build/debug_x86/source/sin_lut.o
                                                   build/debug_x86/source/main.o
 sin_LUT_float_interpolate                         build/debug_x86/source/sin_lut.o
+                                                  build/debug_x86/source/main.o
 sin_LUT_float_nonUniform                          build/debug_x86/source/sin_lut.o
 sin_LUT_float_rangeReduction                      build/debug_x86/source/sin_lut.o
 sincos                                            /lib/x86_64-linux-gnu/libm.so.6
