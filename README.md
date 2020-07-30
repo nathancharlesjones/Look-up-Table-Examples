@@ -34,7 +34,7 @@ Lest the idea of a 1.7% error disagree with you, consider this (semi)realistic s
 
 1. [Description](https://github.com/nathancharlesjones/Look-up-Table-Examples#description)
 	1. [Example](https://github.com/nathancharlesjones/Look-up-Table-Examples#example-fast-sin)
-[2. Defining a Look-up Table](https://github.com/nathancharlesjones/Look-up-Table-Examples#defining-a-look-up-table)
+2. [Defining a Look-up Table](https://github.com/nathancharlesjones/Look-up-Table-Examples#defining-a-look-up-table)
 	1. [Location in Memory](https://github.com/nathancharlesjones/Look-up-Table-Examples#location-in-memory)
 	2. [Data type](https://github.com/nathancharlesjones/Look-up-Table-Examples#data-type)
 	3. [Storage Structure](https://github.com/nathancharlesjones/Look-up-Table-Examples#storage-structure)
