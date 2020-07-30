@@ -50,7 +50,6 @@ int main(int argc, char * argv[])
 	for( int idx = 0; idx < testIterations; idx++ )
 	{
 		double output __attribute__((unused));
-		double input = (double) rand() / (double) RAND_MAX * 2.0 * PI;
 		err = getSystemTime(p_start);
 		ASSERT( err == 0 );
 		output = 0;
