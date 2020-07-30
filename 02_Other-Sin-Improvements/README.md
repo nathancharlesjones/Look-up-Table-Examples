@@ -15,34 +15,35 @@ The following table summarizes the results, though it should be noted that all o
 |Function|Memory usage (bytes)|Absolute Error|Percent Error|Execution time|
 |---|---|---|---|---|
 |Library sin|5728|N/A|N/A|\~45-46 us|
-|LUT double<sup>1</sup>|3484|\~0.0077|\~1.4|\~6.5 us|
-|LUT float<sup>2</sup>|2736|\~0.0076|\~1.4|\~6.2 us|
-|LUT fixed<sup>3</sup>|1792|\~0.016|\~4.1|\~0.681 us|
-|Dbl interp<sup>4</sup>|3548|\~0.00003|\~0.002|\~13.8 us|
-|Flt interp<sup>5</sup>|2848|\~0.00003|\~0.002|\~9.6 us|
-|Fxd interp<sup>6</sup>|1808|\~0.00005|\~0.008|\~0.763 us|
-|Dbl Non-Uni<sup>7</sup>|1088|\~0.007|\~0.623|\~41.2 us|
-|Flt Non-Uni<sup>8</sup>|1424|\~0.007|\~0.636|\~25.5 us|
-|Fxd Non-Uni<sup>9</sup>|440|\~0.007|\~0.610|\~3.6 us|
-|Sin_32<sup>10</sup>|2408|\~0.006|\~0.438|\~19.8 us|
-|Sin_52<sup>11</sup>|2424|\~0.000007|\~0.0016|\~22.2 us|
-|Sin_73<sup>12</sup>|1552|\~0.00000005|\~0.00002|\~28.3 us|
-|Sin_121<sup>13</sup>|1624|\~0.0000000000007|\~0.0000000006|\~35.3 us|
+|LUT double<sup>2</sup>|3484<sup>1</sup>|\~0.0077<sup>1</sup>|\~1.4<sup>1</sup>|\~6.5 us|
+|LUT float<sup>3</sup>|2736<sup>1</sup>|\~0.0076<sup>1</sup>|\~1.4<sup>1</sup>|\~6.2 us|
+|LUT fixed<sup>4</sup>|1792<sup>1</sup>|\~0.016<sup>1</sup>|\~4.1<sup>1</sup>|\~0.681 us|
+|Dbl interp<sup>5</sup>|3548<sup>1</sup>|\~0.00003<sup>1</sup>|\~0.002<sup>1</sup>|\~13.8 us|
+|Flt interp<sup>6</sup>|2848<sup>1</sup>|\~0.00003<sup>1</sup>|\~0.002<sup>1</sup>|\~9.6 us|
+|Fxd interp<sup>7</sup>|1808<sup>1</sup>|\~0.00005<sup>1</sup>|\~0.008<sup>1</sup>|\~0.763 us|
+|Dbl Non-Uni<sup>8</sup>|1088<sup>1</sup>|\~0.007<sup>1</sup>|\~0.623<sup>1</sup>|\~41.2 us|
+|Flt Non-Uni<sup>9</sup>|1424<sup>1</sup>|\~0.007<sup>1</sup>|\~0.636<sup>1</sup>|\~25.5 us|
+|Fxd Non-Uni<sup>10</sup>|440<sup>1</sup>|\~0.007<sup>1</sup>|\~0.610<sup>1</sup>|\~3.6 us|
+|Sin_32<sup>11</sup>|2408|\~0.006|\~0.438|\~19.8 us|
+|Sin_52<sup>12</sup>|2424|\~0.000007|\~0.0016|\~22.2 us|
+|Sin_73<sup>13</sup>|1552|\~0.00000005|\~0.00002|\~28.3 us|
+|Sin_121<sup>14</sup>|1624|\~0.0000000000007|\~0.0000000006|\~35.3 us|
 
 ### Notes:
-1. This function is a LUT of doubles with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
-2. This function is a LUT of floats with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
-3. This function is a LUT of fixed-point numbers (in q15_16 format) with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
-4. This function is a LUT of doubles with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
-5. This function is a LUT of floats with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
-6. This function is a LUT of fixed-point numbers with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
-7. This function is a LUT of doubles with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
-8. This function is a LUT of floats with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
-9. This function is a LUT of fixed-point numbers with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
-10. This function is a polynomial approximation of sin which uses 3 terms.
-11. This function is a polynomial approximation of sin which uses 4 terms.
-12. This function is a polynomial approximation of sin which uses 5 terms.
-13. This function is a polynomial approximation of sin which uses 7 terms.
+1. This LUT could be made larger/smaller and more/less accurate by simply increasing or decreasing the number of elements in the table (though care should be taken to ensure that the resulting size allows for a quick and simple hash function, as execution time may be negatively affected if the hash becomes non-trivial).
+2. This function is a LUT of doubles with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
+3. This function is a LUT of floats with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
+4. This function is a LUT of fixed-point numbers (in q15_16 format) with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
+5. This function is a LUT of doubles with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
+6. This function is a LUT of floats with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
+7. This function is a LUT of fixed-point numbers with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
+8. This function is a LUT of doubles with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
+9. This function is a LUT of floats with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
+10. This function is a LUT of fixed-point numbers with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
+11. This function is a polynomial approximation of sin which uses 3 terms.
+12. This function is a polynomial approximation of sin which uses 4 terms.
+13. This function is a polynomial approximation of sin which uses 5 terms.
+14. This function is a polynomial approximation of sin which uses 7 terms.
 
 ## What's it telling me?
 
