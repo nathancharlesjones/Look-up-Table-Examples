@@ -70,7 +70,7 @@ The following table summarizes the results, though it should be noted that all o
 $ make BUILD=debug TARGET=x86
 ```
 3. The executable is called "{debug or release}\_x86.elf" and it will be placed in a folder called "build/{debug or release}\_x86".
-4. Run the executable; the results of the code will be printed to the terminal. "Scaffolding" runs the profiling code with no function call; it informs us how much of the "average execution time" reported for every other function is taken up by the "scaffolding" code, such as storing the start and end times in their respective variables and asserting that there were no errors in doing so. To get the adjusted (i.e. correct) values for each function's execution time, simply subtract off the execution time for "scaffolding". E.g.:
+4. Run the executable; the results of the code will be printed to the terminal. "Scaffolding" runs the profiling code with no function call; it informs us how much of the "average execution time" reported for every other function is taken up by the "scaffolding" code, such as storing the start and end times in their respective variables and asserting that there were no errors in doing so. To get the adjusted (i.e. correct) values for each function's execution time, I would think that we should simply be able to subtract off the execution time for "scaffolding", however, doing that with the numbers below doesn't make much sense. My best guess is that my laptop is performing optimizations as the code is running so that functions further down on the list execute faster than earlier ones. E.g.:
 ```
 $ ./build/debug_x86/debug.elf 
 -----Sin LUT Test-----
@@ -122,7 +122,7 @@ $ arm-none-eabi-gdb build/debug_STM32F1/debug.elf --tui
 (gdb) load build/debug_STM32F1/debug.elf
 (gdb) c
 ```
-7. The debugger will halt inside the function `printResults_CUT`. You'll be able to view the same parameters as above by printing each array element from GDB. "Scaffolding" (`codeUnderTest[0]`) runs the profiling code with no function call; it informs us how much of the "average execution time" reported for every other function is taken up by the "scaffolding" code, such as storing the start and end times in their respective variables and asserting that there were no errors in doing so. To get the adjusted (i.e. correct) values for each function's execution time, simply subtract off the execution time for "scaffolding". E.g.: 
+7. The debugger will halt inside the function `printResults_CUT`. You'll be able to view the same parameters as above by printing each array element from GDB (i.e. `p codeUnderTest[0]` prints the results of the first test). "Scaffolding" (`codeUnderTest[0]`) runs the profiling code with no function call; it informs us how much of the "average execution time" reported for every other function is taken up by the "scaffolding" code, such as storing the start and end times in their respective variables and asserting that there were no errors in doing so. To get the adjusted (i.e. correct) values for each function's execution time, simply subtract off the execution time for "scaffolding". E.g.: 
 ```
 (gdb) c
 Continuing.
@@ -155,6 +155,79 @@ For more information about how the Makefile works, see [here](https://github.com
 For the sake of brevity, I'll not reiterate what was discussed in the ["How does it work?"](https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/01_Fast-Sin/README.md#how-does-it-work) section of "01_Fast-Sin" (which includes how to build a basic LUT; how to test for the average execution times, average absolute errors, and average percent error; and how to structure the project so that it can be compiled and run on both an x86 and STM32F1 processor).
 
 ### Parameterizing the tests
+
+Adding tests to or subtracting tests from the code in "01_Fast-Sin" was already getting tedious, and with many more functions to add, I decided to first refactor `main` to make that easier. I wanted to make two major changes: (1) Put the variables that hold the profiling information for each function (e.g. absoluteError_avg, executionTime_ns_sum, etc) into a struct for each function being tested (so that I don't need to keep changing the input parameters to `printResults` every time I change which functions are being tested) and (2) Put a pointer to the functions being tested into that struct so that the profiling code (which doesn't change) can be put in one spot and simply called multiple times with function pointers for each of the functions being tested.
+
+To accomplish #1, I created a struct in `main.h` called `sinLUT_implementation_t` that included a `const char *` for the function name and several variables of type `double` to hold the various pieces of profiling information. Eventually, I could create different instances of `sinLUT_implementation_t` for each function being tested and then simply pass this array to `printResults` (which I renamed `printResults_CUT`). I used an empty struct (`{0}`) to signal the end of the array.
+```
+typedef struct sinLUT_implementation_t
+{
+    const char * fcn_name;
+    ...
+    double executionTime_ns;
+    double executionTime_ns_avg;
+    double absoluteError_sum;
+    double absoluteError_avg;
+    double absoluteError_max;
+    double percentError_sum;
+    double percentError_avg;
+} sinLUT_implementation_t;
+```
+On the surface, accomplishing #2 wasn't awful either. However, the slightly complex part was getting the profiling code to work with different function pointers (that is, pointers to functions with different signatures). To start, I created three function typedefs in `sin_lut.h` to represent my three main functions: `p_sin_LUT_double`, `p_sin_LUT_float`, and `p_sin_LUT_fixedPoint`, corresponding to each function's input/output data types (I did not experiment with mixed data types, such as receiving a fixed-point input and returning a double).
+```
+typedef double (*p_sin_LUT_double)(double);
+typedef float (*p_sin_LUT_float)(float);
+typedef q15_16_t (*p_sin_LUT_fixedPoint)(q15_16_t);
+```
+I then added a function pointer to my new struct `sinLUT_implementation_t`, above. Since each function pointer is, effectively, a different data type, I put the three of them into a `union`. In this manner, the `sinLUT_implementation_t` struct would only store one of them at a time, and an enumerated data type called `fcnSignature_t` (which I also added) would indicate which (if any) of the function pointers was active (for more about unions, see [here](https://www.tutorialspoint.com/cprogramming/c_unions.htm), [here](https://www.geeksforgeeks.org/union-c/), or [here](https://github.com/nathancharlesjones/Flexible-message-format)).
+```
+typedef enum fcnSignature_t
+{
+    NOT_ASSIGNED,
+    fcn_scaffolding,
+    fcn_dbl_in_dbl_out,
+    fcn_flt_in_flt_out,
+    fcn_fxd_in_fxd_out
+} fcnSignature_t;
+
+typedef struct sinLUT_implementation_t
+{
+    ...
+    fcnSignature_t function_enum;
+    union
+    {
+        p_sin_LUT_double fcn_double;
+        p_sin_LUT_float fcn_float;
+        p_sin_LUT_fixedPoint fcn_fixedPoint;
+    };
+    ...
+} sinLUT_implementation_t;
+```
+In `main`, now, we start by initializing the array of functions to test. Each function gets a name, a function type, a pointer to the function to call, and zeros for the profiling data.
+```
+sinLUT_implementation_t codeUnderTest[] = 
+{
+    { "Scaffolding",    fcn_scaffolding,    {.fcn_double = NULL},                               0, 0, 0, 0, 0, 0, 0 },
+    { "Library Sin",    fcn_dbl_in_dbl_out, {.fcn_double = sin},                                0, 0, 0, 0, 0, 0, 0 },
+    { "LUT Double",     fcn_dbl_in_dbl_out, {.fcn_double = sin_LUT_double},                     0, 0, 0, 0, 0, 0, 0 },
+    { "LUT Float",      fcn_flt_in_flt_out, {.fcn_float = sin_LUT_float},                       0, 0, 0, 0, 0, 0, 0 },
+    { "LUT Fxd Pt",     fcn_fxd_in_fxd_out, {.fcn_fixedPoint = sin_LUT_fixedPoint},             0, 0, 0, 0, 0, 0, 0 },
+    { "Dbl Interp",     fcn_dbl_in_dbl_out, {.fcn_double = sin_LUT_double_interpolate},         0, 0, 0, 0, 0, 0, 0 },
+    { "Flt Interp",     fcn_flt_in_flt_out, {.fcn_float = sin_LUT_float_interpolate},           0, 0, 0, 0, 0, 0, 0 },
+    { "Fxd Interp",     fcn_fxd_in_fxd_out, {.fcn_fixedPoint = sin_LUT_fixedPoint_interpolate}, 0, 0, 0, 0, 0, 0, 0 },
+    { "Dbl X/Y list",   fcn_dbl_in_dbl_out, {.fcn_double = sin_LUT_double_nonUniform},          0, 0, 0, 0, 0, 0, 0 },
+    { "Flt X/Y list",   fcn_flt_in_flt_out, {.fcn_float = sin_LUT_float_nonUniform},            0, 0, 0, 0, 0, 0, 0 },
+    { "Fxd X/Y list",   fcn_fxd_in_fxd_out, {.fcn_fixedPoint = sin_LUT_fixedPoint_nonUniform},  0, 0, 0, 0, 0, 0, 0 },
+    { "Sin_32\t",       fcn_flt_in_flt_out, {.fcn_float = sin_32},                              0, 0, 0, 0, 0, 0, 0 },
+    { "Sin_52\t",       fcn_flt_in_flt_out, {.fcn_float = sin_52},                              0, 0, 0, 0, 0, 0, 0 },
+    { "Sin_73\t",       fcn_dbl_in_dbl_out, {.fcn_double = sin_73},                             0, 0, 0, 0, 0, 0, 0 },
+    { "Sin_121\t",      fcn_dbl_in_dbl_out, {.fcn_double = sin_121},                            0, 0, 0, 0, 0, 0, 0 },
+    {0}
+};
+```
+The profiling code was then restructured to be a `while` loop that iterates over the `codeUnderTest` array until the `NULL` struct is found. For each function, the profiling code runs `testIterations` numbers of loops, each time creating a new random input value, calling the function under test (while profiling it), and computing the errors. After all iterations, the average values are computed, the index variable is incremented, and the `while` loop continues. A `switch...case` statement in the body of the `for` loop decides which part of the union to access, based on which part is active (which is indicated by the `function_enum` variable in the `sinLUT_implementation_t` struct).
+
+Adding new functions is now fairly trivial (provided they match one of the three function signatures used for the function pointers): Simply write the function and then add an element to the `codeUnderTest` array with the appropriate information and the test will automatically get run. Removing a test is as simple as commenting out the line of code that puts it in the array.
 
 ### Adding fixed-point numbers
 
