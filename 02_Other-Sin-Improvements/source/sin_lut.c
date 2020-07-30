@@ -1,6 +1,8 @@
 #include <math.h>
 #include <stdio.h>
 #include "sin_lut.h"
+#include "error.h"
+#include "assert.h"
 
 #define SIN_LUT_SIZE 404
 #define LAST_ELEMENT ( SIN_LUT_SIZE - 1 )
@@ -8,7 +10,7 @@
 // Sin look-up table using doubles and floats at integer steps of "radians * 64"
 static double sinTable_double[SIN_LUT_SIZE];
 static float sinTable_float[SIN_LUT_SIZE];
-static q15_16_t sinTable_fixedPoint[SIN_LUT_SIZE];
+static q0_31_t sinTable_fixedPoint[SIN_LUT_SIZE];
 
 void init_sinLUT(void)
 {
@@ -18,7 +20,7 @@ void init_sinLUT(void)
 		double output_double = sin( radians );
 		sinTable_double[idx] = output_double;
 		sinTable_float[idx] = (float) output_double;
-		sinTable_fixedPoint[idx] = TOFIX(output_double, 16);
+		sinTable_fixedPoint[idx] = TOFIX(output_double, 31);
 	}
 }
 
@@ -59,21 +61,40 @@ float sin_LUT_float(float radians)
 	return sinTable_float[ idx ];
 }
 
-q15_16_t sin_LUT_fixedPoint(q15_16_t radians)
+q0_31_t sin_LUT_fixedPoint(q9_22_t radians)
 {
-	q15_16_t TWO_PI_FXD = TOFIX(TWO_PI, 16);
+	errno_t err = 0;
+	q9_22_t index = 0;
+	q9_22_t index_plus_half = 0;
+	q9_22_t TWO_PI_FXD = TOFIX( TWO_PI, 28 );
+	int rounded_index = 0;
 
 	// Ensure "radians" is within a valid range. Takes advantage of the fact that sin is periodic to merely "wrap" radians to 
 	// a valid value instead of throwing an error.
 	//
-	while( radians >= TWO_PI_FXD ) radians = FSUB( radians, TWO_PI_FXD );
-	while( radians < 0 ) radians = FADD( radians, TWO_PI_FXD );
+	while( radians >= TWO_PI_FXD )
+	{
+		err = SAFE_FSUB( radians, TWO_PI_FXD, &radians );
+		ASSERT( err == 0 );
+	}
+	while( radians < 0 )
+	{
+		err = SAFE_FADD( radians, TWO_PI_FXD, &radians );
+		ASSERT( err == 0 );
+	}
 
-	// Multiply "radians" by 64 to map the range [0,2*PI] to the range [0,403] (the size of our LUT).
+	// Multiply "radians" by 64 to map the range [0,2*PI] to the range [0,403] (the size of our LUT). Add 0.5 and then convert
+	// to int (i.e. "q31_0" format) in order to implement a basic rounding.
 	//
-	q15_16_t x = FMULI( radians, 64 );
+	err = SAFE_FMULI( radians, 64, &index );
+	ASSERT( err == 0 );
 
-	return sinTable_fixedPoint[ FCONV( x, 16, 0 ) ];
+	err = SAFE_FADD( index, TOFIX( 0.5, 22 ), &index_plus_half  );
+	ASSERT( err == 0 );
+
+	rounded_index = FCONV( index_plus_half, 22, 0 );
+
+	return sinTable_fixedPoint[ rounded_index ];
 }
 
 double sin_LUT_double_interpolate(double radians)
@@ -129,8 +150,8 @@ typedef struct point_float_t
 
 typedef struct point_fixed_t
 {
-	q15_16_t x;
-	q15_16_t y;
+	q9_22_t x;
+	q0_31_t y;
 } point_fixed_t;
 
 #define NONUNIFORM_0DOT007ERROR_SIZE 25
@@ -196,31 +217,31 @@ static point_float_t nonUniform_float_0dot007error[NONUNIFORM_0DOT007ERROR_SIZE]
 
 static point_fixed_t nonUniform_fixed_0dot007error[NONUNIFORM_0DOT007ERROR_SIZE] = 
 {
-	{ TOFIX(0.000000000000000000, 16),  TOFIX(0.000000000000000000, 16) },
-	{ TOFIX(0.246907827863357000, 16),	TOFIX(0.244406737256656000, 16) },
-	{ TOFIX(0.569239513635344000, 16),	TOFIX(0.538991638538422000, 16) },
-	{ TOFIX(0.843093840424931000, 16),  TOFIX(0.746704576346488000, 16) },
-	{ TOFIX(1.094141848997940000, 16),	TOFIX(0.888534848533041000, 16) },
-	{ TOFIX(1.334153179182300000, 16),	TOFIX(0.972130433247043000, 16) },
-	{ TOFIX(1.570796370506290000, 16),	TOFIX(0.999999999999999000, 16) },
-	{ TOFIX(1.807439561830270000, 16),	TOFIX(0.972130412751585000, 16) },
-	{ TOFIX(2.047450894544720000, 16),	TOFIX(0.888534807261842000, 16) },
-	{ TOFIX(2.298498908948140000, 16),	TOFIX(0.746704512635679000, 16) },
-	{ TOFIX(2.572353247420710000, 16),	TOFIX(0.538991548018389000, 16) },
-	{ TOFIX(2.894684960259430000, 16),	TOFIX(0.244406606803670000, 16) },
-	{ TOFIX(3.141592653589790000, 16),	TOFIX(0.000000000000000122, 16) },
-	{ TOFIX(3.388500615986130000, 16),	TOFIX(-0.244406867709622000, 16) },
-	{ TOFIX(3.710832274691400000, 16),	TOFIX(-0.538991729058444000, 16) },
-	{ TOFIX(3.984686589798000000, 16),	TOFIX(-0.746704640057288000, 16) },
-	{ TOFIX(4.235734592540600000, 16),	TOFIX(-0.888534889804232000, 16) },
-	{ TOFIX(4.475745920194870000, 16),	TOFIX(-0.972130453742493000, 16) },
-	{ TOFIX(4.712388980384690000, 16),	TOFIX(-1.000000000000000000, 16) },
-	{ TOFIX(4.949032302842850000, 16),	TOFIX(-0.972130392256120000, 16) },
-	{ TOFIX(5.189043638087370000, 16),	TOFIX(-0.888534765990635000, 16) },
-	{ TOFIX(5.440091658321210000, 16),	TOFIX(-0.746704448924861000, 16) },
-	{ TOFIX(5.713946008476780000, 16),	TOFIX(-0.538991457498343000, 16) },
-	{ TOFIX(6.036277748382230000, 16),	TOFIX(-0.244406476350662000, 16) },
-	{ TOFIX(6.283185307179590000, 16),  TOFIX(0.000000000000000000, 16) }
+	{ TOFIX(0.000000000000000000, 22),  TOFIX(0.000000000000000000, 31) },
+	{ TOFIX(0.246907827863357000, 22),	TOFIX(0.244406737256656000, 31) },
+	{ TOFIX(0.569239513635344000, 22),	TOFIX(0.538991638538422000, 31) },
+	{ TOFIX(0.843093840424931000, 22),  TOFIX(0.746704576346488000, 31) },
+	{ TOFIX(1.094141848997940000, 22),	TOFIX(0.888534848533041000, 31) },
+	{ TOFIX(1.334153179182300000, 22),	TOFIX(0.972130433247043000, 31) },
+	{ TOFIX(1.570796370506290000, 22),	TOFIX(0.999999999999999000, 31) },
+	{ TOFIX(1.807439561830270000, 22),	TOFIX(0.972130412751585000, 31) },
+	{ TOFIX(2.047450894544720000, 22),	TOFIX(0.888534807261842000, 31) },
+	{ TOFIX(2.298498908948140000, 22),	TOFIX(0.746704512635679000, 31) },
+	{ TOFIX(2.572353247420710000, 22),	TOFIX(0.538991548018389000, 31) },
+	{ TOFIX(2.894684960259430000, 22),	TOFIX(0.244406606803670000, 31) },
+	{ TOFIX(3.141592653589790000, 22),	TOFIX(0.000000000000000122, 31) },
+	{ TOFIX(3.388500615986130000, 22),	TOFIX(-0.244406867709622000, 31) },
+	{ TOFIX(3.710832274691400000, 22),	TOFIX(-0.538991729058444000, 31) },
+	{ TOFIX(3.984686589798000000, 22),	TOFIX(-0.746704640057288000, 31) },
+	{ TOFIX(4.235734592540600000, 22),	TOFIX(-0.888534889804232000, 31) },
+	{ TOFIX(4.475745920194870000, 22),	TOFIX(-0.972130453742493000, 31) },
+	{ TOFIX(4.712388980384690000, 22),	TOFIX(-1.000000000000000000, 31) },
+	{ TOFIX(4.949032302842850000, 22),	TOFIX(-0.972130392256120000, 31) },
+	{ TOFIX(5.189043638087370000, 22),	TOFIX(-0.888534765990635000, 31) },
+	{ TOFIX(5.440091658321210000, 22),	TOFIX(-0.746704448924861000, 31) },
+	{ TOFIX(5.713946008476780000, 22),	TOFIX(-0.538991457498343000, 31) },
+	{ TOFIX(6.036277748382230000, 22),	TOFIX(-0.244406476350662000, 31) },
+	{ TOFIX(6.283185307179590000, 22),  TOFIX(0.000000000000000000, 31) }
 };
 
 double sin_LUT_double_nonUniform(double radians)
@@ -356,20 +377,36 @@ float sin_LUT_float_nonUniform(float radians)
 	return ret;
 }
 
-q15_16_t sin_LUT_fixedPoint_interpolate(q15_16_t radians)
+q0_31_t sin_LUT_fixedPoint_interpolate(q9_22_t radians)
 {
-	q15_16_t ret, TWO_PI_FXD = TOFIX(TWO_PI, 16);
+	errno_t err = 0;
+	q0_31_t y0 = 0;
+	q0_31_t slope = 0;
+	q0_31_t offset = 0;
+	q0_31_t ret = 0;
+	q9_22_t x = 0;
+	q9_22_t span = 0;
+	q9_22_t TWO_PI_FXD = TOFIX(TWO_PI, 22);
 	int x0, x1;
 
 	// Ensure "radians" is within a valid range. Takes advantage of the fact that sin is periodic to merely "wrap" radians to 
 	// a valid value instead of throwing an error.
 	//
-	while( radians >= TWO_PI_FXD ) radians = FSUB( radians, TWO_PI_FXD );
-	while( radians < 0 ) radians = FADD( radians, TWO_PI_FXD );
+	while( radians >= TWO_PI_FXD )
+	{
+		err = SAFE_FSUB( radians, TWO_PI_FXD, &radians );
+		ASSERT( err == 0 );
+	}
+	while( radians < 0 )
+	{
+		err = SAFE_FADD( radians, TWO_PI_FXD, &radians );
+		ASSERT( err == 0 );
+	}
 
 	// Multiply "radians" by 64 to map the range [0,2*PI] to the range [0,403] (the size of our LUT).
 	//
-	q15_16_t x = FMULI( radians, 64 );
+	err = SAFE_FMULI( radians, 64, &x );
+	ASSERT( err == 0 );
 
 	// Get the indices for the array elements that are just below and just above "x" by converting from q16 to q0 (to get x0, 
 	// the below element) and then adding one (to get x1, the above element). We can safely do this without any bounds checking
@@ -377,7 +414,7 @@ q15_16_t sin_LUT_fixedPoint_interpolate(q15_16_t radians)
 	// over 402.12; in this manner, the most x0 and x1 will ever be is 402 and 403, which are still within the bounds of our
 	// array.
 	//
-	x0 = FCONV( x, 16, 0 );
+	x0 = FCONV( x, 22, 0 );
 	x1 = x0 + 1;
 
 	// Next, compute the linear interpolation. The slope is merely the difference between the table values, since the difference
@@ -386,18 +423,42 @@ q15_16_t sin_LUT_fixedPoint_interpolate(q15_16_t radians)
 	// offset. This algorithm constitutes one floating-point multiply and 3 floating-point additions/subtractions, and so is
 	// relatively fast.
 	//
-	q15_16_t y0 = sinTable_fixedPoint[ x0 ];
-	q15_16_t slope = FSUB( sinTable_fixedPoint[ x1 ], y0 );
-	q15_16_t span = FSUBG( x, x0, 16, 0, 16 );
-	q15_16_t offset = FMUL( slope, span, 16 );
-	ret = FADD( y0, offset );
+	y0 = sinTable_fixedPoint[ x0 ];
+
+	// NOTE: Since "slope" is in the output format of q0.31, this variable is ONLY valid in the range [-1,1] and WILL NOT hold
+	// the correct value otherwise.
+	//
+	err = SAFE_FSUB( sinTable_fixedPoint[ x1 ], y0, &slope );
+	ASSERT( err == 0 );
+
+	err = SAFE_FSUBG( x, x0, 22, 0, 22, &span );
+	ASSERT( err == 0 );
+	
+	err = SAFE_FMULG( slope, span, 31, 22, 31, &offset );
+	ASSERT( err == 0 );
+
+	err = SAFE_FADD( y0, offset, &ret );
+	ASSERT( err == 0 );
 
 	return ret;
 }
 
-q15_16_t sin_LUT_fixedPoint_nonUniform(q15_16_t radians)
+q0_31_t sin_LUT_fixedPoint_nonUniform(q9_22_t radians)
 {
-	q15_16_t ret, TWO_PI_FXD = TOFIX(TWO_PI, 16);
+	// The input doesn't necessarily need to be in q9_22 format, since the x-values never go over 2*PI. However, I'm using it here
+	// to avoid needing to rewrite the rest of the test code to accept a fourth function signature (the first two fixed-point LUTs
+	// already require an input parameter of at least q9_22).
+
+	errno_t err = 0;
+	q9_22_t x0 = 0;
+	q9_22_t run = 0;
+	q9_22_t span = 0;
+	q0_31_t y0 = 0;
+	q0_31_t rise = 0;
+	q0_31_t slope = 0;
+	q0_31_t offset = 0;
+	q0_31_t ret = 0;
+	q9_22_t TWO_PI_FXD = TOFIX(TWO_PI, 28);
 	int low = 0;
 	int high = LAST_ELEMENT_0DOT007ERROR;
 	int mid = ( low + high ) / 2;
@@ -405,8 +466,16 @@ q15_16_t sin_LUT_fixedPoint_nonUniform(q15_16_t radians)
 	// Ensure "radians" is within a valid range. Takes advantage of the fact that sin is periodic to merely "wrap" radians 
 	// to a valid value instead of throwing an error.
 	//
-	while( radians >= TWO_PI_FXD ) radians = FSUB( radians, TWO_PI_FXD );
-	while( radians < 0 ) radians = FADD( radians, TWO_PI_FXD );
+	while( radians >= TWO_PI_FXD )
+	{
+		err = SAFE_FSUB( radians, TWO_PI_FXD, &radians );
+		ASSERT( err == 0 );
+	}
+	while( radians < 0 )
+	{
+		err = SAFE_FADD( radians, TWO_PI_FXD, &radians );
+		ASSERT( err == 0 );
+	}
 
 	// Perform a binary search to find the LUT elements that will be used to interpolate the final value. Returns the last 
 	// list element if "radians" is greater than the last element.
@@ -429,14 +498,26 @@ q15_16_t sin_LUT_fixedPoint_nonUniform(q15_16_t radians)
 		// between our input and the lower table point, x0. The "offset" is the amount our y-value changes as a result of our 
 		// span. The final value is equal to the y-value of the lower point plus this offset.
 		//
-		q15_16_t x0 = nonUniform_fixed_0dot007error[mid].x;
-		q15_16_t y0 = nonUniform_fixed_0dot007error[mid].y;
-		q15_16_t rise = FSUB( nonUniform_fixed_0dot007error[mid+1].y, y0 );
-		q15_16_t run = FSUB( nonUniform_fixed_0dot007error[mid+1].x, x0 );
-		q15_16_t slope = FDIV( rise, run, 16 );
-		q15_16_t span = FSUB( radians, x0 );
-		q15_16_t offset = FMUL( slope, span, 16 );
-		ret = FADD( y0, offset );
+		x0 = nonUniform_fixed_0dot007error[mid].x;
+		y0 = nonUniform_fixed_0dot007error[mid].y;
+
+		err = SAFE_FSUB( nonUniform_fixed_0dot007error[mid+1].y, y0, &rise );
+		ASSERT( err == 0 );
+
+		err = SAFE_FSUB( nonUniform_fixed_0dot007error[mid+1].x, x0, &run );
+		ASSERT( err == 0 );
+
+		err = SAFE_FDIVG( rise, run, 31, 22, 31, &slope );
+		ASSERT( err == 0 );
+
+		err = SAFE_FSUB( radians, x0, &span );
+		ASSERT( err == 0 );
+
+		err = SAFE_FMULG( slope, span, 31, 22, 31, &offset );
+		ASSERT( err == 0 );
+
+		err = SAFE_FADD( y0, offset, &ret );
+		ASSERT( err == 0 );
 	}
 
 	return ret;

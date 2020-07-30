@@ -9,6 +9,7 @@
 #include "sin_lut.h"
 #include "sincos.h"
 #include "hardwareAPI.h"
+#include "assert.h"
 
 // testIterations is marked as "volatile" so that it can be updated with a debugger; otherwise
 // it could be const or #define.
@@ -68,7 +69,8 @@ int main(int argc, char * argv[])
 			//
 			double output_CUT, input_double = (double) rand() / (double) RAND_MAX * 2.0 * PI;
 			float output_float, input_float = (float) input_double;
-			q15_16_t output_fixedPoint, input_fixedPoint = TOFIX(input_double, 16);
+			q0_31_t output_fixedPoint;
+			q9_22_t input_fixedPoint = TOFIX(input_double, 22);
 
 			// Call the correct function with the correct input data type based on the fcnSignature_t enum
 			//
@@ -105,7 +107,7 @@ int main(int argc, char * argv[])
 					output_fixedPoint = codeUnderTest[idx_CUT].fcn_fixedPoint( input_fixedPoint );
 					err = getSystemTime(p_end);
 					ASSERT( err == 0 );
-					output_CUT = TOFLT(output_fixedPoint, 16);
+					output_CUT = TOFLT(output_fixedPoint, 31);
 				break;
 
 				default:

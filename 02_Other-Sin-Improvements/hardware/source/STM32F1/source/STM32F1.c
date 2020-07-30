@@ -19,10 +19,10 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "hardwareAPI.h"
-#include "STM32F1.h"
 #include <stdlib.h>
-
+#include "STM32F1.h"
+#include "hardwareAPI.h"
+#include "assert.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 

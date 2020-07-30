@@ -2,6 +2,7 @@
 #define FIXED_POINT_H
 
 #include <stdint.h>
+#include "error.h"
 
 //******************************************************//
 //                                                      //
@@ -42,7 +43,193 @@ returning the result in q3 format */
 #define TOFIX(d, q) ((int)( (d)*(double)(1<<(q)) ))
 #define TOFLT(a, q) ( (double)(a) / (double)(1<<(q)) )
 
-// Define a fixed-point type with 1 sign bit (implied), 15 integer bits, and 16 fractional bits
-typedef int32_t q15_16_t;
+// Define a fixed-point type with 1 sign bit (implied), 0 integer bits, and 31 fractional bits
+typedef int32_t q0_31_t;
+
+// Define a fixed-point type with 1 sign bit (implied), 9 integer bits, and 22 fractional bits
+typedef int32_t q9_22_t;
+
+// Define a fixed-point type with 1 sign bit (implied), 3 integer bits, and 28 fractional bits
+typedef int32_t q3_28_t;
+
+static inline errno_t SAFE_FADD( int32_t a, int32_t b, int32_t * ret)
+{
+	errno_t err = 0;
+	int64_t _a = a;
+	int64_t _b = b;
+	int64_t _ret;
+
+	_ret = FADD( _a, _b );
+
+	if( _ret < INT32_MAX ) *ret = (int32_t)( _ret );
+	else err = -1;
+
+	return err;
+}
+
+static inline errno_t SAFE_FSUB( int32_t a, int32_t b, int32_t * ret)
+{
+	errno_t err = 0;
+	int64_t _a = a;
+	int64_t _b = b;
+	int64_t _ret;
+
+	_ret = FSUB( _a, _b );
+
+	if( _ret > INT32_MIN ) *ret = (int32_t)( _ret );
+	else err = -1;
+
+	return err;
+}
+
+static inline errno_t SAFE_FMUL( int32_t a, int32_t b, int32_t q, int32_t * ret)
+{
+	errno_t err = 0;
+	int64_t _a = a;
+	int64_t _b = b;
+	int64_t _ret;
+
+	_ret = FMUL( _a, _b, q );
+
+	if( _ret < INT32_MAX ) *ret = (int32_t)( _ret );
+	else err = -1;
+
+	return err;
+}
+
+static inline errno_t SAFE_FDIV( int32_t a, int32_t b, int32_t q, int32_t * ret)
+{
+	errno_t err = 0;
+	int64_t _a = a;
+	int64_t _b = b;
+	int64_t _ret;
+
+	_ret = FDIV( _a, _b, q );
+
+	if( _ret > INT32_MIN ) *ret = (int32_t)( _ret );
+	else err = -1;
+
+	return err;
+}
+
+static inline errno_t SAFE_FADDI( int32_t a, int32_t b, int32_t q, int32_t * ret)
+{
+	errno_t err = 0;
+	int64_t _a = a;
+	int64_t _b = b;
+	int64_t _ret;
+
+	_ret = FADDI( _a, _b, q );
+
+	if( _ret < INT32_MAX ) *ret = (int32_t)( _ret );
+	else err = -1;
+
+	return err;
+}
+
+static inline errno_t SAFE_FSUBI( int32_t a, int32_t b, int32_t q, int32_t * ret)
+{
+	errno_t err = 0;
+	int64_t _a = a;
+	int64_t _b = b;
+	int64_t _ret;
+
+	_ret = FSUBI( _a, _b, q );
+
+	if( _ret > INT32_MIN ) *ret = (int32_t)( _ret );
+	else err = -1;
+
+	return err;
+}
+
+static inline errno_t SAFE_FMULI( int32_t a, int32_t b, int32_t * ret)
+{
+	errno_t err = 0;
+	int64_t _a = a;
+	int64_t _b = b;
+	int64_t _ret;
+
+	_ret = FMULI( _a, _b );
+
+	if( _ret < INT32_MAX ) *ret = (int32_t)( _ret );
+	else err = -1;
+
+	return err;
+}
+
+static inline errno_t SAFE_FDIVI( int32_t a, int32_t b, int32_t * ret)
+{
+	errno_t err = 0;
+	int64_t _a = a;
+	int64_t _b = b;
+	int64_t _ret;
+
+	_ret = FDIVI( _a, _b );
+
+	if( _ret > INT32_MIN ) *ret = (int32_t)( _ret );
+	else err = -1;
+
+	return err;
+}
+
+static inline errno_t SAFE_FADDG( int32_t a, int32_t b, int32_t q1, int32_t q2, int32_t q3, int32_t * ret)
+{
+	errno_t err = 0;
+	int64_t _a = a;
+	int64_t _b = b;
+	int64_t _ret;
+
+	_ret = FADDG( _a, _b, q1, q2, q3 );
+
+	if( _ret < INT32_MAX ) *ret = (int32_t)( _ret );
+	else err = -1;
+
+	return err;
+}
+
+static inline errno_t SAFE_FSUBG( int32_t a, int32_t b, int32_t q1, int32_t q2, int32_t q3, int32_t * ret)
+{
+	errno_t err = 0;
+	int64_t _a = a;
+	int64_t _b = b;
+	int64_t _ret;
+
+	_ret = FSUBG( _a, _b, q1, q2, q3 );
+
+	if( _ret > INT32_MIN ) *ret = (int32_t)( _ret );
+	else err = -1;
+
+	return err;
+}
+
+static inline errno_t SAFE_FMULG( int32_t a, int32_t b, int32_t q1, int32_t q2, int32_t q3, int32_t * ret)
+{
+	errno_t err = 0;
+	int64_t _a = a;
+	int64_t _b = b;
+	int64_t _ret;
+
+	_ret = FMULG( _a, _b, q1, q2, q3 );
+
+	if( _ret < INT32_MAX ) *ret = (int32_t)( _ret );
+	else err = -1;
+
+	return err;
+}
+
+static inline errno_t SAFE_FDIVG( int32_t a, int32_t b, int32_t q1, int32_t q2, int32_t q3, int32_t * ret)
+{
+	errno_t err = 0;
+	int64_t _a = a;
+	int64_t _b = b;
+	int64_t _ret;
+
+	_ret = FDIVG( _a, _b, q1, q2, q3 );
+
+	if( _ret > INT32_MIN ) *ret = (int32_t)( _ret );
+	else err = -1;
+
+	return err;
+}
 
 #endif // FIXED_POINT_H

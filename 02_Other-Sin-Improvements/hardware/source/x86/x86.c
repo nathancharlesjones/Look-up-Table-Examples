@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "hardwareAPI.h"
+#include "assert.h"
 
 void assert_failed(const char * file, uint32_t line)
 {
