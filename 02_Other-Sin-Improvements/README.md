@@ -17,9 +17,31 @@ The following table summarizes the results. This code was compiled for an STM32F
 |LUT double<sup>1</sup>|3484|\~0.0077|\~1.4|\~6.5 us|
 |LUT float<sup>2</sup>|2736|\~0.0076|\~1.4|\~6.2 us|
 |LUT fixed<sup>3</sup>|1792|\~0.016|\~4.1|\~0.681 us|
+|Dbl interp<sup>4</sup>|3548|\~0.00003|\~0.002|\~13.8 us|
+|Flt interp<sup>5</sup>|2848|\~0.00003|\~0.002|\~9.6 us|
+|Fxd interp<sup>6</sup>|1808|\~0.00005|\~0.008|\~0.763 us|
+|Dbl Non-Uni<sup>7</sup>|1088|\~0.007|\~0.623|\~41.2 us|
+|Flt Non-Uni<sup>8</sup>|1424|\~0.007|\~0.636|\~25.5 us|
+|Fxd Non-Uni<sup>9</sup>|440|\~0.007|\~0.610|\~3.6 us|
+|Sin_32<sup>10</sup>|2408|\~0.006|\~0.438|\~19.8 us|
+|Sin_52<sup>11</sup>|2424|\~0.000007|\~0.0016|\~22.2 us|
+|Sin_73<sup>12</sup>|1552|\~0.00000005|\~0.00002|\~28.3 us|
+|Sin_121<sup>13</sup>|1624|\~0.0000000000007|\~0.0000000006|\~35.3 us|
 
-Notes:
+### Notes:
 1. This function is a LUT of doubles with uniform distribution which uses no interpolation.
+2. This function is a LUT of floats with uniform distribution which uses no interpolation.
+3. This function is a LUT of fixed-point numbers (in q15_16 format) with uniform distribution which uses no interpolation.
+4. This function is a LUT of doubles with uniform distribution which uses linear interpolation.
+5. This function is a LUT of floats with uniform distribution which uses linear interpolation.
+6. This function is a LUT of fixed-point numbers with uniform distribution which uses linear interpolation.
+7. This function is a LUT of doubles with non-uniform distribution which uses linear interpolation.
+8. This function is a LUT of floats with non-uniform distribution which uses linear interpolation.
+9. This function is a LUT of fixed-point numbers with non-uniform distribution which uses linear interpolation.
+10. This function is a polynomial approximation of sin which uses 3 terms.
+11. This function is a polynomial approximation of sin which uses 4 terms.
+12. This function is a polynomial approximation of sin which uses 5 terms.
+13. This function is a polynomial approximation of sin which uses 7 terms.
 
 ## How do I use it?
 
