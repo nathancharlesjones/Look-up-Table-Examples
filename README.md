@@ -7,9 +7,9 @@ A “look-up table” (LUT) is a programming idiom in which the pre-computed val
 The most common usage of a look-up table is to implement simpler and "just accurate enough" versions of math functions like sin or exp, as shown below. In the table below, each element at position “X” is assigned the value of “sin(X)”, where “X” is a value in degrees.
 ```
 const double sin_LUT[360] = {
-	//              sin(0)               sin(1)
+	//				sin(0)               sin(1)
                         0,  0.0174524064372835,
-    //              sin(2)               sin(3)
+	//				sin(2)               sin(3)
 	   0.0348994967025010,  0.0523359562429438,
 	// ... Many more rows
 	//            sin(356)             sin(357)
@@ -30,9 +30,10 @@ A comparison of a slightly modified version of this implementation to that of th
 
 Lest the idea of a 1.7% error disagree with you, consider this (semi)realistic scenario: a 1-foot long lever is connected to the shaft of a servo motor. The lever only travels from 0 to 90 degrees; that is, from horizontal to vertical and you wish to determine the vertical displacement of the highest point of the lever based on a given angle. You can compute this by multiplying the length of the lever (1 foot) by the sin of the angle formed by it and a horizontal plane, which you can measure from the servo motor. In this scenario, a 1.7% error still gives you an answer that is accurate to, at worst, about one-fifth of an inch or 5 mm. The average absolute error of 0.0025 means that most of your calculations will be off by less than 0.76 mm. For all but a few applications, this resolution is probably entirely sufficient. Of course, there are other ways to improve the accuracy of a LUT if it is needed (see below).
 
-Table of Contents
-1. Description
-	1. Example
+## Table of Contents
+
+1. [Description](https://github.com/nathancharlesjones/Look-up-Table-Examples#description)
+	1. [Example](https://github.com/nathancharlesjones/Look-up-Table-Examples#example-fast-sin)
 2. Defining a Look-up Table
 	1. Location in Memory
 	2. Data type
