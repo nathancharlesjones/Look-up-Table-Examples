@@ -26,6 +26,7 @@ typedef struct sinLUT_implementation_t
 	double executionTime_ns_avg;
 	double absoluteError_sum;
 	double absoluteError_avg;
+	double absoluteError_max;
 	double percentError_sum;
 	double percentError_avg;
 } sinLUT_implementation_t;

@@ -75,14 +75,15 @@ void printResults_CUT(uint32_t iterations, sinLUT_implementation_t codeUnderTest
 {
 	printf("-----Sin LUT Test-----\n");
 	printf("Number of iterations: %d\n\n", iterations);
-	printf("Function\tAvg Execution Time (ns)\tAvg Absolute Error\tAvg Percent Error\n");
-	printf("---------------------------------------------------------------------------------\n");
+	printf("Function\tAvg Exec Time (ns)\tMax Abs Err\tAvg Abs Err\tAvg Pcnt Err\n");
+	printf("------------------------------------------------------------------------------------\n");
 
 	int idx_CUT = 0;
 	while( codeUnderTest[idx_CUT].function_enum != NOT_ASSIGNED )
 	{
-		printf("%s\t%f\t\t%f\t\t%f\n", codeUnderTest[idx_CUT].fcn_name, 
+		printf("%s\t%f\t\t%1.12f\t%1.12f\t%1.12f\n", codeUnderTest[idx_CUT].fcn_name, 
 			codeUnderTest[idx_CUT].executionTime_ns_avg, 
+			codeUnderTest[idx_CUT].absoluteError_max,
 			codeUnderTest[idx_CUT].absoluteError_avg,
 			codeUnderTest[idx_CUT].percentError_avg);
 		idx_CUT++;

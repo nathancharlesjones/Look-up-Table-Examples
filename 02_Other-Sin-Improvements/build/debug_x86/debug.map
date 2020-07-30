@@ -5,7 +5,7 @@ Archive member included to satisfy reference by file (symbol)
 
 As-needed library included to satisfy reference by file (symbol)
 
-libm.so.6                     build/debug_x86/source/main.o (sin@@GLIBC_2.2.5)
+libm.so.6                     build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o (fmod@@GLIBC_2.2.5)
 libc.so.6                     build/debug_x86/hardware/source/x86/x86.o (__printf_chk@@GLIBC_2.3.4)
 
 Discarded input sections
@@ -104,18 +104,40 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/debug_x86/source/sin_lut.o
  .data          0x0000000000000000        0x0 build/debug_x86/source/sin_lut.o
  .bss           0x0000000000000000        0x0 build/debug_x86/source/sin_lut.o
+ .text.init_sinLUT
+                0x0000000000000000       0x63 build/debug_x86/source/sin_lut.o
+ .text.sin_LUT_double
+                0x0000000000000000       0x49 build/debug_x86/source/sin_lut.o
+ .text.sin_LUT_float
+                0x0000000000000000       0x4b build/debug_x86/source/sin_lut.o
+ .text.sin_LUT_fixedPoint
+                0x0000000000000000       0x2e build/debug_x86/source/sin_lut.o
+ .text.sin_LUT_double_interpolate
+                0x0000000000000000       0x65 build/debug_x86/source/sin_lut.o
  .text.sin_LUT_double_nonUniform
-                0x0000000000000000        0x1 build/debug_x86/source/sin_lut.o
+                0x0000000000000000       0xf6 build/debug_x86/source/sin_lut.o
+ .text.sin_LUT_float_interpolate
+                0x0000000000000000       0x63 build/debug_x86/source/sin_lut.o
  .text.sin_LUT_float_nonUniform
-                0x0000000000000000        0x1 build/debug_x86/source/sin_lut.o
+                0x0000000000000000       0xe2 build/debug_x86/source/sin_lut.o
+ .text.sin_LUT_fixedPoint_interpolate
+                0x0000000000000000       0x45 build/debug_x86/source/sin_lut.o
  .text.sin_LUT_fixedPoint_nonUniform
-                0x0000000000000000        0x1 build/debug_x86/source/sin_lut.o
- .text.sin_LUT_double_rangeReduction
-                0x0000000000000000        0x1 build/debug_x86/source/sin_lut.o
- .text.sin_LUT_float_rangeReduction
-                0x0000000000000000        0x1 build/debug_x86/source/sin_lut.o
- .text.sin_LUT_fixedPoint_rangeReduction
-                0x0000000000000000        0x1 build/debug_x86/source/sin_lut.o
+                0x0000000000000000       0xc0 build/debug_x86/source/sin_lut.o
+ .rodata.nonUniform_fixed_0dot007error
+                0x0000000000000000       0xc8 build/debug_x86/source/sin_lut.o
+ .rodata.nonUniform_float_0dot007error
+                0x0000000000000000       0xc8 build/debug_x86/source/sin_lut.o
+ .rodata.nonUniform_double_0dot007error
+                0x0000000000000000      0x190 build/debug_x86/source/sin_lut.o
+ .bss.sinTable_fixedPoint
+                0x0000000000000000      0x650 build/debug_x86/source/sin_lut.o
+ .bss.sinTable_float
+                0x0000000000000000      0x650 build/debug_x86/source/sin_lut.o
+ .bss.sinTable_double
+                0x0000000000000000      0xca0 build/debug_x86/source/sin_lut.o
+ .rodata.cst8   0x0000000000000000       0x28 build/debug_x86/source/sin_lut.o
+ .rodata.cst4   0x0000000000000000        0x8 build/debug_x86/source/sin_lut.o
  .debug_macro   0x0000000000000000       0x22 build/debug_x86/source/sin_lut.o
  .debug_macro   0x0000000000000000       0x10 build/debug_x86/source/sin_lut.o
  .debug_macro   0x0000000000000000       0x16 build/debug_x86/source/sin_lut.o
@@ -143,6 +165,126 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 build/debug_x86/source/sin_lut.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/debug_x86/source/sin_lut.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .group         0x0000000000000000        0xc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text          0x0000000000000000        0x0 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .data          0x0000000000000000        0x0 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .bss           0x0000000000000000        0x0 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.cos_32s  0x0000000000000000       0x27 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.cos_32   0x0000000000000000       0xb5 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.sin_32   0x0000000000000000       0x26 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.cos_52s  0x0000000000000000       0x33 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.cos_52   0x0000000000000000       0xb5 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.sin_52   0x0000000000000000       0x26 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.cos_73s  0x0000000000000000       0x41 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.cos_73   0x0000000000000000       0xa1 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.sin_73   0x0000000000000000       0x1e build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.cos_121s
+                0x0000000000000000       0x59 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.cos_121  0x0000000000000000       0xa1 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.sin_121  0x0000000000000000       0x1e build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.tan_32s  0x0000000000000000       0x1c build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.tan_32   0x0000000000000000      0x18c build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .rodata.tan_32
+                0x0000000000000000       0x20 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.tan_56s  0x0000000000000000       0x2b build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.tan_56   0x0000000000000000      0x18c build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .rodata.tan_56
+                0x0000000000000000       0x20 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.tan_82s  0x0000000000000000       0x3d build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.tan_82   0x0000000000000000      0x166 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .rodata.tan_82
+                0x0000000000000000       0x20 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.tan_14s  0x0000000000000000       0x55 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.tan_14   0x0000000000000000      0x166 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .rodata.tan_14
+                0x0000000000000000       0x20 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.atan_66s
+                0x0000000000000000       0x2d build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.atan_66  0x0000000000000000       0xc9 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.atan_137s
+                0x0000000000000000       0x55 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .text.atan_137
+                0x0000000000000000       0xc9 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .rodata.cst4   0x0000000000000000       0x38 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .rodata.cst8   0x0000000000000000      0x150 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .rodata.cst16  0x0000000000000000       0x20 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x22 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x10 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000      0x10b build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000      0x168 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x16 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x4a build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x58 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x34 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x5e build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0xee build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000      0x172 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x2e build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x80 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x22 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x10 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x12 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x58 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x3c build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x43 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0xac build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000      0x14d build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x10 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x3a build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x10 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x97 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x16 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x20 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x28 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x58 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x10 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000      0x1cc build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x2e build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x28 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x27 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x11 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x16 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000000000       0x35 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
  .group         0x0000000000000000        0xc build/debug_x86/hardware/source/x86/x86.o
  .group         0x0000000000000000        0xc build/debug_x86/hardware/source/x86/x86.o
  .group         0x0000000000000000        0xc build/debug_x86/hardware/source/x86/x86.o
@@ -207,6 +349,8 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/debug_x86/hardware/source/x86/x86.o
  .data          0x0000000000000000        0x0 build/debug_x86/hardware/source/x86/x86.o
  .bss           0x0000000000000000        0x0 build/debug_x86/hardware/source/x86/x86.o
+ .text.systemTimeDiff_ns
+                0x0000000000000000       0x49 build/debug_x86/hardware/source/x86/x86.o
  .debug_macro   0x0000000000000000       0x22 build/debug_x86/hardware/source/x86/x86.o
  .debug_macro   0x0000000000000000       0x10 build/debug_x86/hardware/source/x86/x86.o
  .debug_macro   0x0000000000000000      0x168 build/debug_x86/hardware/source/x86/x86.o
@@ -227,6 +371,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 build/debug_x86/hardware/source/x86/x86.o
  .debug_macro   0x0000000000000000       0x16 build/debug_x86/hardware/source/x86/x86.o
  .debug_macro   0x0000000000000000       0x16 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000000000       0x97 build/debug_x86/hardware/source/x86/x86.o
  .debug_macro   0x0000000000000000       0x2e build/debug_x86/hardware/source/x86/x86.o
  .debug_macro   0x0000000000000000       0x80 build/debug_x86/hardware/source/x86/x86.o
  .debug_macro   0x0000000000000000       0x10 build/debug_x86/hardware/source/x86/x86.o
@@ -259,6 +404,7 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crti.o
 LOAD /usr/lib/gcc/x86_64-linux-gnu/8/crtbeginS.o
 LOAD build/debug_x86/source/main.o
 LOAD build/debug_x86/source/sin_lut.o
+LOAD build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
 LOAD build/debug_x86/hardware/source/x86/x86.o
 LOAD /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/libm.so
 START GROUP
@@ -380,14 +526,14 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
  .plt           0x00000000000007a0       0x90 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
  *(.iplt)
 
-.plt.got        0x0000000000000830       0x10
+.plt.got        0x0000000000000830        0x8
  *(.plt.got)
- .plt.got       0x0000000000000830       0x10 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .plt.got       0x0000000000000830        0x8 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
 
 .plt.sec
  *(.plt.sec)
 
-.text           0x0000000000000840      0xec2
+.text           0x0000000000000840      0x7f2
  *(.text.unlikely .text.*_unlikely .text.unlikely.*)
  *(.text.exit .text.exit.*)
  *(.text.startup .text.startup.*)
@@ -397,108 +543,83 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
                 0x0000000000000840                _start
  *fill*         0x000000000000086b        0x5 
  .text          0x0000000000000870       0xb5 /usr/lib/gcc/x86_64-linux-gnu/8/crtbeginS.o
- .text.main     0x0000000000000925      0x911 build/debug_x86/source/main.o
+ .text.main     0x0000000000000925      0x4e4 build/debug_x86/source/main.o
                 0x0000000000000925                main
- .text.init_sinLUT
-                0x0000000000001236       0x63 build/debug_x86/source/sin_lut.o
-                0x0000000000001236                init_sinLUT
- .text.sin_LUT_double
-                0x0000000000001299       0x3a build/debug_x86/source/sin_lut.o
-                0x0000000000001299                sin_LUT_double
- .text.sin_LUT_float
-                0x00000000000012d3       0x3e build/debug_x86/source/sin_lut.o
-                0x00000000000012d3                sin_LUT_float
- .text.sin_LUT_fixedPoint
-                0x0000000000001311       0x2e build/debug_x86/source/sin_lut.o
-                0x0000000000001311                sin_LUT_fixedPoint
- .text.sin_LUT_double_interpolate
-                0x000000000000133f       0x7b build/debug_x86/source/sin_lut.o
-                0x000000000000133f                sin_LUT_double_interpolate
- .text.sin_LUT_float_interpolate
-                0x00000000000013ba       0x78 build/debug_x86/source/sin_lut.o
-                0x00000000000013ba                sin_LUT_float_interpolate
- .text.sin_LUT_fixedPoint_interpolate
-                0x0000000000001432       0x59 build/debug_x86/source/sin_lut.o
-                0x0000000000001432                sin_LUT_fixedPoint_interpolate
  .text.assert_failed
-                0x000000000000148b       0x31 build/debug_x86/hardware/source/x86/x86.o
-                0x000000000000148b                assert_failed
+                0x0000000000000e09       0x31 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000000e09                assert_failed
  .text.initHardware
-                0x00000000000014bc        0x6 build/debug_x86/hardware/source/x86/x86.o
-                0x00000000000014bc                initHardware
+                0x0000000000000e3a        0x6 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000000e3a                initHardware
  .text.systemTime_create
-                0x00000000000014c2       0x2e build/debug_x86/hardware/source/x86/x86.o
-                0x00000000000014c2                systemTime_create
+                0x0000000000000e40       0x2e build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000000e40                systemTime_create
  .text.getSystemTime
-                0x00000000000014f0       0x2c build/debug_x86/hardware/source/x86/x86.o
-                0x00000000000014f0                getSystemTime
+                0x0000000000000e6e       0x2c build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000000e6e                getSystemTime
  .text.elapsedSystemTime_ns
-                0x000000000000151c       0x67 build/debug_x86/hardware/source/x86/x86.o
-                0x000000000000151c                elapsedSystemTime_ns
- .text.systemTimeDiff_ns
-                0x0000000000001583       0x49 build/debug_x86/hardware/source/x86/x86.o
-                0x0000000000001583                systemTimeDiff_ns
+                0x0000000000000e9a       0x67 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000000e9a                elapsedSystemTime_ns
  .text.printResults_CUT
-                0x00000000000015cc       0xb6 build/debug_x86/hardware/source/x86/x86.o
-                0x00000000000015cc                printResults_CUT
- *fill*         0x0000000000001682        0xe 
- .text          0x0000000000001690       0x72 /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
-                0x0000000000001690                __libc_csu_init
-                0x0000000000001700                __libc_csu_fini
+                0x0000000000000f01       0xba build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000000f01                printResults_CUT
+ *fill*         0x0000000000000fbb        0x5 
+ .text          0x0000000000000fc0       0x72 /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
+                0x0000000000000fc0                __libc_csu_init
+                0x0000000000001030                __libc_csu_fini
  *(.gnu.warning)
 
-.fini           0x0000000000001704        0x9
+.fini           0x0000000000001034        0x9
  *(SORT_NONE(.fini))
- .fini          0x0000000000001704        0x4 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crti.o
-                0x0000000000001704                _fini
- .fini          0x0000000000001708        0x5 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
+ .fini          0x0000000000001034        0x4 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crti.o
+                0x0000000000001034                _fini
+ .fini          0x0000000000001038        0x5 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
                 [!provide]                        PROVIDE (__etext = .)
                 [!provide]                        PROVIDE (_etext = .)
                 [!provide]                        PROVIDE (etext = .)
 
-.rodata         0x0000000000001710      0x1e8
+.rodata         0x0000000000001040      0x158
  *(.rodata .rodata.* .gnu.linkonce.r.*)
- .rodata        0x0000000000001710       0x98 build/debug_x86/source/main.o
- .rodata.cst8   0x00000000000017a8       0x30 build/debug_x86/source/sin_lut.o
- .rodata.cst4   0x00000000000017d8        0xc build/debug_x86/source/sin_lut.o
- *fill*         0x00000000000017e4        0x4 
+ .rodata        0x0000000000001040       0x38 build/debug_x86/source/main.o
  .rodata.assert_failed.str1.8
-                0x00000000000017e8       0x27 build/debug_x86/hardware/source/x86/x86.o
+                0x0000000000001078       0x27 build/debug_x86/hardware/source/x86/x86.o
  .rodata.systemTime_create.str1.1
-                0x000000000000180f        0x6 build/debug_x86/hardware/source/x86/x86.o
+                0x000000000000109f        0x6 build/debug_x86/hardware/source/x86/x86.o
  .rodata.printResults_CUT.str1.1
-                0x0000000000001815       0x42 build/debug_x86/hardware/source/x86/x86.o
- *fill*         0x0000000000001857        0x1 
+                0x00000000000010a5       0x50 build/debug_x86/hardware/source/x86/x86.o
+ *fill*         0x00000000000010f5        0x3 
  .rodata.printResults_CUT.str1.8
-                0x0000000000001858       0xa0 build/debug_x86/hardware/source/x86/x86.o
-                                         0x9b (size before relaxing)
+                0x00000000000010f8       0xa0 build/debug_x86/hardware/source/x86/x86.o
+                                         0x9e (size before relaxing)
 
 .rodata1
  *(.rodata1)
 
-.eh_frame_hdr   0x00000000000018f8       0xac
+.eh_frame_hdr   0x0000000000001198       0x6c
  *(.eh_frame_hdr)
- .eh_frame_hdr  0x00000000000018f8       0xac /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
-                0x00000000000018f8                __GNU_EH_FRAME_HDR
+ .eh_frame_hdr  0x0000000000001198       0x6c /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+                0x0000000000001198                __GNU_EH_FRAME_HDR
  *(.eh_frame_entry .eh_frame_entry.*)
 
-.eh_frame       0x00000000000019a8      0x268
+.eh_frame       0x0000000000001208      0x1b8
  *(.eh_frame)
- .eh_frame      0x00000000000019a8       0x30 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .eh_frame      0x0000000000001208       0x30 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
                                          0x2c (size before relaxing)
- *fill*         0x00000000000019d8        0x0 
- .eh_frame      0x00000000000019d8       0x40 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
- .eh_frame      0x0000000000001a18       0x18 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ *fill*         0x0000000000001238        0x0 
+ .eh_frame      0x0000000000001238       0x40 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
+ .eh_frame      0x0000000000001278       0x18 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
                                          0x30 (size before relaxing)
- .eh_frame      0x0000000000001a30       0x20 build/debug_x86/source/main.o
+ .eh_frame      0x0000000000001290       0x20 build/debug_x86/source/main.o
                                          0x38 (size before relaxing)
- .eh_frame      0x0000000000001a50       0x98 build/debug_x86/source/sin_lut.o
-                                        0x128 (size before relaxing)
- .eh_frame      0x0000000000001ae8       0xc8 build/debug_x86/hardware/source/x86/x86.o
+ .eh_frame      0x00000000000012b0        0x0 build/debug_x86/source/sin_lut.o
+                                         0xe8 (size before relaxing)
+ .eh_frame      0x00000000000012b0        0x0 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+                                        0x280 (size before relaxing)
+ .eh_frame      0x00000000000012b0       0xb0 build/debug_x86/hardware/source/x86/x86.o
                                          0xe0 (size before relaxing)
- .eh_frame      0x0000000000001bb0       0x5c /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
+ .eh_frame      0x0000000000001360       0x5c /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
                                          0x78 (size before relaxing)
- .eh_frame      0x0000000000001c0c        0x4 /usr/lib/gcc/x86_64-linux-gnu/8/crtendS.o
+ .eh_frame      0x00000000000013bc        0x4 /usr/lib/gcc/x86_64-linux-gnu/8/crtendS.o
  *(.eh_frame.*)
 
 .gcc_except_table
@@ -610,41 +731,34 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
                 0x0000000000202010                . = .
                 0x0000000000202010                __bss_start = .
 
-.bss            0x0000000000202020     0x1970
+.bss            0x0000000000202020       0x10
  *(.dynbss)
+ *fill*         0x0000000000202020        0x0 
  .dynbss        0x0000000000202020        0x8 /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
                 0x0000000000202020                stderr@@GLIBC_2.2.5
  *(.bss .bss.* .gnu.linkonce.b.*)
  .bss           0x0000000000202028        0x1 /usr/lib/gcc/x86_64-linux-gnu/8/crtbeginS.o
- *fill*         0x0000000000202029       0x17 
- .bss.sinTable_fixedPoint
-                0x0000000000202040      0x648 build/debug_x86/source/sin_lut.o
- *fill*         0x0000000000202688       0x18 
- .bss.sinTable_float
-                0x00000000002026a0      0x648 build/debug_x86/source/sin_lut.o
- *fill*         0x0000000000202ce8       0x18 
- .bss.sinTable_double
-                0x0000000000202d00      0xc90 build/debug_x86/source/sin_lut.o
  *(COMMON)
-                0x0000000000203990                . = ALIGN ((. != 0x0)?0x8:0x1)
+                0x0000000000202030                . = ALIGN ((. != 0x0)?0x8:0x1)
+ *fill*         0x0000000000202029        0x7 
 
 .lbss
  *(.dynlbss)
  *(.lbss .lbss.* .gnu.linkonce.lb.*)
  *(LARGE_COMMON)
-                0x0000000000203990                . = ALIGN (0x8)
-                0x0000000000203990                . = SEGMENT_START ("ldata-segment", .)
+                0x0000000000202030                . = ALIGN (0x8)
+                0x0000000000202030                . = SEGMENT_START ("ldata-segment", .)
 
 .lrodata
  *(.lrodata .lrodata.* .gnu.linkonce.lr.*)
 
-.ldata          0x0000000000603990        0x0
+.ldata          0x0000000000602030        0x0
  *(.ldata .ldata.* .gnu.linkonce.l.*)
-                0x0000000000603990                . = ALIGN ((. != 0x0)?0x8:0x1)
-                0x0000000000603990                . = ALIGN (0x8)
-                0x0000000000603990                _end = .
+                0x0000000000602030                . = ALIGN ((. != 0x0)?0x8:0x1)
+                0x0000000000602030                . = ALIGN (0x8)
+                0x0000000000602030                _end = .
                 [!provide]                        PROVIDE (end = .)
-                0x0000000000603990                . = DATA_SEGMENT_END (.)
+                0x0000000000602030                . = DATA_SEGMENT_END (.)
 
 .stab
  *(.stab)
@@ -670,6 +784,7 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
                                          0x2a (size before relaxing)
  .comment       0x0000000000000029       0x2a build/debug_x86/source/main.o
  .comment       0x0000000000000029       0x2a build/debug_x86/source/sin_lut.o
+ .comment       0x0000000000000029       0x2a build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
  .comment       0x0000000000000029       0x2a build/debug_x86/hardware/source/x86/x86.o
  .comment       0x0000000000000029       0x2a /usr/lib/gcc/x86_64-linux-gnu/8/crtendS.o
 
@@ -685,53 +800,61 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x0000000000000000      0x1b0
+.debug_aranges  0x0000000000000000      0x320
  *(.debug_aranges)
  .debug_aranges
                 0x0000000000000000       0x30 build/debug_x86/source/main.o
  .debug_aranges
-                0x0000000000000030       0xf0 build/debug_x86/source/sin_lut.o
+                0x0000000000000030       0xc0 build/debug_x86/source/sin_lut.o
  .debug_aranges
-                0x0000000000000120       0x90 build/debug_x86/hardware/source/x86/x86.o
+                0x00000000000000f0      0x1a0 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_aranges
+                0x0000000000000290       0x90 build/debug_x86/hardware/source/x86/x86.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x1d14
+.debug_info     0x0000000000000000     0x31a5
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x0000000000000000      0x861 build/debug_x86/source/main.o
- .debug_info    0x0000000000000861      0x8ee build/debug_x86/source/sin_lut.o
- .debug_info    0x000000000000114f      0xbc5 build/debug_x86/hardware/source/x86/x86.o
+ .debug_info    0x0000000000000000      0x7af build/debug_x86/source/main.o
+ .debug_info    0x00000000000007af      0xc5c build/debug_x86/source/sin_lut.o
+ .debug_info    0x000000000000140b     0x11c8 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_info    0x00000000000025d3      0xbd2 build/debug_x86/hardware/source/x86/x86.o
 
-.debug_abbrev   0x0000000000000000      0x649
+.debug_abbrev   0x0000000000000000      0x88d
  *(.debug_abbrev)
- .debug_abbrev  0x0000000000000000      0x1f9 build/debug_x86/source/main.o
- .debug_abbrev  0x00000000000001f9      0x1a6 build/debug_x86/source/sin_lut.o
- .debug_abbrev  0x000000000000039f      0x2aa build/debug_x86/hardware/source/x86/x86.o
+ .debug_abbrev  0x0000000000000000      0x1e6 build/debug_x86/source/main.o
+ .debug_abbrev  0x00000000000001e6      0x211 build/debug_x86/source/sin_lut.o
+ .debug_abbrev  0x00000000000003f7      0x1ec build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_abbrev  0x00000000000005e3      0x2aa build/debug_x86/hardware/source/x86/x86.o
 
-.debug_line     0x0000000000000000     0x1629
+.debug_line     0x0000000000000000     0x2536
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x0000000000000000      0x6ac build/debug_x86/source/main.o
- .debug_line    0x00000000000006ac      0x7cc build/debug_x86/source/sin_lut.o
- .debug_line    0x0000000000000e78      0x7b1 build/debug_x86/hardware/source/x86/x86.o
+ .debug_line    0x0000000000000000      0x623 build/debug_x86/source/main.o
+ .debug_line    0x0000000000000623      0xa6a build/debug_x86/source/sin_lut.o
+ .debug_line    0x000000000000108d      0xcf7 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_line    0x0000000000001d84      0x7b2 build/debug_x86/hardware/source/x86/x86.o
 
 .debug_frame
  *(.debug_frame)
 
-.debug_str      0x0000000000000000     0x9e60
+.debug_str      0x0000000000000000     0xa106
  *(.debug_str)
- .debug_str     0x0000000000000000     0x6127 build/debug_x86/source/main.o
-                                       0x62a8 (size before relaxing)
- .debug_str     0x0000000000006127      0xf6a build/debug_x86/source/sin_lut.o
-                                       0x6d3e (size before relaxing)
- .debug_str     0x0000000000007091     0x2dcf build/debug_x86/hardware/source/x86/x86.o
-                                       0x8dd7 (size before relaxing)
+ .debug_str     0x0000000000000000     0x60f6 build/debug_x86/source/main.o
+                                       0x6277 (size before relaxing)
+ .debug_str     0x00000000000060f6     0x1001 build/debug_x86/source/sin_lut.o
+                                       0x6dc9 (size before relaxing)
+ .debug_str     0x00000000000070f7      0x245 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+                                       0x64e3 (size before relaxing)
+ .debug_str     0x000000000000733c     0x2dca build/debug_x86/hardware/source/x86/x86.o
+                                       0x8de9 (size before relaxing)
 
-.debug_loc      0x0000000000000000     0x15ae
+.debug_loc      0x0000000000000000     0x3332
  *(.debug_loc)
- .debug_loc     0x0000000000000000      0x850 build/debug_x86/source/main.o
- .debug_loc     0x0000000000000850      0x77e build/debug_x86/source/sin_lut.o
- .debug_loc     0x0000000000000fce      0x5e0 build/debug_x86/hardware/source/x86/x86.o
+ .debug_loc     0x0000000000000000      0x71b build/debug_x86/source/main.o
+ .debug_loc     0x000000000000071b      0xf89 build/debug_x86/source/sin_lut.o
+ .debug_loc     0x00000000000016a4     0x16ae build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_loc     0x0000000000002d52      0x5e0 build/debug_x86/hardware/source/x86/x86.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -751,103 +874,106 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/crtn.o
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x0000000000000000      0x180
+.debug_ranges   0x0000000000000000      0x2e0
  *(.debug_ranges)
  .debug_ranges  0x0000000000000000       0x20 build/debug_x86/source/main.o
- .debug_ranges  0x0000000000000020       0xe0 build/debug_x86/source/sin_lut.o
- .debug_ranges  0x0000000000000100       0x80 build/debug_x86/hardware/source/x86/x86.o
+ .debug_ranges  0x0000000000000020       0xb0 build/debug_x86/source/sin_lut.o
+ .debug_ranges  0x00000000000000d0      0x190 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_ranges  0x0000000000000260       0x80 build/debug_x86/hardware/source/x86/x86.o
 
-.debug_macro    0x0000000000000000     0x4147
+.debug_macro    0x0000000000000000     0x4bc1
  *(.debug_macro)
- .debug_macro   0x0000000000000000      0x1c6 build/debug_x86/source/main.o
- .debug_macro   0x00000000000001c6      0x80e build/debug_x86/source/main.o
- .debug_macro   0x00000000000009d4       0x22 build/debug_x86/source/main.o
- .debug_macro   0x00000000000009f6       0x10 build/debug_x86/source/main.o
- .debug_macro   0x0000000000000a06      0x10b build/debug_x86/source/main.o
- .debug_macro   0x0000000000000b11      0x168 build/debug_x86/source/main.o
- .debug_macro   0x0000000000000c79       0x16 build/debug_x86/source/main.o
- .debug_macro   0x0000000000000c8f       0x4a build/debug_x86/source/main.o
- .debug_macro   0x0000000000000cd9       0x58 build/debug_x86/source/main.o
- .debug_macro   0x0000000000000d31       0x34 build/debug_x86/source/main.o
- .debug_macro   0x0000000000000d65       0x5e build/debug_x86/source/main.o
- .debug_macro   0x0000000000000dc3       0xee build/debug_x86/source/main.o
- .debug_macro   0x0000000000000eb1      0x172 build/debug_x86/source/main.o
- .debug_macro   0x0000000000001023       0x2e build/debug_x86/source/main.o
- .debug_macro   0x0000000000001051       0x80 build/debug_x86/source/main.o
- .debug_macro   0x00000000000010d1       0x22 build/debug_x86/source/main.o
- .debug_macro   0x00000000000010f3       0x10 build/debug_x86/source/main.o
- .debug_macro   0x0000000000001103       0x12 build/debug_x86/source/main.o
- .debug_macro   0x0000000000001115       0x58 build/debug_x86/source/main.o
- .debug_macro   0x000000000000116d       0x3c build/debug_x86/source/main.o
- .debug_macro   0x00000000000011a9       0x43 build/debug_x86/source/main.o
- .debug_macro   0x00000000000011ec       0xac build/debug_x86/source/main.o
- .debug_macro   0x0000000000001298      0x14d build/debug_x86/source/main.o
- .debug_macro   0x00000000000013e5       0x3a build/debug_x86/source/main.o
- .debug_macro   0x000000000000141f       0x16 build/debug_x86/source/main.o
- .debug_macro   0x0000000000001435      0x10e build/debug_x86/source/main.o
- .debug_macro   0x0000000000001543       0x35 build/debug_x86/source/main.o
- .debug_macro   0x0000000000001578       0x10 build/debug_x86/source/main.o
- .debug_macro   0x0000000000001588       0x16 build/debug_x86/source/main.o
- .debug_macro   0x000000000000159e      0x1bf build/debug_x86/source/main.o
- .debug_macro   0x000000000000175d       0x5e build/debug_x86/source/main.o
- .debug_macro   0x00000000000017bb       0x10 build/debug_x86/source/main.o
- .debug_macro   0x00000000000017cb       0x10 build/debug_x86/source/main.o
- .debug_macro   0x00000000000017db      0x23c build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000001a17      0x80e build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000002225      0x10b build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000002330      0x168 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000002498       0x10 build/debug_x86/source/sin_lut.o
- .debug_macro   0x00000000000024a8       0x10 build/debug_x86/source/sin_lut.o
- .debug_macro   0x00000000000024b8       0x97 build/debug_x86/source/sin_lut.o
- .debug_macro   0x000000000000254f       0x16 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000002565       0x20 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000002585       0x28 build/debug_x86/source/sin_lut.o
- .debug_macro   0x00000000000025ad       0x58 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000002605       0x10 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000002615      0x1cc build/debug_x86/source/sin_lut.o
- .debug_macro   0x00000000000027e1       0x2e build/debug_x86/source/sin_lut.o
- .debug_macro   0x000000000000280f       0x28 build/debug_x86/source/sin_lut.o
- .debug_macro   0x0000000000002837       0x27 build/debug_x86/source/sin_lut.o
- .debug_macro   0x000000000000285e       0x11 build/debug_x86/source/sin_lut.o
- .debug_macro   0x000000000000286f      0x3d7 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000002c46      0x80e build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003454      0x293 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x00000000000036e7       0x34 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x000000000000371b       0x58 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003773       0x34 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x00000000000037a7       0x1f build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x00000000000037c6       0x3a build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003800      0x2a6 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003aa6       0x97 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003b3d       0x52 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003b8f       0x4c build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003bdb       0x2e build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003c09       0x28 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003c31       0x52 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003c83       0x19 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003c9c       0x12 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003cae       0x12 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003cc0       0x1c build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003cdc       0x28 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003d04       0x10 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003d14       0x4c build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003d60       0x22 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003d82       0x10 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003d92       0x46 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003dd8       0x10 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003de8       0x1c build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003e04       0x2e build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003e32       0x5e build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003e90       0x27 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003eb7       0x76 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003f2d       0x17 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003f44       0x10 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003f54       0x10 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003f64       0x16 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003f7a       0x58 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x0000000000003fd2      0x100 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x00000000000040d2       0x11 build/debug_x86/hardware/source/x86/x86.o
- .debug_macro   0x00000000000040e3       0x64 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000000000      0x1d0 build/debug_x86/source/main.o
+ .debug_macro   0x00000000000001d0      0x80e build/debug_x86/source/main.o
+ .debug_macro   0x00000000000009de       0x22 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000a00       0x10 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000a10      0x10b build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000b1b      0x168 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000c83       0x16 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000c99       0x4a build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000ce3       0x58 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000d3b       0x34 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000d6f       0x5e build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000dcd       0xee build/debug_x86/source/main.o
+ .debug_macro   0x0000000000000ebb      0x172 build/debug_x86/source/main.o
+ .debug_macro   0x000000000000102d       0x2e build/debug_x86/source/main.o
+ .debug_macro   0x000000000000105b       0x80 build/debug_x86/source/main.o
+ .debug_macro   0x00000000000010db       0x22 build/debug_x86/source/main.o
+ .debug_macro   0x00000000000010fd       0x10 build/debug_x86/source/main.o
+ .debug_macro   0x000000000000110d       0x12 build/debug_x86/source/main.o
+ .debug_macro   0x000000000000111f       0x58 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000001177       0x3c build/debug_x86/source/main.o
+ .debug_macro   0x00000000000011b3       0x43 build/debug_x86/source/main.o
+ .debug_macro   0x00000000000011f6       0xac build/debug_x86/source/main.o
+ .debug_macro   0x00000000000012a2      0x14d build/debug_x86/source/main.o
+ .debug_macro   0x00000000000013ef       0x3a build/debug_x86/source/main.o
+ .debug_macro   0x0000000000001429       0x16 build/debug_x86/source/main.o
+ .debug_macro   0x000000000000143f      0x10e build/debug_x86/source/main.o
+ .debug_macro   0x000000000000154d       0x35 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000001582       0x10 build/debug_x86/source/main.o
+ .debug_macro   0x0000000000001592       0x16 build/debug_x86/source/main.o
+ .debug_macro   0x00000000000015a8      0x1bf build/debug_x86/source/main.o
+ .debug_macro   0x0000000000001767       0x5e build/debug_x86/source/main.o
+ .debug_macro   0x00000000000017c5       0x10 build/debug_x86/source/main.o
+ .debug_macro   0x00000000000017d5       0x10 build/debug_x86/source/main.o
+ .debug_macro   0x00000000000017e5      0x24a build/debug_x86/source/sin_lut.o
+ .debug_macro   0x0000000000001a2f      0x80e build/debug_x86/source/sin_lut.o
+ .debug_macro   0x000000000000223d      0x10b build/debug_x86/source/sin_lut.o
+ .debug_macro   0x0000000000002348      0x168 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x00000000000024b0       0x10 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x00000000000024c0       0x10 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x00000000000024d0       0x97 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x0000000000002567       0x16 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x000000000000257d       0x20 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x000000000000259d       0x28 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x00000000000025c5       0x58 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x000000000000261d       0x10 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x000000000000262d      0x1cc build/debug_x86/source/sin_lut.o
+ .debug_macro   0x00000000000027f9       0x2e build/debug_x86/source/sin_lut.o
+ .debug_macro   0x0000000000002827       0x28 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x000000000000284f       0x27 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x0000000000002876       0x11 build/debug_x86/source/sin_lut.o
+ .debug_macro   0x0000000000002887      0x254 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000002adb      0x80e build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x00000000000032e9       0x97 build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+ .debug_macro   0x0000000000003380      0x3d7 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003757      0x80e build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000003f65      0x293 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000041f8       0x34 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x000000000000422c       0x58 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000004284       0x34 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000042b8       0x1f build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000042d7       0x3a build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000004311      0x2a6 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000045b7       0x52 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000004609       0x4c build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000004655       0x2e build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000004683       0x28 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000046ab       0x52 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000046fd       0x19 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000004716       0x12 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000004728       0x12 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x000000000000473a       0x1c build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000004756       0x28 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x000000000000477e       0x10 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x000000000000478e       0x4c build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000047da       0x22 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000047fc       0x10 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x000000000000480c       0x46 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000004852       0x10 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000004862       0x1c build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x000000000000487e       0x2e build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000048ac       0x5e build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x000000000000490a       0x27 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000004931       0x76 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000049a7       0x17 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000049be       0x10 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000049ce       0x10 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000049de       0x16 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x00000000000049f4       0x58 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000004a4c      0x100 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000004b4c       0x11 build/debug_x86/hardware/source/x86/x86.o
+ .debug_macro   0x0000000000004b5d       0x64 build/debug_x86/hardware/source/x86/x86.o
 
 .debug_addr
  *(.debug_addr)
@@ -912,6 +1038,7 @@ _Exit@GLIBC_2.2.5                                 /lib/x86_64-linux-gnu/libc.so.
 _GLOBAL_OFFSET_TABLE_                             /usr/lib/gcc/x86_64-linux-gnu/8/../../../x86_64-linux-gnu/Scrt1.o
                                                   /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
                                                   build/debug_x86/hardware/source/x86/x86.o
+                                                  build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
                                                   build/debug_x86/source/sin_lut.o
                                                   build/debug_x86/source/main.o
                                                   /usr/lib/gcc/x86_64-linux-gnu/8/crtbeginS.o
@@ -1245,6 +1372,10 @@ atan2l@@GLIBC_2.2.5                               /lib/x86_64-linux-gnu/libm.so.
 atan2l@GLIBC_2.2.5                                /lib/x86_64-linux-gnu/libm.so.6
 atan@@GLIBC_2.2.5                                 /lib/x86_64-linux-gnu/libm.so.6
 atan@GLIBC_2.2.5                                  /lib/x86_64-linux-gnu/libm.so.6
+atan_137                                          build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+atan_137s                                         build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+atan_66                                           build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+atan_66s                                          build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
 atanf                                             /lib/x86_64-linux-gnu/libm.so.6
 atanf128                                          /lib/x86_64-linux-gnu/libm.so.6
 atanf128@@GLIBC_2.26                              /lib/x86_64-linux-gnu/libm.so.6
@@ -1839,6 +1970,14 @@ copysignl@GLIBC_2.2.5                             /lib/x86_64-linux-gnu/libm.so.
 cos                                               /lib/x86_64-linux-gnu/libm.so.6
 cos@@GLIBC_2.2.5                                  /lib/x86_64-linux-gnu/libm.so.6
 cos@GLIBC_2.2.5                                   /lib/x86_64-linux-gnu/libm.so.6
+cos_121                                           build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+cos_121s                                          build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+cos_32                                            build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+cos_32s                                           build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+cos_52                                            build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+cos_52s                                           build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+cos_73                                            build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+cos_73s                                           build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
 cosf                                              /lib/x86_64-linux-gnu/libm.so.6
 cosf128                                           /lib/x86_64-linux-gnu/libm.so.6
 cosf128@@GLIBC_2.26                               /lib/x86_64-linux-gnu/libm.so.6
@@ -2605,6 +2744,7 @@ fminmagl                                          /lib/x86_64-linux-gnu/libm.so.
 fminmagl@@GLIBC_2.25                              /lib/x86_64-linux-gnu/libm.so.6
 fminmagl@GLIBC_2.25                               /lib/x86_64-linux-gnu/libm.so.6
 fmod                                              /lib/x86_64-linux-gnu/libm.so.6
+                                                  build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
 fmod@@GLIBC_2.2.5                                 /lib/x86_64-linux-gnu/libm.so.6
 fmod@GLIBC_2.2.5                                  /lib/x86_64-linux-gnu/libm.so.6
 fmodf                                             /lib/x86_64-linux-gnu/libm.so.6
@@ -3109,7 +3249,6 @@ inet_pton@GLIBC_2.2.5                             /lib/x86_64-linux-gnu/libc.so.
 initHardware                                      build/debug_x86/hardware/source/x86/x86.o
                                                   build/debug_x86/source/main.o
 init_sinLUT                                       build/debug_x86/source/sin_lut.o
-                                                  build/debug_x86/source/main.o
 initstate                                         /lib/x86_64-linux-gnu/libc.so.6
 initstate@@GLIBC_2.2.5                            /lib/x86_64-linux-gnu/libc.so.6
 initstate@GLIBC_2.2.5                             /lib/x86_64-linux-gnu/libc.so.6
@@ -4626,24 +4765,19 @@ sin                                               /lib/x86_64-linux-gnu/libm.so.
                                                   build/debug_x86/source/main.o
 sin@@GLIBC_2.2.5                                  /lib/x86_64-linux-gnu/libm.so.6
 sin@GLIBC_2.2.5                                   /lib/x86_64-linux-gnu/libm.so.6
+sin_121                                           build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+sin_32                                            build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+sin_52                                            build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+sin_73                                            build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
 sin_LUT_double                                    build/debug_x86/source/sin_lut.o
-                                                  build/debug_x86/source/main.o
 sin_LUT_double_interpolate                        build/debug_x86/source/sin_lut.o
-                                                  build/debug_x86/source/main.o
 sin_LUT_double_nonUniform                         build/debug_x86/source/sin_lut.o
-sin_LUT_double_rangeReduction                     build/debug_x86/source/sin_lut.o
 sin_LUT_fixedPoint                                build/debug_x86/source/sin_lut.o
-                                                  build/debug_x86/source/main.o
 sin_LUT_fixedPoint_interpolate                    build/debug_x86/source/sin_lut.o
-                                                  build/debug_x86/source/main.o
 sin_LUT_fixedPoint_nonUniform                     build/debug_x86/source/sin_lut.o
-sin_LUT_fixedPoint_rangeReduction                 build/debug_x86/source/sin_lut.o
 sin_LUT_float                                     build/debug_x86/source/sin_lut.o
-                                                  build/debug_x86/source/main.o
 sin_LUT_float_interpolate                         build/debug_x86/source/sin_lut.o
-                                                  build/debug_x86/source/main.o
 sin_LUT_float_nonUniform                          build/debug_x86/source/sin_lut.o
-sin_LUT_float_rangeReduction                      build/debug_x86/source/sin_lut.o
 sincos                                            /lib/x86_64-linux-gnu/libm.so.6
 sincos@@GLIBC_2.2.5                               /lib/x86_64-linux-gnu/libm.so.6
 sincos@GLIBC_2.2.5                                /lib/x86_64-linux-gnu/libm.so.6
@@ -4949,7 +5083,6 @@ system                                            /lib/x86_64-linux-gnu/libc.so.
 system@@GLIBC_2.2.5                               /lib/x86_64-linux-gnu/libc.so.6
 system@GLIBC_2.2.5                                /lib/x86_64-linux-gnu/libc.so.6
 systemTimeDiff_ns                                 build/debug_x86/hardware/source/x86/x86.o
-                                                  build/debug_x86/source/main.o
 systemTime_create                                 build/debug_x86/hardware/source/x86/x86.o
                                                   build/debug_x86/source/main.o
 sysv_signal                                       /lib/x86_64-linux-gnu/libc.so.6
@@ -4958,6 +5091,14 @@ sysv_signal@GLIBC_2.2.5                           /lib/x86_64-linux-gnu/libc.so.
 tan                                               /lib/x86_64-linux-gnu/libm.so.6
 tan@@GLIBC_2.2.5                                  /lib/x86_64-linux-gnu/libm.so.6
 tan@GLIBC_2.2.5                                   /lib/x86_64-linux-gnu/libm.so.6
+tan_14                                            build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+tan_14s                                           build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+tan_32                                            build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+tan_32s                                           build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+tan_56                                            build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+tan_56s                                           build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+tan_82                                            build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
+tan_82s                                           build/debug_x86/libraries/PolynomialApproximations_Ganssle/sincos.o
 tanf                                              /lib/x86_64-linux-gnu/libm.so.6
 tanf128                                           /lib/x86_64-linux-gnu/libm.so.6
 tanf128@@GLIBC_2.26                               /lib/x86_64-linux-gnu/libm.so.6

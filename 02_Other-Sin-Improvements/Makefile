@@ -153,7 +153,8 @@ endif
 # Source files common to all targets.
 SRC_FILES := \
 	source/main.c \
-	source/sin_lut.c
+	source/sin_lut.c \
+	libraries/PolynomialApproximations_Ganssle/sincos.c
 
 # Source and assembly files specific to one or more targets.
 ifeq ($(MAKE_GOALS_INCLUDE_ALL_CLEAN_OR_ZIP),0)
@@ -236,7 +237,8 @@ INCLUDE_DIRS := \
 	libraries/STM32CubeF1/STM32F1xx_HAL_Driver/Inc/Legacy \
 	libraries/STM32CubeF1/CMSIS/Device/ST/STM32F1xx/Include \
 	libraries/STM32CubeF1/CMSIS/Include \
-	libraries/STM32CubeF1/CMSIS/Include
+	libraries/STM32CubeF1/CMSIS/Include \
+	libraries/PolynomialApproximations_Ganssle
 
 # Prefix the include dirs with '-I' when passing them to the compiler
 CFLAGS += $(addprefix -I,$(INCLUDE_DIRS))
