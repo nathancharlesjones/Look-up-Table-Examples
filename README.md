@@ -34,35 +34,38 @@ Lest the idea of a 1.7% error disagree with you, consider this (semi)realistic s
 
 1. [Description](https://github.com/nathancharlesjones/Look-up-Table-Examples#description)
 	1. [Example](https://github.com/nathancharlesjones/Look-up-Table-Examples#example-fast-sin)
-2. Defining a Look-up Table
-	1. Location in Memory
-	2. Data type
-	3. Storage Structure
-	4. Addressing Method
-	5. Dimensions
-	6. Bounds-checking
-3. Advanced
-	1. Table filled-at run-time
-	2. Dynamically-allocated LUTs
-	3. Arbitrary-type LUTs
-4. Uses
-	1. Fast Math
-	2. Bit Twiddling and Format Conversion
-	3. Digital Logic
-	4. Mapping Metadata
-	5. Complex Conditionals
-	5. Jump Tables and Table-driven Finite State Machines
-	6. Fast Output
-	7. Dictionaries?
+[2. Defining a Look-up Table](https://github.com/nathancharlesjones/Look-up-Table-Examples#defining-a-look-up-table)
+	1. [Location in Memory](https://github.com/nathancharlesjones/Look-up-Table-Examples#location-in-memory)
+	2. [Data type](https://github.com/nathancharlesjones/Look-up-Table-Examples#data-type)
+	3. [Storage Structure](https://github.com/nathancharlesjones/Look-up-Table-Examples#storage-structure)
+	4. [Addressing Method](https://github.com/nathancharlesjones/Look-up-Table-Examples#addressing-method)
+	5. [Dimensions](https://github.com/nathancharlesjones/Look-up-Table-Examples#dimensions)
+	6. [Bounds-checking](https://github.com/nathancharlesjones/Look-up-Table-Examples#bounds-checking)
+3. [Advanced](https://github.com/nathancharlesjones/Look-up-Table-Examples#advanced)
+	1. [Table filled-at run-time](https://github.com/nathancharlesjones/Look-up-Table-Examples#table-filled-at-run-time)
+	2. [Dynamically-allocated LUTs](https://github.com/nathancharlesjones/Look-up-Table-Examples#dynamically-allocated-luts)
+	3. [Arbitrary-type LUTs](https://github.com/nathancharlesjones/Look-up-Table-Examples#arbitrary-types-luts)
+4. [Uses](https://github.com/nathancharlesjones/Look-up-Table-Examples#uses)
+	1. [Fast Math](https://github.com/nathancharlesjones/Look-up-Table-Examples#fast-math)
+	2. [Bit Twiddling and Format Conversion](https://github.com/nathancharlesjones/Look-up-Table-Examples#bit-twiddling-and-format-conversion)
+	3. [Digital Logic](https://github.com/nathancharlesjones/Look-up-Table-Examples#digital-logic)
+	4. [Mapping Metadata](https://github.com/nathancharlesjones/Look-up-Table-Examples#mapping-metadata)
+	5. [Complex Conditionals](https://github.com/nathancharlesjones/Look-up-Table-Examples#complex-conditionals)
+	5. [Jump Tables and Table-driven Finite State Machines](https://github.com/nathancharlesjones/Look-up-Table-Examples#jumpt-tables-and-table-driven-finite-state-machines)
+	6. [Fast Output](https://github.com/nathancharlesjones/Look-up-Table-Examples#fast-output)
+	7. [Dictionaries](https://github.com/nathancharlesjones/Look-up-Table-Examples#dictionaries)
 
 ## Defining a Look-up Table
 
 ### Storage Structure
 
-Based on our broad definition that a LUT simply stores a value for future use, there are lots of ways to structure them. The simplest methods are ones you've likely already seen, though they aren't even really tables at all. They are macros (i.e. #define PI 3.14159f), constant variables (i.e. const double pi = 3.14159;), and enumerations (i.e. ). In each case, 
+Based on our broad definition that a LUT simply stores a value for future use, there are lots of ways to structure them. The simplest methods are ones you've likely already seen, though they aren't even really tables at all. They are macros (i.e. `#define PI 3.14159f`), constant variables (i.e. `const double pi = 3.14159;`), and enumerations (i.e. ). In each case, 
 Const/#define, enum, Array, Linked
-Scope
+
+### Scope
+
 It is recommended that LUTs be defined from inside an access function (see below). Although a LUT can be defined anywhere in a program, placing it in a function allows the developer (that's you) the ability to change many aspects of how the LUT is defined and accessed in the future without needing to change a lot of other code. The function effectively encapsulates the details of how your LUT is implemented. Declaring the LUT to have file scope is a suitable alternative.
+```
 // Do THIS...
 double sin_LUT( double degrees )
 {
@@ -91,8 +94,9 @@ const double sin_table[360] = {...};
 // 
 static const double sin_table[360] = {...};
 double sin_LUT( double degrees ){...};
-
-Also, always ensure index values fall within a valid range before accessing the LUT. This is called "bounds checking" and it ensures you don't accidentally read from memory that lies beyond the table. The only exception to this is if the size of your LUT exactly matches the max size for a standard unsigned integer data type (i.e. it has exactly 2^8, 2^16, or 2^32 elements) AND an unsigned integer of the same width is used to access the table (i.e. a uint8_t is used to access a table with 256 elements). In that case, it can be said that the compiler performs the bounds checking for you.
+```
+Also, always ensure index values fall within a valid range before accessing the LUT. This is called "bounds checking" and it ensures you don't accidentally read from memory that lies beyond the table. The only exception to this is if the size of your LUT exactly matches the max size for a standard unsigned integer data type (i.e. it has exactly 2<sup>8</sup>, 2<sup>16</sup>, or 2<sup>32</sup> elements) AND an unsigned integer of the same width is used to access the table (i.e. a uint8_t is used to access a table with 256 elements). In that case, it can be said that the compiler performs the bounds checking for you.
+```
 // The above function should have been written like this:
 //
 double sin_LUT( double degrees )
@@ -107,61 +111,106 @@ double sin_LUT( double degrees )
 
     return sin_table[(int)degrees];
 }
-Location in Memory
+```
+
+### Location in Memory
+
 Whether the look-up table is placed in RAM or ROM depends on (1) how much space is available in each memory segment and (2) whether the application can afford the latency (if any) inherent to ROM accesses. LUTs should not be allocated on the stack (that is, re-created every time the function is called) except in very rare circumstances.
 
 Use the "const" qualifier to inform the linker it should place the LUT in ROM. This is the most common scenario. Ex:
+```
 // Placed in ROM
 const int something
-
+```
 Use the "static" qualifier, absent any "const", to inform the linker it should place the LUT in RAM. Take care not to use BOTH "static" and "const" together, since "const" will take precedence and the array will be placed in ROM. Ex:
+```
 // Placed in RAM
 static int something
-
+```
 Without either qualifier, the LUT will be placed in RAM and space will be allocated on the stack for it
-Data type
+
+### Data type
+
 LUTs can hold any type of data, including integers, floats, doubles, fixed-point numbers, chars, strings, pointers, or user- or library-defined data types, though the most straightforward implementations will hold only one of these types. Using unions, a LUT may even hold a variety of these data types.
+```
 // Code here
-Addressing Method
+```
+
+### Addressing Method
+
 There are four ways to address the elements in a LUT: directly, indirectly, by hashing, or by searching. All four methods can be used to address arrays, though the first three are the most common. Dynamically-allocated memory structures, like a linked list, can only be addressed via the fourth method.
 
 When a LUT is directly addressed, it’s elements are retrieved by a number that denotes their exact position in memory or in the LUT. This is typically accomplished using array indices.
+```
 // Code here
-
+```
 When a LUT is indirectly addressed, it’s elements are retrieved by first looking up their position or index in another LUT. This can be helpful when a LUT is needed to store a large data type for non-contiguous values; instead of allocating space for every value at every position (wasting much space), a second LUT (holding just the index of the desired value) can be allocated to hold the indices while the original LUT holds just the data desired.
+```
 // Code here
-
+```
 A “hash” is a function that transforms an input value or “key” into an array index. For integers, this can be as simple as “index = key % length_of_LUT”. For strings, this could be XOR-ing each character in the string. Or it could even be application-specific: sin range reduction. A hash is most useful when the keys, the items to be looked up, don’t exactly map to the array’s indices (i.e. aren’t all positive integers that start at 0). For any hash function and 
+```
 // Code here
-
+```
 In the event the LUT is implemented as a dynamically-allocated memory structure (in which we cannot directly address any of its elements) or if the keys to the LUT are such that they cannot be easily hashed, then we must perform a search, comparing our “key” to the keys in the LUT until we find a match, and only then retrieving the associated value. A sequential search is the most straightforward and also one of the slowest search methods. A binary search is much faster, particularly for large LUTs, but it requires that the LUT be sorted. There are many more and faster search algorithms available to us if the LUT is sorted. For more about searching and sorting, see here. Searching will inevitably take longer than a direct or indirect addressing method, however.
+```
 // Code here
-Dimensions
+```
+
+### Dimensions
+
 A LUT can have one dimension or many, depending on how many keys are provided for the look-up. For arrays, this corresponds directly to the dimensions of the array. For dynamically-allocated memory structures, this would correspond to the number of fields being compared when the search is conducted. Multi-dimensional LUTs are often put to use implementing complex conditionals or jump tables (see below).
+```
 // Code here
-Advanced
+```
+
+## Advanced
+
 Asf
-Table filled-at run-time
+
+### Table filled-at run-time
+
 Asdf
-Dynamically-allocated LUTs
+
+### Dynamically-allocated LUTs
+
 Asdf
-Arbitrary-type LUTs
+
+### Arbitrary-type LUTs
+
 asdf
-Uses
-Fast Math
+
+## Uses
+
+### Fast Math
+
 Asdf
-Bit Twiddling and Format Conversion
+
+###Bit Twiddling and Format Conversion
+
 Asdf
-Digital Logic
+
+### Digital Logic
+
 adf
-Mapping Metadata
+
+### Mapping Metadata
+
 Asdf
-Complex Conditionals
+
+### Complex Conditionals
+
 asdf
-Jump Tables and Table-driven Finite State Machines
+
+### Jump Tables and Table-driven Finite State Machines
+
 Asdf
-Fast Output
+
+### Fast Output
+
 Asdf
-Dictionaries?
+
+### Dictionaries
+
 asdf
 
