@@ -7,15 +7,15 @@ A “look-up table” (LUT) is a programming idiom in which the pre-computed val
 The most common usage of a look-up table is to implement simpler and "just accurate enough" versions of math functions like sin or exp, as shown below. In the table below, each element at position “X” is assigned the value of “sin(X)”, where “X” is a value in degrees.
 ```
 const double sin_LUT[360] = {
-	//				sin(0)               sin(1)
+    //              sin(0)               sin(1)
                         0,  0.0174524064372835,
-	//				sin(2)               sin(3)
-	   0.0348994967025010,  0.0523359562429438,
-	// ... Many more rows
-	//            sin(356)             sin(357)
-	  -0.0697564737441248, -0.0523359562429444,
-	//            sin(358)             sin(359)
-	  -0.0348994967025008, -0.0174524064372845 };
+    //              sin(2)               sin(3)
+       0.0348994967025010,  0.0523359562429438,
+    // ... Many more rows
+    //            sin(356)             sin(357)
+      -0.0697564737441248, -0.0523359562429444,
+    //            sin(358)             sin(359)
+      -0.0348994967025008, -0.0174524064372845 };
 ```
 Having defined the array “sin_LUT” like this, our program can find the sin of any integer angle from 0 to 359 degrees by simply executing a memory access, instead of having to compute the sin directly (which may take many clock cycles).
 ```
