@@ -10,29 +10,6 @@
 #include "sincos.h"
 #include "hardwareAPI.h"
 
-/*
-Knobs:
-- Input: float, int, fixed-point
-- Output: float, fixed-point
-- Linear interpolation
-- Non-uniform distribution
-- Range reduction
-- Compare to polynomial approximations?
-Progression:
-- Make it faster
-	- Change input/output to fixed-point
-	- Take out linear interpolation/non-uniform distribution (but possibly add more points)
-- Make it more accurate
-	- Add linear interpolation
-	- Non-uniform distribution
-	- Add more points
-	- Go from fixed-point -> floats -> doubles
-- Make it smaller
-	- Change to floats/fixed-point
-	- Range reduction
-	- Remove points (keep conversions in mind (i.e. powers-of-two multiplication); speed reductions could be significant if they aren't)
-*/
-
 // testIterations is marked as "volatile" so that it can be updated with a debugger; otherwise
 // it could be const or #define.
 //

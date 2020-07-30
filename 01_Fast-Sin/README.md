@@ -13,8 +13,8 @@
 The following table summarizes the results. This code was compiled for an STM32F1 running at 72 MHz using GCC 6.3.1 on Ubuntu (there’s also code to run this same example on an x86 so you don’t need an STM32F1 in order to test it, though the results are less drastic).
 |Function|Memory usage (bytes)|Absolute Error|Percent Error|Execution time|
 |---|---|---|---|---|
-|sin|5368|N/A|N/A|\~63-64 us|
-|sin_LUT|3272|\~0.0025|\~1.1-3.1|\~21.5 us|
+|sin|5368|N/A|N/A|\~*** us|
+|sin_LUT|3272|\~0.0025|\~1.1-3.1|\~*** us|
 
 ## How do I use it?
 
