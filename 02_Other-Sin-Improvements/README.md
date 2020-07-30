@@ -1,20 +1,25 @@
-# Fast Sin
+# Other Sin Improvements
 
 ## Contents
 
-1. [What is it?](https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/01_Fast-Sin/README.md#what-is-it)
-2. [How do I use it?](https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/01_Fast-Sin/README.md#how-do-i-use-it)
-3. [How does it work?](https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/01_Fast-Sin/README.md#how-does-it-work)
+1. [What is it?](https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/README.md#what-is-it)
+2. [How do I use it?](https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/README.md#how-do-i-use-it)
+3. [How does it work?](https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/README.md#how-does-it-work)
 
 ## What is it?
 
-"Fast Sin" is a demonstration of using a simple look-up table (LUT) to improve the execution time of the library sin function. It also demonstrates several aspects of professional quality code, such as using asserts, enforcing various compiler optimizations, building for multiple targets, and having a well-structured Makefile.
+"Other Sin Improvements" builds on the demonstration in "01_Fast-Sin" of using a simple look-up table (LUT) to improve the execution time of the library sin function. These LUT examples add different data types, linear interpolation, and arbitrary-input tables in order to improve the execution time, accuracy, or memory size of the LUT in "01_Fast-Sin". It also profiles and compares four different implementations of "sin" that utilize various polynomial approximations to the LUT implementations. Lastly, it builds upon the the professional quality code from "01_Fast-Sin" by parameterizing the test code (to more easily change which functions are being tested).
 
-The following table summarizes the results. This code was compiled for an STM32F1 running at 72 MHz using GCC 6.3.1 on Ubuntu (there’s also code to run this same example on an x86 so you don’t need an STM32F1 in order to test it, though the results are less drastic).
+The following table summarizes the results. This code was compiled for an STM32F1 running at 72 MHz using GCC 6.3.1 on Ubuntu (there’s also code to run this same example on an x86 so you don’t need an STM32F1 in order to test it, though the results are less drastic). The rest of this README should explain each part of the table, so don't fret if parts of it don't make sense at this time.
 |Function|Memory usage (bytes)|Absolute Error|Percent Error|Execution time|
 |---|---|---|---|---|
-|sin|5368|N/A|N/A|\~63-64 us|
-|sin_LUT|2936|\~0.0025|\~1.1-3.1|\~21.5 us|
+|Library sin|5728|N/A|N/A|\~45-46 us|
+|LUT double<sup>1</sup>|3484|\~0.0077|\~1.4|\~6.5 us|
+|LUT float<sup>2</sup>|2736|\~0.0076|\~1.4|\~6.2 us|
+|LUT fixed<sup>3</sup>|1792|\~0.016|\~4.1|\~0.681 us|
+
+Notes:
+1. This function is a LUT of doubles with uniform distribution which uses no interpolation.
 
 ## How do I use it?
 
