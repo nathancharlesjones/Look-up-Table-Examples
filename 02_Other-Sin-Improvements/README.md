@@ -229,7 +229,19 @@ The profiling code was then restructured to be a `while` loop that iterates over
 
 Adding new functions is now fairly trivial (provided they match one of the three function signatures used for the function pointers): Simply write the function and then add an element to the `codeUnderTest` array with the appropriate information and the test will automatically get run. Removing a test is as simple as commenting out the line of code that puts it in the array.
 
+### Adding floats
+
+Changing the data type from doubles to floats involved no code changes, except to change `double` to `float`. The LUT could even stay the same, just being stored as floats instead of doubles, since the compiler would handle the actual conversion process. As expected, this resulted in a LUT that was half the size of one that used doubles. In each case tested, the resulting code had roughly the same accuracy as a LUT of doubles though the code ran anywhere from 4.7% to 38% faster.
+
 ### Adding fixed-point numbers
+
+What's a "fixed-point" number, you ask? Excellent question! Consider, first, an integer: the least significant bit of an integer has the value "1" (or 2<sup>0</sup>), so 0b0001 is equal to "1" and 0b1001 is equal to "9". There are no digits to the right of the lest significant bit, but what if there were? What would 0b0001.00 mean? If we extend the idea that the third bit of a binary number is 2<sup>3</sup>, the second bit is 2<sup>2</sup>, the first bit is 2<sup>1</sup>, and the zeroth bit is 2<sup>0</sup>, then the bit after the decimal (or "radix") point might be 2<sup>-1</sup> (or 0.5), then 2<sup>-2</sup> (or 0.25), and so on. The digits to the left of the radix point become the "integer" bits and those to the right become the "fractional" bits. This is the meaning of a "fixed-point" number: an integer data type whose radix point is redefined to be somewhere other than to the right of the least significant bit. Assuming our example above of a fixed-point number is signed, "0b0001.00", is said to be in "q3.2" format, meaning that there are 3 integer bits (plus an assumed sign bit) and 2 fractional bits. Instead of representing the range [-32, 31], as it would if it were a plain signed integer, our example can now represent the range [-8, 7.75], in increments of 0.25. Since I am using an STM32F1 with a 32-bit processor to demonstrate these LUTs, I assumed a commonly used fixed-point format might be "q15.16", allowing for a range of [-65536, 65535.999984741], in increments of 0.000015259. For a processor without a floating-point unit, integer math (including operating on fixed-point numbers, since they are an "integer" data type, just with a different radix position) goes MUCH faster and doesn't require additional code (as would be needed to perform floating-point math). For more information, see [here](https://developer.arm.com/documentation/dai0033/a/).
+
+I added the code at the above link into my project directly, adding a typedef for the fixed-point data type I wanted to use.
+```
+typedef int q15_16_t
+```
+
 
 ### Adding linear interpolation
 
