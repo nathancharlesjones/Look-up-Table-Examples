@@ -44,7 +44,7 @@ Lest the idea of a 1.7% error disagree with you, consider this (semi)realistic s
 3. [Advanced](https://github.com/nathancharlesjones/Look-up-Table-Examples#advanced)
 	1. [Table filled-at run-time](https://github.com/nathancharlesjones/Look-up-Table-Examples#table-filled-at-run-time)
 	2. [Dynamically-allocated LUTs](https://github.com/nathancharlesjones/Look-up-Table-Examples#dynamically-allocated-luts)
-	3. [Arbitrary-type LUTs](https://github.com/nathancharlesjones/Look-up-Table-Examples#arbitrary-types-luts)
+	3. [Arbitrary-type LUTs](https://github.com/nathancharlesjones/Look-up-Table-Examples#arbitrary-type-luts)
 4. [Uses](https://github.com/nathancharlesjones/Look-up-Table-Examples#uses)
 	1. [Fast Math](https://github.com/nathancharlesjones/Look-up-Table-Examples#fast-math)
 	2. [Bit Twiddling and Format Conversion](https://github.com/nathancharlesjones/Look-up-Table-Examples#bit-twiddling-and-format-conversion)
