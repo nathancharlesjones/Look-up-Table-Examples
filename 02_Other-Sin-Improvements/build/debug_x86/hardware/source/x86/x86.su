@@ -1,7 +1,0 @@
-x86.c:11:6:assert_failed	16	static
-x86.c:22:9:initHardware	8	static
-x86.c:28:16:systemTime_create	16	static
-x86.c:36:9:getSystemTime	16	static
-x86.c:47:9:elapsedSystemTime_ns	48	static
-x86.c:60:10:systemTimeDiff_ns	16	static
-x86.c:74:6:printResults_CUT	32	static
