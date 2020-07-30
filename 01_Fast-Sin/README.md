@@ -84,17 +84,24 @@ For more information about how the Makefile works, see [here](https://github.com
 
 Let's start with `sin_lut.c`, the heart (if not the meat) of this little example. In lines 8-77, we define an array of doubles called `sin_table`.
 ```
-#define SIN_LUT_SIZE 402
+#define SIN_LUT_SIZE 404
 static const double sin_table[SIN_LUT_SIZE] =
 {
      0.00000000000000000,  0.01562436422488340,  0.03124491398532610,  0.04685783574813420,  0.06245931784238020,  0.07804555138996730,
      0.09361273123551290,  0.10915705687532200,  0.12467473338522800,  0.14016197234706400,  0.15561499277355600,  0.17103002203139500,
      // Many more rows
-    -0.18830433415331500, -0.17293649256293000, -0.15752643100814300, -0.14207791163447200, -0.12659470597635800, -0.11108059403640400,
-    -0.09553936336253460, -0.07997480812332720, -0.06439072818171630, -0.04879092816731250, -0.03317921654755680, -0.01755940469793780
+    -0.15752643100814300, -0.14207791163447200, -0.12659470597635800, -0.11108059403640400, -0.09553936336253460, -0.07997480812332720, -0.06439072818171630, -0.04879092816731250, -0.03317921654755680, -0.01755940469793780, -0.00193530597149897,  0.01368926523213660
 };
 ```
-At each index X is stored the value of sin(X/64), allowing us to find the value of any radian angle from zero to 2\*PI simply by accessing the array (e.g. `sin[50]` is equivalent to `sin(50/64)`; notice how the first statement is merely an array access while the second is a library function call). The array size (which may seem odd) was chosen to be a power-of-two multiple of 2\*PI (or as close to it as makes sense) whose value was in the low-hundreds. The "power-of-two multiple" criteria was imposed to make converting from radians to array indices easier (power-of-two multplies or divides are far easier to execute in software than any of type of multiplication or division). The "value in the low-hundreds" criteria was imposed in order to have enough data points to keep the average error low (a table with only 10 elements will have a lot of error for values that lie in between the elements, since the data points are so far apart; however, a table with 1000 elements or more would take up too much space in memory). The array is made `const` so that it is stored in ROM, not RAM; either is fine, but RAM is more often smaller and in higher demand than ROM on an embedded system. The sin_table array is also made `static` and a function is written to access it so that no other code can depend on our implementation of sin_table; it can change in the future and as long as our function still takes a double as input and returns a double that is the sin of the input, then no other code needs to change.
+At each index X is stored the value of sin(X/64), allowing us to find the value of any radian angle from zero to 2\*PI simply by accessing the array (e.g. `sin[50]` is equivalent to `sin(50/64)`; notice how the first statement is merely an array access while the second is a library function call). The array size (which may seem odd) was chosen to be an integer which was slightly greater than a power-of-two multiple of 2\*PI whose value was in the low-hundreds. The "power-of-two multiple" criteria was imposed to make converting from radians to array indices easier (power-of-two multplies or divides are far easier to execute in software than any of type of multiplication or division). The "value in the low-hundreds" criteria was imposed in order to have enough data points to keep the average error low (a table with only 10 elements will have a lot of error for values that lie in between the elements, since the data points are so far apart; however, a table with 1000 elements or more would take up too much space in memory). The process of converting an input in radians into an array index is called "hashing" and the function or code that does the conversion is called the "hash function" or, simply, the "hash". Our hash looks like this:
+```
+int table_index = (int)( radians * 64 );
+```
+The hash in the example code adds one step in order to perform a basic rounding (as opposed to the truncation that is happening in the hash above). The value `0.5` is added to the value of `radians * 64`, so that values equal to or greater than xxx.5 become xxx+1.0 and so get truncated to the higher integer value when being converted to an integer.
+```
+int table_index = (int)( ( radians * 64 ) + 0.5 );
+```
+The array is made `const` so that it is stored in ROM, not RAM; either is fine, but RAM is more often smaller and in higher demand than ROM on an embedded system. The sin_table array is also made `static` and a function is written to access it so that no other code can depend on our implementation of sin_table; it can change in the future and as long as our function still takes a double as input and returns a double that is the sin of the input, then no other code needs to change.
 ```
 double sin_LUT(double radians)
 {
