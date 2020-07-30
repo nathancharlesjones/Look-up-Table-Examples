@@ -51,7 +51,7 @@ Lest the idea of a 1.7% error disagree with you, consider this (semi)realistic s
 	3. [Digital Logic](https://github.com/nathancharlesjones/Look-up-Table-Examples#digital-logic)
 	4. [Mapping Metadata](https://github.com/nathancharlesjones/Look-up-Table-Examples#mapping-metadata)
 	5. [Complex Conditionals](https://github.com/nathancharlesjones/Look-up-Table-Examples#complex-conditionals)
-	5. [Jump Tables and Table-driven Finite State Machines](https://github.com/nathancharlesjones/Look-up-Table-Examples#jumpt-tables-and-table-driven-finite-state-machines)
+	5. [Jump Tables and Table-driven Finite State Machines](https://github.com/nathancharlesjones/Look-up-Table-Examples#jump-tables-and-table-driven-finite-state-machines)
 	6. [Fast Output](https://github.com/nathancharlesjones/Look-up-Table-Examples#fast-output)
 	7. [Dictionaries](https://github.com/nathancharlesjones/Look-up-Table-Examples#dictionaries)
 
