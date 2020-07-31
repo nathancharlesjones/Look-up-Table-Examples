@@ -164,10 +164,10 @@ SRC_FILES += \
     hardware/source/x86/x86.c
 else ifeq ($(TARGET),$(MCU))
 SRC_FILES += \
-	hardware/source/STM32F1/source/STM32F1.c \
-	hardware/source/STM32F1/source/stm32f1xx_hal_msp.c \
-	hardware/source/STM32F1/source/stm32f1xx_it.c \
-	hardware/source/STM32F1/source/system_stm32f1xx.c \
+	hardware/STM32F1/source/STM32F1.c \
+	hardware/STM32F1/source/stm32f1xx_hal_msp.c \
+	hardware/STM32F1/source/stm32f1xx_it.c \
+	hardware/STM32F1/source/system_stm32f1xx.c \
 	libraries/STM32CubeF1/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c \
 	libraries/STM32CubeF1/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c \
 	libraries/STM32CubeF1/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c \
@@ -182,7 +182,7 @@ SRC_FILES += \
 	libraries/STM32CubeF1/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c \
 	libraries/STM32CubeF1/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_exti.c
 ASM_FILES := \
-	hardware/source/STM32F1/source/startup_stm32f103xb.s
+	hardware/STM32F1/source/startup_stm32f103xb.s
 else
 $(error Unreachable)
 endif
@@ -232,12 +232,15 @@ endif
 INCLUDE_DIRS := \
     include/ \
     hardware/include/ \
-    hardware/source/STM32F1/include \
+    hardware/STM32F1/include \
 	libraries/STM32CubeF1/STM32F1xx_HAL_Driver/Inc \
 	libraries/STM32CubeF1/STM32F1xx_HAL_Driver/Inc/Legacy \
 	libraries/STM32CubeF1/CMSIS/Device/ST/STM32F1xx/Include \
 	libraries/STM32CubeF1/CMSIS/Include \
 	libraries/STM32CubeF1/CMSIS/Include \
+	libraries/Assert \
+	libraries/Error \
+	libraries/FixedPoint_ARM \
 	libraries/PolynomialApproximations_Ganssle
 
 # Prefix the include dirs with '-I' when passing them to the compiler
@@ -296,7 +299,7 @@ else
 $(error Unreachable)
 endif
 
-LDSCRIPT := hardware/source/STM32F1/linker-script/STM32F103C8Tx_FLASH.ld
+LDSCRIPT := hardware/STM32F1/linker-script/STM32F103C8Tx_FLASH.ld
 
 ##############################################################################
 #                                                                            #

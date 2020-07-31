@@ -43,6 +43,13 @@ returning the result in q3 format */
 #define TOFIX(d, q) ((int)( (d)*(double)(1<<(q)) ))
 #define TOFLT(a, q) ( (double)(a) / (double)(1<<(q)) )
 
+//******************************************************//
+//                                                      //
+//  The following code was added by Nathan Jones, July  //
+//  2020.                                               //
+//                                                      //
+//******************************************************//
+
 // Define a fixed-point type with 1 sign bit (implied), 0 integer bits, and 31 fractional bits
 typedef int32_t q0_31_t;
 

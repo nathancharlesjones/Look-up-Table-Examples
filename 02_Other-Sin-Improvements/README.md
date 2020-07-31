@@ -14,23 +14,23 @@
 The following table summarizes the results, though it should be noted that all of the LUTs could be made larger/smaller and more/less accurate by simply increasing or decreasing the number of elements in the table (though care should be taken to ensure that the resulting size allows for a quick and simple hash function, as execution time may be negatively affected if the hash becomes non-trivial). This code was compiled for an STM32F1 running at 72 MHz using GCC 6.3.1 on Ubuntu (there’s also code to run this same example on an x86 so you don’t need an STM32F1 in order to test it, though the results are less drastic). The rest of this README should explain each part of the table, so don't fret if parts of it don't make sense at this time.
 |Function|Memory usage<sup>1</sup> (bytes)|Absolute Error|Percent Error|Execution time|
 |---|---|---|---|---|
-|Library sin|5728|N/A|N/A|\~45-46 us|
-|LUT double<sup>3</sup>|3484<sup>2</sup>|\~0.0077<sup>2</sup>|\~1.4<sup>1</sup>|\~6.5 us|
-|LUT float<sup>4</sup>|2736<sup>2</sup>|\~0.0076<sup>2</sup>|\~1.4<sup>1</sup>|\~6.2 us|
-|LUT fixed<sup>5</sup>|1792<sup>2</sup>|\~0.016<sup>2</sup>|\~4.1<sup>1</sup>|\~0.681 us|
-|Dbl interp<sup>6</sup>|3548<sup>2</sup>|\~0.00003<sup>2</sup>|\~0.002<sup>1</sup>|\~13.8 us|
-|Flt interp<sup>7</sup>|2848<sup>2</sup>|\~0.00003<sup>2</sup>|\~0.002<sup>1</sup>|\~9.6 us|
-|Fxd interp<sup>8</sup>|1808<sup>2</sup>|\~0.00005<sup>2</sup>|\~0.008<sup>1</sup>|\~0.763 us|
-|Dbl Non-Uni<sup>9</sup>|1088<sup>2</sup>|\~0.007<sup>2</sup>|\~0.623<sup>1</sup>|\~41.2 us|
-|Flt Non-Uni<sup>10</sup>|1424<sup>2</sup>|\~0.007<sup>2</sup>|\~0.636<sup>1</sup>|\~25.5 us|
-|Fxd Non-Uni<sup>11</sup>|440<sup>2</sup>|\~0.007<sup>2</sup>|\~0.610<sup>1</sup>|\~3.6 us|
-|Sin_32<sup>12</sup>|2408|\~0.006|\~0.438|\~19.8 us|
-|Sin_52<sup>13</sup>|2424|\~0.000007|\~0.0016|\~22.2 us|
-|Sin_73<sup>14</sup>|1552|\~0.00000005|\~0.00002|\~28.3 us|
-|Sin_121<sup>15</sup>|1624|\~0.0000000000007|\~0.0000000006|\~35.3 us|
+|Library sin|5728|N/A|N/A|\~47 us|
+|LUT double<sup>3</sup>|3484<sup>2</sup>|\~0.0076<sup>2</sup>|\~2.5<sup>1</sup>|\~6.6 us|
+|LUT float<sup>4</sup>|2736<sup>2</sup>|\~0.0076<sup>2</sup>|\~1.5<sup>1</sup>|\~6.3 us|
+|LUT fixed<sup>5</sup>|1792<sup>2</sup>|\~0.0077<sup>2</sup>|\~1.6<sup>1</sup>|\~1.3 us|
+|Dbl interp<sup>6</sup>|3548<sup>2</sup>|\~0.00003<sup>2</sup>|\~0.002<sup>1</sup>|\~13.9 us|
+|Flt interp<sup>7</sup>|2848<sup>2</sup>|\~0.00003<sup>2</sup>|\~0.002<sup>1</sup>|\~9.9 us|
+|Fxd interp<sup>8</sup>|1808<sup>2</sup>|\~0.00003<sup>2</sup>|\~0.002<sup>1</sup>|\~2.4 us|
+|Dbl Non-Uni<sup>9</sup>|1088<sup>2</sup>|\~0.007<sup>2</sup>|\~0.62<sup>1</sup>|\~40.9 us|
+|Flt Non-Uni<sup>10</sup>|1424<sup>2</sup>|\~0.007<sup>2</sup>|\~0.63<sup>1</sup>|\~25.8 us|
+|Fxd Non-Uni<sup>11</sup>|440<sup>2</sup>|\~0.007<sup>2</sup>|\~0.61<sup>1</sup>|\~8.2 us|
+|Sin_32<sup>12</sup>|2408|\~0.0006|\~0.44|\~19.5 us|
+|Sin_52<sup>13</sup>|2424|\~0.000007|\~0.0016|\~22.0 us|
+|Sin_73<sup>14</sup>|1552|\~0.00000005|\~0.00002|\~28.1 us|
+|Sin_121<sup>15</sup>|1624|\~0.0000000000007|\~0.0000000006|\~35.1 us|
 
 ### Notes:
-1. Memory usage was measured very non-academically, by observing the difference in the output of the `size` tool with each function included and them removed. It seems possible to glean this information from the map file. I'd love to hear if you have any better suggestions!
+1. Memory usage was measured very non-academically, by observing the difference in the output of the `size` tool with each function included and them removed. It seems possible to glean this information from the map file. I'd love to hear any better suggestions!
 2. This LUT could be made larger/smaller and more/less accurate by simply increasing or decreasing the number of elements in the table (though care should be taken to ensure that the resulting size allows for a quick and simple hash function, as execution time may be negatively affected if the hash becomes non-trivial).
 3. "LUT double" is a LUT of doubles with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
 4. "LUT float" is a LUT of floats with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
@@ -41,10 +41,10 @@ The following table summarizes the results, though it should be noted that all o
 9. "Dbl Non-Uni" is a LUT of doubles with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
 10. "Flt Non-Uni" is a LUT of floats with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
 11. "Fxd Non-Uni" is a LUT of fixed-point numbers (x-vales in q9_22 format and y-values in q0_31 format) with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
-12. "Sin_32" is a polynomial approximation of sin which uses 3 terms.
-13. "Sin_52" is a polynomial approximation of sin which uses 4 terms.
-14. "Sin_73" is a polynomial approximation of sin which uses 5 terms.
-15. "Sin_121" is a polynomial approximation of sin which uses 7 terms.
+12. "Sin_32" is a polynomial approximation of sin which uses 3 terms. For more information, see [here](http://www.ganssle.com/approx.htm).
+13. "Sin_52" is a polynomial approximation of sin which uses 4 terms. For more information, see [here](http://www.ganssle.com/approx.htm).
+14. "Sin_73" is a polynomial approximation of sin which uses 5 terms. For more information, see [here](http://www.ganssle.com/approx.htm).
+15. "Sin_121" is a polynomial approximation of sin which uses 7 terms. For more information, see [here](http://www.ganssle.com/approx.htm).
 
 ## What's it telling me?
 
@@ -296,11 +296,15 @@ Since multiplying and dividing fixed-point numbers changes the location of the r
 
 2. Integer overflow/underflow is MUCH easier to fall into with fixed-point numbers, since you're often sizing them to be only exactly as big as you need them, forgetting that multiply/add and divide/subtract operations might cause these integers to exceed their maximum or minimum values. We saw an example of this above, in which the input values for our sin LUTs needed to extend up to at least 403 in order to match our array indices, even though the input values should only ever really be as high as 2\*PI. Addtionally, the fixed-point library at the link above performs all multiplication and divisions BEFORE shifting the result up or down to match the final radix, meaning that even though a result might fit into the fixed-point data type to which an operation is being assigned, the operation may still fail if the intermediary product/sum/dividend/difference is greater than the maximum integer value (or less than the minimum value). This is actually a problem for our application, since even though the y-values in our sin table are in q0.31 format and multiplying them by any other number should yield a result that fits into the other number, because they are integers, the intermediary product may be as large as 64 bits, causing an incorrect value to get returned from the operation! To correct this, I added the `SAFE_` functions to `fixed_point.h`. These functions store the 32-bit operands into 64-bit integers before executing the desired operation; if the result is less than INT32_MAX (or greater than INT32_MIN), then the result is stored in the output variable and a value of `0` (meaning "no error") is returned from the function. However, if the safety check fails, then no value is stored and a `-1` is returned. The LUT code checks this value to make sure no math operations inadvertently overflowed or underflowed. I chose to `ASSERT` that the error code returned is `0`, since I figured that anything else constituted a programming error. However, it is possible to recover from a fault like that, and another developer may simply chose to retry the operation with a larger data type for the return variable.
 
+The fixed-point LUTs were significantly smaller and faster than either the double or float LUTs, though at the cost of a fair bit of added complexity.
+
 ### Adding linear interpolation
 
-So far our LUTs have done nothing more complicated than map the input value onto the range [0, 403] and perform a simple rounding; a look-up table of this type will have a maximum error of EQUATION, which comes out to around XX near the zero-crossing points and around XX near the local maxima and minima (to understand why, see [here]()). However, if we assume that each pair of adjacent elements in our LUT is connected with a line, we can get a much more accurate answer for input values that fall in-between the LUT elements by figuring out where on the line the input would fall and returning the resulting y-value. This is called "piecewise linear interpolation" (PwLI) or, simply, "linear interpolation".
-
-
+So far our LUTs have done nothing more complicated than map the input value onto the range [0, 403] and perform a simple rounding; a depiction of this type of LUT appears below.
+IMAGE
+A look-up table of this type will have a maximum error of EQUATION, which, for our sin LUTs, comes out to around XX near the zero-crossing points and around XX near the local maxima and minima (to understand why, see [here]()). However, if we assume that each pair of adjacent elements in our LUT is connected with a line, we can get a much more accurate answer for input values that fall in-between the LUT elements by figuring out where on the line the input would fall and returning the resulting y-value. This is called "piecewise linear interpolation" (PwLI) or, simply, "linear interpolation". A depiction of this type of LUT appears below.
+IMAGE
+asdfasdf
 
 ### Changing from a uniform to a non-uniform distribution of x-values
 

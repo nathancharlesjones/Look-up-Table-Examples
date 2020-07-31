@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include "STM32F1.h"
 #include "hardwareAPI.h"
+#include "error.h"
 #include "assert.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */

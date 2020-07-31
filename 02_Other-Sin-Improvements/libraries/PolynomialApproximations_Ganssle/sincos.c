@@ -1,3 +1,6 @@
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wreturn-type"
+
 //  The following code implements approximations to various trig functions.
 //
 //  This is demo code to guide developers in implementing their own approximation
@@ -631,3 +634,5 @@ if (sign)y=-y;						// correct for negative arg
 return (y);
 
 }
+
+#pragma GCC diagnostic pop
