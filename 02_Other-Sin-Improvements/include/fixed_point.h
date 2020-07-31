@@ -49,9 +49,6 @@ typedef int32_t q0_31_t;
 // Define a fixed-point type with 1 sign bit (implied), 9 integer bits, and 22 fractional bits
 typedef int32_t q9_22_t;
 
-// Define a fixed-point type with 1 sign bit (implied), 3 integer bits, and 28 fractional bits
-typedef int32_t q3_28_t;
-
 static inline errno_t SAFE_FADD( int32_t a, int32_t b, int32_t * ret)
 {
 	errno_t err = 0;
