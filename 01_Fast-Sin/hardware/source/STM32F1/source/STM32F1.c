@@ -290,7 +290,7 @@ uint32_t systemTimeDiff_ns(p_systemTime_t p_startTime, p_systemTime_t p_endTime)
 }
 
 void printResults(uint32_t iterations, float executionTime_scaffolding_ns, float executionTime_scaffolding_ns_avg,
-  float executionTime_sin_ns_avg, float executionTime_sin_LUT_ns_avg, 
+  float executionTime_sin_ns_avg, float executionTime_sin_LUT_ns_avg, float absoluteError_sin_LUT_max,
   float absoluteError_sin_LUT_avg, float percentError_sin_LUT_avg)
 {
     while(1)

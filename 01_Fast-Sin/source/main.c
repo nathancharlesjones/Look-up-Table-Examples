@@ -26,6 +26,7 @@ int main(int argc, char * argv[])
 	double executionTime_sin_LUT_ns_avg;
 	double absoluteError_sin_LUT_sum = 0;
 	double absoluteError_sin_LUT_avg;
+	double absoluteError_sin_LUT_max = 0;
 	double percentError_sin_LUT_sum = 0;
 	double percentError_sin_LUT_avg;
 
@@ -110,6 +111,7 @@ int main(int argc, char * argv[])
 		//
 		absoluteError = fabs( output_sin - output_sin_LUT );
 		absoluteError_sin_LUT_sum += absoluteError;
+		if( absoluteError > absoluteError_sin_LUT_max ) absoluteError_sin_LUT_max = absoluteError;
 
 		// Compute percent error. Make sure the divisor, the expected value, is not 0
 		//
@@ -122,7 +124,7 @@ int main(int argc, char * argv[])
 	percentError_sin_LUT_avg = percentError_sin_LUT_sum / testIterations;
 	
 	printResults(testIterations, executionTime_scaffolding_ns, executionTime_scaffolding_ns_avg,
-		executionTime_sin_ns_avg, executionTime_sin_LUT_ns_avg, 
+		executionTime_sin_ns_avg, executionTime_sin_LUT_ns_avg, absoluteError_sin_LUT_max,
 		absoluteError_sin_LUT_avg, percentError_sin_LUT_avg);
 
 	return EXIT_SUCCESS;
