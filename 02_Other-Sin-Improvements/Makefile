@@ -161,7 +161,7 @@ ifeq ($(MAKE_GOALS_INCLUDE_ALL_CLEAN_OR_ZIP),0)
 # Do nothing; we don't need a list of source files for the remaining goals
 else ifeq ($(TARGET),x86)
 SRC_FILES += \
-    hardware/source/x86/x86.c
+    hardware/x86/x86.c
 else ifeq ($(TARGET),$(MCU))
 SRC_FILES += \
 	hardware/STM32F1/source/STM32F1.c \
