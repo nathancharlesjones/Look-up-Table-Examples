@@ -12,38 +12,39 @@
 "Other Sin Improvements" builds on the demonstration in "01_Fast-Sin" of using a simple look-up table (LUT) to improve the execution time of the library sin function. These LUT examples add different data types, linear interpolation, and arbitrary-input tables in order to improve the execution time, accuracy, or memory size of the LUT in "01_Fast-Sin". It also profiles and compares to the LUT implementations four different implementations of "sin" that utilize various polynomial approximations. Lastly, it builds upon the the professional quality code from "01_Fast-Sin" by parameterizing the test code (to more easily change which functions are being tested).
 
 The following table summarizes the results, though it should be noted that all of the LUTs could be made larger/smaller and more/less accurate by simply increasing or decreasing the number of elements in the table (though care should be taken to ensure that the resulting size allows for a quick and simple hash function, as execution time may be negatively affected if the hash becomes non-trivial). This code was compiled for an STM32F1 running at 72 MHz using GCC 6.3.1 on Ubuntu (there’s also code to run this same example on an x86 so you don’t need an STM32F1 in order to test it, though the results are less drastic). The rest of this README should explain each part of the table, so don't fret if parts of it don't make sense at this time.
-|Function|Memory usage (bytes)|Absolute Error|Percent Error|Execution time|
+|Function|Memory usage<sup>1</sup> (bytes)|Absolute Error|Percent Error|Execution time|
 |---|---|---|---|---|
 |Library sin|5728|N/A|N/A|\~45-46 us|
-|LUT double<sup>2</sup>|3484<sup>1</sup>|\~0.0077<sup>1</sup>|\~1.4<sup>1</sup>|\~6.5 us|
-|LUT float<sup>3</sup>|2736<sup>1</sup>|\~0.0076<sup>1</sup>|\~1.4<sup>1</sup>|\~6.2 us|
-|LUT fixed<sup>4</sup>|1792<sup>1</sup>|\~0.016<sup>1</sup>|\~4.1<sup>1</sup>|\~0.681 us|
-|Dbl interp<sup>5</sup>|3548<sup>1</sup>|\~0.00003<sup>1</sup>|\~0.002<sup>1</sup>|\~13.8 us|
-|Flt interp<sup>6</sup>|2848<sup>1</sup>|\~0.00003<sup>1</sup>|\~0.002<sup>1</sup>|\~9.6 us|
-|Fxd interp<sup>7</sup>|1808<sup>1</sup>|\~0.00005<sup>1</sup>|\~0.008<sup>1</sup>|\~0.763 us|
-|Dbl Non-Uni<sup>8</sup>|1088<sup>1</sup>|\~0.007<sup>1</sup>|\~0.623<sup>1</sup>|\~41.2 us|
-|Flt Non-Uni<sup>9</sup>|1424<sup>1</sup>|\~0.007<sup>1</sup>|\~0.636<sup>1</sup>|\~25.5 us|
-|Fxd Non-Uni<sup>10</sup>|440<sup>1</sup>|\~0.007<sup>1</sup>|\~0.610<sup>1</sup>|\~3.6 us|
-|Sin_32<sup>11</sup>|2408|\~0.006|\~0.438|\~19.8 us|
-|Sin_52<sup>12</sup>|2424|\~0.000007|\~0.0016|\~22.2 us|
-|Sin_73<sup>13</sup>|1552|\~0.00000005|\~0.00002|\~28.3 us|
-|Sin_121<sup>14</sup>|1624|\~0.0000000000007|\~0.0000000006|\~35.3 us|
+|LUT double<sup>3</sup>|3484<sup>2</sup>|\~0.0077<sup>2</sup>|\~1.4<sup>1</sup>|\~6.5 us|
+|LUT float<sup>4</sup>|2736<sup>2</sup>|\~0.0076<sup>2</sup>|\~1.4<sup>1</sup>|\~6.2 us|
+|LUT fixed<sup>5</sup>|1792<sup>2</sup>|\~0.016<sup>2</sup>|\~4.1<sup>1</sup>|\~0.681 us|
+|Dbl interp<sup>6</sup>|3548<sup>2</sup>|\~0.00003<sup>2</sup>|\~0.002<sup>1</sup>|\~13.8 us|
+|Flt interp<sup>7</sup>|2848<sup>2</sup>|\~0.00003<sup>2</sup>|\~0.002<sup>1</sup>|\~9.6 us|
+|Fxd interp<sup>8</sup>|1808<sup>2</sup>|\~0.00005<sup>2</sup>|\~0.008<sup>1</sup>|\~0.763 us|
+|Dbl Non-Uni<sup>9</sup>|1088<sup>2</sup>|\~0.007<sup>2</sup>|\~0.623<sup>1</sup>|\~41.2 us|
+|Flt Non-Uni<sup>10</sup>|1424<sup>2</sup>|\~0.007<sup>2</sup>|\~0.636<sup>1</sup>|\~25.5 us|
+|Fxd Non-Uni<sup>11</sup>|440<sup>2</sup>|\~0.007<sup>2</sup>|\~0.610<sup>1</sup>|\~3.6 us|
+|Sin_32<sup>12</sup>|2408|\~0.006|\~0.438|\~19.8 us|
+|Sin_52<sup>13</sup>|2424|\~0.000007|\~0.0016|\~22.2 us|
+|Sin_73<sup>14</sup>|1552|\~0.00000005|\~0.00002|\~28.3 us|
+|Sin_121<sup>15</sup>|1624|\~0.0000000000007|\~0.0000000006|\~35.3 us|
 
 ### Notes:
-1. This LUT could be made larger/smaller and more/less accurate by simply increasing or decreasing the number of elements in the table (though care should be taken to ensure that the resulting size allows for a quick and simple hash function, as execution time may be negatively affected if the hash becomes non-trivial).
-2. This function is a LUT of doubles with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
-3. This function is a LUT of floats with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
-4. This function is a LUT of fixed-point numbers (in q15_16 format) with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
-5. This function is a LUT of doubles with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
-6. This function is a LUT of floats with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
-7. This function is a LUT of fixed-point numbers with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
-8. This function is a LUT of doubles with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
-9. This function is a LUT of floats with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
-10. This function is a LUT of fixed-point numbers with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
-11. This function is a polynomial approximation of sin which uses 3 terms.
-12. This function is a polynomial approximation of sin which uses 4 terms.
-13. This function is a polynomial approximation of sin which uses 5 terms.
-14. This function is a polynomial approximation of sin which uses 7 terms.
+1. Memory usage was measured very non-academically, by observing the difference in the output of the `size` tool with each function included and them removed. It seems possible to glean this information from the map file. I'd love to hear if you have any better suggestions!
+2. This LUT could be made larger/smaller and more/less accurate by simply increasing or decreasing the number of elements in the table (though care should be taken to ensure that the resulting size allows for a quick and simple hash function, as execution time may be negatively affected if the hash becomes non-trivial).
+3. "LUT double" is a LUT of doubles with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
+4. "LUT float" is a LUT of floats with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
+5. "LUT fixed" is a LUT of fixed-point numbers (in q0_31 format) with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
+6. "Dbl interp" is a LUT of doubles with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
+7. "Flt interp" is a LUT of floats with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
+8. "Fxd interp" is a LUT of fixed-point numbers (in q0_31 format) with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
+9. "Dbl Non-Uni" is a LUT of doubles with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
+10. "Flt Non-Uni" is a LUT of floats with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
+11. "Fxd Non-Uni" is a LUT of fixed-point numbers (x-vales in q9_22 format and y-values in q0_31 format) with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
+12. "Sin_32" is a polynomial approximation of sin which uses 3 terms.
+13. "Sin_52" is a polynomial approximation of sin which uses 4 terms.
+14. "Sin_73" is a polynomial approximation of sin which uses 5 terms.
+15. "Sin_121" is a polynomial approximation of sin which uses 7 terms.
 
 ## What's it telling me?
 
@@ -156,9 +157,9 @@ For the sake of brevity, I'll not reiterate what was discussed in the ["How does
 
 ### Parameterizing the tests
 
-Adding tests to or subtracting tests from the code in "01_Fast-Sin" was already getting tedious, and with many more functions to add, I decided to first refactor `main` to make that easier. I wanted to make two major changes: (1) Put the variables that hold the profiling information for each function (e.g. absoluteError_avg, executionTime_ns_sum, etc) into a struct for each function being tested (so that I don't need to keep changing the input parameters to `printResults` every time I change which functions are being tested) and (2) Put a pointer to the functions being tested into that struct so that the profiling code (which doesn't change) can be put in one spot and simply called multiple times with function pointers for each of the functions being tested.
+Adding tests to or subtracting tests from the code in "01_Fast-Sin" was already getting tedious, and with many more functions to add, I decided to first refactor `main` to make that easier. I wanted to make two major changes: (1) Put the variables that hold the profiling information for each function (e.g. `absoluteError_avg`, `executionTime_ns_sum`, etc) into a struct for each function being tested (so that I don't need to keep changing the input parameters to `printResults` every time I change which functions are being tested) and (2) Put a pointer to the functions being tested into that struct so that the profiling code (which doesn't change) can be put in one spot and simply called multiple times with function pointers for each of the functions being tested.
 
-To accomplish #1, I created a struct in `main.h` called `sinLUT_implementation_t` that included a `const char *` for the function name and several variables of type `double` to hold the various pieces of profiling information. Eventually, I could create different instances of `sinLUT_implementation_t` for each function being tested and then simply pass this array to `printResults` (which I renamed `printResults_CUT`). I used an empty struct (`{0}`) to signal the end of the array.
+To accomplish (1), I created a struct in `main.h` called `sinLUT_implementation_t` that included a `const char *` for the function name and several variables of type `double` to hold the various pieces of profiling information. Eventually, I could create different instances of `sinLUT_implementation_t` for each function being tested and then simply pass this array to `printResults` (which I renamed `printResults_CUT`). I used an empty struct (`{0}`) to signal the end of the array.
 ```
 typedef struct sinLUT_implementation_t
 {
@@ -173,7 +174,7 @@ typedef struct sinLUT_implementation_t
     double percentError_avg;
 } sinLUT_implementation_t;
 ```
-On the surface, accomplishing #2 wasn't awful either. However, the slightly complex part was getting the profiling code to work with different function pointers (that is, pointers to functions with different signatures). To start, I created three function typedefs in `sin_lut.h` to represent my three main functions: `p_sin_LUT_double`, `p_sin_LUT_float`, and `p_sin_LUT_fixedPoint`, corresponding to each function's input/output data types (I did not experiment with mixed data types, such as receiving a fixed-point input and returning a double).
+On the surface, accomplishing (2) wasn't awful either. However, the slightly complex part was getting the profiling code to work with different function pointers (that is, pointers to functions with different signatures). To start, I created three function typedefs in `sin_lut.h` to represent my three main functions: `p_sin_LUT_double`, `p_sin_LUT_float`, and `p_sin_LUT_fixedPoint`, corresponding to each function's input/output data types (I did not experiment with mixed data types, such as receiving a fixed-point input and returning a double).
 ```
 typedef double (*p_sin_LUT_double)(double);
 typedef float (*p_sin_LUT_float)(float);
@@ -226,7 +227,47 @@ sinLUT_implementation_t codeUnderTest[] =
 };
 ```
 The profiling code was then restructured to be a `while` loop that iterates over the `codeUnderTest` array until the `NULL` struct is found. For each function, the profiling code runs `testIterations` numbers of loops, each time creating a new random input value, calling the function under test (while profiling it), and computing the errors. After all iterations, the average values are computed, the index variable is incremented, and the `while` loop continues. A `switch...case` statement in the body of the `for` loop decides which part of the union to access, based on which part is active (which is indicated by the `function_enum` variable in the `sinLUT_implementation_t` struct).
+```
+int idx_CUT = 0;
+    while( codeUnderTest[idx_CUT].function_enum != NOT_ASSIGNED )
+    {
+        for( int idx_test = 0; idx_test < testIterations; idx_test++ )
+        {
 
+            ...
+
+            switch( codeUnderTest[idx_CUT].function_enum )
+            {
+                case fcn_scaffolding:
+                    // Run profiling code
+                break;
+
+                case fcn_dbl_in_dbl_out:
+                    // Run profiling code
+                break;
+
+                case fcn_flt_in_flt_out:
+                    // Run profiling code
+                break;
+
+                case fcn_fxd_in_fxd_out:
+                    // Run profiling code
+                break;
+
+                default:
+                    ASSERT(0);
+                // Unreachable
+                break;
+            }           
+            
+            ...
+        }
+
+        ...
+
+        idx_CUT++;
+    }
+```
 Adding new functions is now fairly trivial (provided they match one of the three function signatures used for the function pointers): Simply write the function and then add an element to the `codeUnderTest` array with the appropriate information and the test will automatically get run. Removing a test is as simple as commenting out the line of code that puts it in the array.
 
 ### Adding floats
@@ -235,9 +276,9 @@ Changing the data type from doubles to floats involved no code changes, except t
 
 ### Adding fixed-point numbers
 
-What's a "fixed-point" number, you ask? Excellent question! Consider, first, an integer: the least significant bit of an integer has the value "1" (or 2<sup>0</sup>), so 0b0001 is equal to "1" and 0b1001 is equal to "9". There are no digits to the right of the lest significant bit, but what if there were? What would 0b0001.00 mean? If we extend the idea that the third bit of a binary number is 2<sup>3</sup>, the second bit is 2<sup>2</sup>, the first bit is 2<sup>1</sup>, and the zeroth bit is 2<sup>0</sup>, then the bit after the decimal (or "radix") point might be 2<sup>-1</sup> (or 0.5), then 2<sup>-2</sup> (or 0.25), and so on. The digits to the left of the radix point become the "integer" bits and those to the right become the "fractional" bits. This is the meaning of a "fixed-point" number: an integer data type whose radix point is redefined to be somewhere other than to the right of the least significant bit. Assuming our example above of a fixed-point number is signed, "0b0001.00", is said to be in "q3.2" format, meaning that there are 3 integer bits (plus an assumed sign bit) and 2 fractional bits. Instead of representing the range [-32, 31], as it would if it were a plain signed integer, our example can now represent the range [-8, 7.75], in increments of 0.25. For a 32-bit processor, such as the STM32F1 we are using in these examples, it makes sense to make all fixed-point numbers 32-bits long and a commonly used format might be "q15.16", allowing for a range of [-65536, 65535.999984741], in increments of 0.000015259 (2<sup>-16</sup>). For a processor without a floating-point unit, integer math (including operating on fixed-point numbers, since they are an "integer" data type, just with a different radix position) goes MUCH faster and doesn't require additional code (as would be needed to perform floating-point math). For more information, see [here](https://developer.arm.com/documentation/dai0033/a/).
+What's a "fixed-point" number, you ask? Excellent question! Consider, first, an integer: the least significant bit of an integer has the value "1" (or 2<sup>0</sup>), so 0b0001 is equal to "1" and 0b1001 is equal to "9". There are no digits to the right of the lest significant bit, but what if there were? What would 0b0001.00 mean? If we extend the idea that the third bit of a binary number is 2<sup>3</sup>, the second bit is 2<sup>2</sup>, the first bit is 2<sup>1</sup>, and the zeroth bit is 2<sup>0</sup>, then the bit after the decimal (or "radix") point might be 2<sup>-1</sup> (or 0.5), then 2<sup>-2</sup> (or 0.25), and so on. The digits to the left of the radix point become the "integer" bits and those to the right become the "fractional" bits. This is the meaning of a "fixed-point" number: an integer data type whose radix point is redefined to be somewhere other than to the right of the least significant bit. Assuming our example above of a fixed-point number is signed, "0b0001.00", is said to be in "q3.2" format, meaning that there are 3 integer bits (plus an assumed sign bit) and 2 fractional bits. Instead of representing the range [-32, 31], as it would if it were a plain signed integer, our example can now represent the range [-8, 7.75], in increments of 0.25. For a 32-bit processor, such as the STM32F1 we are using in these examples, it makes sense to make all fixed-point numbers 32-bits long and a commonly used format might be "q15.16", allowing for a range of [-65536, 65535.999984741], in increments of 1.5259e-5 (2<sup>-16</sup>). For a processor without a floating-point unit, integer math (including operating on fixed-point numbers, since they are an "integer" data type, just with a different radix position) goes MUCH faster and doesn't require additional code (as would be needed to perform floating-point math). For more information, see [here](https://developer.arm.com/documentation/dai0033/a/).
 
-I added the code at the above link into my project directly, adding two typedefs for the fixed-point data types I wanted to use. The first covers a range from [-1, 0.99999999976] in increments of 2.3283064e-10, perfect for representing the output values of our sin LUTs. The second covers a range from [-512, 511.999999762] in increments of 2.38418579e-7; it's used to represent the input values. Why is the integer portion so large if the input will only be as large as 2\*PI? Because for two of the fixed-point LUTs, the input is multiplied by 64 in order to get the array index and any fixed-point number with less than 9 integer bits could possible overflow, causing completely erroneous results.
+I added the code at the above link into my project directly, adding two typedefs for the fixed-point data types I wanted to use.
 ```
 // Define a fixed-point type with 1 sign bit (implied), 0 integer bits, and 31 fractional bits
 typedef int32_t q0_31_t;
@@ -245,14 +286,21 @@ typedef int32_t q0_31_t;
 // Define a fixed-point type with 1 sign bit (implied), 9 integer bits, and 22 fractional bits
 typedef int32_t q9_22_t;
 ```
+The first covers a range from [-1, 0.99999999976] in increments of 2.3283064e-10, perfect for representing the output values of our sin LUTs. The second covers a range from [-512, 511.999999762] in increments of 2.38418579e-7; it's used to represent the input values. Why is the integer portion so large if the input will only be as large as 2\*PI? Because for two of the fixed-point LUTs, the input is multiplied by 64 in order to get the array index and any fixed-point number with less than 9 integer bits could possible overflow, causing erroneous results.
+
 Since multiplying and dividing fixed-point numbers changes the location of the radix point (see the link above for an explanation why), special operations are needed in order to preserve the position of the radix (or, more accurately, special operations are needed in order for the developer to specify what they want the final position of the radix to be). The code at that link provides these functions for us (such as `FDIV` and `FSUBG`), including a few that may seem redundant but which provide for a consistent interface (such as `FADD` and `FMULI`), as well as a few really useful operations (`TOFLT`, `TOFIX`, and `FCONV`). These functions can (mostly) be used as direct stand-ins for the normal integer or floating-point operations in our LUT functions (i.e. `double x = radians * 64` could be replaced with `q9_22_t x = FMULI(radians, 64)`).
 
-**HOWEVER**, I offer two words of caution when using fixed-point numbers:
+**HOWEVER**, I offer two points of caution when using fixed-point numbers:
 
 1. You are responsible for manually managing the various fixed-point data types you use in your program, which gets harder the more fixed-point data types you use. It was extremely easy while developing these examples for me to write some fixed-point code and only after I encounter a bug to realize that I hadn't updated a single `q` argument which caused the result of a certain function to not come out in the q format that I had thought it would (i.e. I update a line like `q3_28_t x = FMULG( a, b, 28, 22, 28);` to put `x` into `q9_22_t` format and change it to be `q9_22_t x = FMULG( a, b, 28, 22, 28);`, forgetting that the fifth argument to `FMULG` needs to match the q format of the output; the line should read `q9_22_t x = FMULG( a, b, 28, 22, 22);`).
-2. Integer overflow/underflow is MUCH easier to fall into with fixed-point numbers, since you're often sizing them to be only exactly as big as you need them, forgetting that multiply/add and divide/subtract operations might cause these integers to exceed their maximum or minimum values. We saw an example of this above, in which the input values for our sin LUTs needed to extend up to at least 403 in order to match our array indices, even though the input values should only ever really be as high as 2\*PI. Addtionally, the fixed-point library at the link above performs all multiplication and divisions BEFORE shifting the result up or down to match the final radix, meaning that even though a result might fit into the fixed-point data type to which an operation is being assigned, the operation may still fail if the intermediary product/sum/dividend/difference is greater than the maximum integer value (or less than the minimum value). This is actually a problem for our application, since even though the y-values in our sin table are in q0.31 format and multiplying them by any other number should yield a result that fits into the other number, because they are integers, the intermediary product may be as large as 64 bits, causing an incorrect value to get returned from the operation! To correct this, I added the `SAFE_` functions to `fixed_point.h`. These functions store the 32-bit input values into 64-bit integers before executing the desired operation; if the result is less than INT32_MAX (or greater than INT32_MIN), then the result is stored in the output variable and a value of `0` (meaning "no error") is returned from the function. However, if the safety check fails, then no value is stored and a `-1` is returned. The LUT code checks this value to make sure no math operations inadvertently overflowed or underflowed. I chose to `ASSERT` that the error code returned is `0`, since I figured that anything else constituted a programming error. However, it is possible to recover from a fault like that, and another developer may simply chose to retry the operation with a larger data type for the return variable.
+
+2. Integer overflow/underflow is MUCH easier to fall into with fixed-point numbers, since you're often sizing them to be only exactly as big as you need them, forgetting that multiply/add and divide/subtract operations might cause these integers to exceed their maximum or minimum values. We saw an example of this above, in which the input values for our sin LUTs needed to extend up to at least 403 in order to match our array indices, even though the input values should only ever really be as high as 2\*PI. Addtionally, the fixed-point library at the link above performs all multiplication and divisions BEFORE shifting the result up or down to match the final radix, meaning that even though a result might fit into the fixed-point data type to which an operation is being assigned, the operation may still fail if the intermediary product/sum/dividend/difference is greater than the maximum integer value (or less than the minimum value). This is actually a problem for our application, since even though the y-values in our sin table are in q0.31 format and multiplying them by any other number should yield a result that fits into the other number, because they are integers, the intermediary product may be as large as 64 bits, causing an incorrect value to get returned from the operation! To correct this, I added the `SAFE_` functions to `fixed_point.h`. These functions store the 32-bit operands into 64-bit integers before executing the desired operation; if the result is less than INT32_MAX (or greater than INT32_MIN), then the result is stored in the output variable and a value of `0` (meaning "no error") is returned from the function. However, if the safety check fails, then no value is stored and a `-1` is returned. The LUT code checks this value to make sure no math operations inadvertently overflowed or underflowed. I chose to `ASSERT` that the error code returned is `0`, since I figured that anything else constituted a programming error. However, it is possible to recover from a fault like that, and another developer may simply chose to retry the operation with a larger data type for the return variable.
 
 ### Adding linear interpolation
+
+So far our LUTs have done nothing more complicated than map the input value onto the range [0, 403] and perform a simple rounding; a look-up table of this type will have a maximum error of EQUATION, which comes out to around XX near the zero-crossing points and around XX near the local maxima and minima (to understand why, see [here]()). However, if we assume that each pair of adjacent elements in our LUT is connected with a line, we can get a much more accurate answer for input values that fall in-between the LUT elements by figuring out where on the line the input would fall and returning the resulting y-value. This is called "piecewise linear interpolation" (PwLI) or, simply, "linear interpolation".
+
+
 
 ### Changing from a uniform to a non-uniform distribution of x-values
 
