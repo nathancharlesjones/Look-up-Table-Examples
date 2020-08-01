@@ -27,21 +27,21 @@ int main(int argc, char * argv[])
 	{
 		{ "Scaffolding",	fcn_scaffolding,	{.fcn_double = NULL}, 										0, 0, 0, 0, 0, 0, 0 },
 		{ "Library Sin",	fcn_dbl_in_dbl_out,	{.fcn_double = sin}, 										0, 0, 0, 0, 0, 0, 0 },
-		//{ "LUT Double",		fcn_dbl_in_dbl_out,	{.fcn_double = sin_LUT_double},								0, 0, 0, 0, 0, 0, 0 },
-		//{ "LUT Float",		fcn_flt_in_flt_out,	{.fcn_float = sin_LUT_float},								0, 0, 0, 0, 0, 0, 0 },
-		//{ "LUT Fxd Pt",		fcn_fxd_in_fxd_out,	{.fcn_fixedPoint = sin_LUT_fixedPoint},						0, 0, 0, 0, 0, 0, 0 },
-		//{ "LUT Fxd Safe",	fcn_fxd_in_fxd_out,	{.fcn_fixedPoint = sin_LUT_fixedPoint_safe},				0, 0, 0, 0, 0, 0, 0 },
-		//{ "Dbl Interp",		fcn_dbl_in_dbl_out,	{.fcn_double = sin_LUT_double_interpolate},					0, 0, 0, 0, 0, 0, 0 },
-		//{ "Flt Interp",		fcn_flt_in_flt_out,	{.fcn_float = sin_LUT_float_interpolate},					0, 0, 0, 0, 0, 0, 0 },
-		//{ "Fxd Interp",		fcn_fxd_in_fxd_out,	{.fcn_fixedPoint = sin_LUT_fixedPoint_interpolate},			0, 0, 0, 0, 0, 0, 0 },
-		//{ "Fxd Intp Sf",	fcn_fxd_in_fxd_out,	{.fcn_fixedPoint = sin_LUT_fixedPoint_interpolate_safe},	0, 0, 0, 0, 0, 0, 0 },
-		//{ "Dbl X/Y list",	fcn_dbl_in_dbl_out,	{.fcn_double = sin_LUT_double_nonUniform},					0, 0, 0, 0, 0, 0, 0 },
-		//{ "Flt X/Y list",	fcn_flt_in_flt_out,	{.fcn_float = sin_LUT_float_nonUniform},					0, 0, 0, 0, 0, 0, 0 },
-		//{ "Fxd X/Y list",	fcn_fxd_in_fxd_out,	{.fcn_fixedPoint = sin_LUT_fixedPoint_nonUniform},			0, 0, 0, 0, 0, 0, 0 },
-		//{ "Fxd X/Y Safe",	fcn_fxd_in_fxd_out,	{.fcn_fixedPoint = sin_LUT_fixedPoint_nonUniform_safe},		0, 0, 0, 0, 0, 0, 0 },
-		//{ "Sin_32\t",		fcn_flt_in_flt_out,	{.fcn_float = sin_32},										0, 0, 0, 0, 0, 0, 0 },
-		//{ "Sin_52\t",		fcn_flt_in_flt_out,	{.fcn_float = sin_52},										0, 0, 0, 0, 0, 0, 0 },
-		//{ "Sin_73\t",		fcn_dbl_in_dbl_out,	{.fcn_double = sin_73},										0, 0, 0, 0, 0, 0, 0 },
+		{ "LUT Double",		fcn_dbl_in_dbl_out,	{.fcn_double = sin_LUT_double},								0, 0, 0, 0, 0, 0, 0 },
+		{ "LUT Float",		fcn_flt_in_flt_out,	{.fcn_float = sin_LUT_float},								0, 0, 0, 0, 0, 0, 0 },
+		{ "LUT Fxd Pt",		fcn_fxd_in_fxd_out,	{.fcn_fixedPoint = sin_LUT_fixedPoint},						0, 0, 0, 0, 0, 0, 0 },
+		{ "LUT Fxd Safe",	fcn_fxd_in_fxd_out,	{.fcn_fixedPoint = sin_LUT_fixedPoint_safe},				0, 0, 0, 0, 0, 0, 0 },
+		{ "Dbl Interp",		fcn_dbl_in_dbl_out,	{.fcn_double = sin_LUT_double_interpolate},					0, 0, 0, 0, 0, 0, 0 },
+		{ "Flt Interp",		fcn_flt_in_flt_out,	{.fcn_float = sin_LUT_float_interpolate},					0, 0, 0, 0, 0, 0, 0 },
+		{ "Fxd Interp",		fcn_fxd_in_fxd_out,	{.fcn_fixedPoint = sin_LUT_fixedPoint_interpolate},			0, 0, 0, 0, 0, 0, 0 },
+		{ "Fxd Intp Sf",	fcn_fxd_in_fxd_out,	{.fcn_fixedPoint = sin_LUT_fixedPoint_interpolate_safe},	0, 0, 0, 0, 0, 0, 0 },
+		{ "Dbl X/Y list",	fcn_dbl_in_dbl_out,	{.fcn_double = sin_LUT_double_nonUniform},					0, 0, 0, 0, 0, 0, 0 },
+		{ "Flt X/Y list",	fcn_flt_in_flt_out,	{.fcn_float = sin_LUT_float_nonUniform},					0, 0, 0, 0, 0, 0, 0 },
+		{ "Fxd X/Y list",	fcn_fxd_in_fxd_out,	{.fcn_fixedPoint = sin_LUT_fixedPoint_nonUniform},			0, 0, 0, 0, 0, 0, 0 },
+		{ "Fxd X/Y Safe",	fcn_fxd_in_fxd_out,	{.fcn_fixedPoint = sin_LUT_fixedPoint_nonUniform_safe},		0, 0, 0, 0, 0, 0, 0 },
+		{ "Sin_32\t",		fcn_flt_in_flt_out,	{.fcn_float = sin_32},										0, 0, 0, 0, 0, 0, 0 },
+		{ "Sin_52\t",		fcn_flt_in_flt_out,	{.fcn_float = sin_52},										0, 0, 0, 0, 0, 0, 0 },
+		{ "Sin_73\t",		fcn_dbl_in_dbl_out,	{.fcn_double = sin_73},										0, 0, 0, 0, 0, 0, 0 },
 		{ "Sin_121\t",		fcn_dbl_in_dbl_out,	{.fcn_double = sin_121},									0, 0, 0, 0, 0, 0, 0 },
 		{0}
 	};
@@ -125,8 +125,7 @@ int main(int argc, char * argv[])
 
 			// Add current absolute error to the running total
 			//
-			//double output_sin = sin( input_double );
-			double output_sin = 0;
+			double output_sin = sin( input_double );
 			double absoluteError = fabs( output_sin - output_CUT );
 			codeUnderTest[idx_CUT].absoluteError_sum += absoluteError;
 			if( absoluteError > codeUnderTest[idx_CUT].absoluteError_max ) codeUnderTest[idx_CUT].absoluteError_max = absoluteError;

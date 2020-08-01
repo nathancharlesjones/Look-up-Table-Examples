@@ -18,9 +18,9 @@ void init_sinLUT(void)
 	{
 		double radians = ( (double) idx ) / 64.0;
 		double output_double = sin( radians );
-		//sinTable_double[idx] = output_double;
-		//sinTable_float[idx] = (float) output_double;
-		//sinTable_fixedPoint[idx] = TOFIX(output_double, 31);
+		sinTable_double[idx] = output_double;
+		sinTable_float[idx] = (float) output_double;
+		sinTable_fixedPoint[idx] = TOFIX(output_double, 31);
 	}
 }
 

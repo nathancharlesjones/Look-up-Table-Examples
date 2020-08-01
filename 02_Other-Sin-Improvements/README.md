@@ -85,21 +85,22 @@ Number of iterations: 1000
 
 Function        Avg Exec Time (ns)  Max Abs Err     Avg Abs Err     Avg Pcnt Err
 ------------------------------------------------------------------------------------
-Scaffolding     1400.669000         0.999999631059  0.652310682314  100.000000000000
-Library Sin     1461.493000         0.000000000000  0.000000000000  0.000000000000
-LUT Double      1368.243000         0.007731751814  0.002422178446  1.741621087140
-LUT Float       1477.782000         0.007781785917  0.002449251424  1.908848834801
-LUT Fxd Pt      518.283000          0.007789333234  0.002425126663  1.745504007445
-Dbl Interp      458.890000          0.000030399625  0.000013219860  0.002068185136
-Flt Interp      491.998000          0.000030497550  0.000012931535  0.002032499788
-Fxd Interp      480.742000          0.000030458810  0.000012775540  0.002012521111
-Dbl X/Y list    480.910000          0.006942981122  0.003651405452  0.631011883711
-Flt X/Y list    484.509000          0.006941808730  0.003474547855  0.613417469977
-Fxd X/Y list    487.844000          0.006942964109  0.003529551882  0.608958238201
-Sin_32          467.824000          0.000596918907  0.000385646151  0.584851163968
-Sin_52          470.245000          0.000007009045  0.000004331988  0.001958647318
-Sin_73          485.269000          0.000000046536  0.000000029727  0.000014366719
-Sin_121         472.147000          0.000000000001  0.000000000000  0.000000000667
+Scaffolding     1350.171000         0.999999840370  0.637547402434  100.000000000000
+Library Sin     1475.126000         0.000000000000  0.000000000000  0.000000000000
+LUT Double      1404.799000         0.007658433750  0.002452456807  1.703403779301
+LUT Float       894.440000          0.007714504384  0.002425062955  1.980796716839
+LUT Fxd Pt      454.375000          0.007690879916  0.002489271738  1.299438306881
+Dbl Interp      462.178000          0.000030464276  0.000012960821  0.002022806164
+Flt Interp      460.140000          0.000030504935  0.000012977239  0.002021830578
+Fxd Interp      481.944000          0.000030515773  0.000012951384  0.002055758608
+Fx Inp Unsafe   456.142000          0.000030477741  0.000012671948  0.002043563519
+Dbl X/Y list    495.558000          0.006942882239  0.003443082929  0.631202250727
+Flt X/Y list    480.272000          0.006942402425  0.003624371136  0.631100949583
+Fxd X/Y list    489.616000          0.006942925121  0.003691612287  0.636527145907
+Sin_32          470.916000          0.000596940208  0.000395464782  0.193384360234
+Sin_52          485.312000          0.000006943070  0.000004115109  0.001783769951
+Sin_73          482.411000          0.000000046535  0.000000029063  0.000011365045
+Sin_121         488.485000          0.000000000001  0.000000000000  0.000000000430
 ```
 5. Run `make BUILD={debug or release} TARGET=x86 clean` to remove the "build/{debug or release}\_x86" folder. E.g.:
 ```
@@ -214,21 +215,24 @@ In `main`, now, we start by initializing the array of functions to test. Each fu
 ```
 sinLUT_implementation_t codeUnderTest[] = 
 {
-    { "Scaffolding",    fcn_scaffolding,    {.fcn_double = NULL},                               0, 0, 0, 0, 0, 0, 0 },
-    { "Library Sin",    fcn_dbl_in_dbl_out, {.fcn_double = sin},                                0, 0, 0, 0, 0, 0, 0 },
-    { "LUT Double",     fcn_dbl_in_dbl_out, {.fcn_double = sin_LUT_double},                     0, 0, 0, 0, 0, 0, 0 },
-    { "LUT Float",      fcn_flt_in_flt_out, {.fcn_float = sin_LUT_float},                       0, 0, 0, 0, 0, 0, 0 },
-    { "LUT Fxd Pt",     fcn_fxd_in_fxd_out, {.fcn_fixedPoint = sin_LUT_fixedPoint},             0, 0, 0, 0, 0, 0, 0 },
-    { "Dbl Interp",     fcn_dbl_in_dbl_out, {.fcn_double = sin_LUT_double_interpolate},         0, 0, 0, 0, 0, 0, 0 },
-    { "Flt Interp",     fcn_flt_in_flt_out, {.fcn_float = sin_LUT_float_interpolate},           0, 0, 0, 0, 0, 0, 0 },
-    { "Fxd Interp",     fcn_fxd_in_fxd_out, {.fcn_fixedPoint = sin_LUT_fixedPoint_interpolate}, 0, 0, 0, 0, 0, 0, 0 },
-    { "Dbl X/Y list",   fcn_dbl_in_dbl_out, {.fcn_double = sin_LUT_double_nonUniform},          0, 0, 0, 0, 0, 0, 0 },
-    { "Flt X/Y list",   fcn_flt_in_flt_out, {.fcn_float = sin_LUT_float_nonUniform},            0, 0, 0, 0, 0, 0, 0 },
-    { "Fxd X/Y list",   fcn_fxd_in_fxd_out, {.fcn_fixedPoint = sin_LUT_fixedPoint_nonUniform},  0, 0, 0, 0, 0, 0, 0 },
-    { "Sin_32\t",       fcn_flt_in_flt_out, {.fcn_float = sin_32},                              0, 0, 0, 0, 0, 0, 0 },
-    { "Sin_52\t",       fcn_flt_in_flt_out, {.fcn_float = sin_52},                              0, 0, 0, 0, 0, 0, 0 },
-    { "Sin_73\t",       fcn_dbl_in_dbl_out, {.fcn_double = sin_73},                             0, 0, 0, 0, 0, 0, 0 },
-    { "Sin_121\t",      fcn_dbl_in_dbl_out, {.fcn_double = sin_121},                            0, 0, 0, 0, 0, 0, 0 },
+    { "Scaffolding",    fcn_scaffolding,    {.fcn_double = NULL},                                       0, 0, 0, 0, 0, 0, 0 },
+    { "Library Sin",    fcn_dbl_in_dbl_out, {.fcn_double = sin},                                        0, 0, 0, 0, 0, 0, 0 },
+    { "LUT Double",     fcn_dbl_in_dbl_out, {.fcn_double = sin_LUT_double},                             0, 0, 0, 0, 0, 0, 0 },
+    { "LUT Float",      fcn_flt_in_flt_out, {.fcn_float = sin_LUT_float},                               0, 0, 0, 0, 0, 0, 0 },
+    { "LUT Fxd Pt",     fcn_fxd_in_fxd_out, {.fcn_fixedPoint = sin_LUT_fixedPoint},                     0, 0, 0, 0, 0, 0, 0 },
+    { "LUT Fxd Safe",   fcn_fxd_in_fxd_out, {.fcn_fixedPoint = sin_LUT_fixedPoint_safe},                0, 0, 0, 0, 0, 0, 0 },
+    { "Dbl Interp",     fcn_dbl_in_dbl_out, {.fcn_double = sin_LUT_double_interpolate},                 0, 0, 0, 0, 0, 0, 0 },
+    { "Flt Interp",     fcn_flt_in_flt_out, {.fcn_float = sin_LUT_float_interpolate},                   0, 0, 0, 0, 0, 0, 0 },
+    { "Fxd Interp",     fcn_fxd_in_fxd_out, {.fcn_fixedPoint = sin_LUT_fixedPoint_interpolate},         0, 0, 0, 0, 0, 0, 0 },
+    { "Fxd Intp Sf",    fcn_fxd_in_fxd_out, {.fcn_fixedPoint = sin_LUT_fixedPoint_interpolate_safe},    0, 0, 0, 0, 0, 0, 0 },
+    { "Dbl X/Y list",   fcn_dbl_in_dbl_out, {.fcn_double = sin_LUT_double_nonUniform},                  0, 0, 0, 0, 0, 0, 0 },
+    { "Flt X/Y list",   fcn_flt_in_flt_out, {.fcn_float = sin_LUT_float_nonUniform},                    0, 0, 0, 0, 0, 0, 0 },
+    { "Fxd X/Y list",   fcn_fxd_in_fxd_out, {.fcn_fixedPoint = sin_LUT_fixedPoint_nonUniform},          0, 0, 0, 0, 0, 0, 0 },
+    { "Fxd X/Y Safe",   fcn_fxd_in_fxd_out, {.fcn_fixedPoint = sin_LUT_fixedPoint_nonUniform_safe},     0, 0, 0, 0, 0, 0, 0 },
+    { "Sin_32\t",       fcn_flt_in_flt_out, {.fcn_float = sin_32},                                      0, 0, 0, 0, 0, 0, 0 },
+    { "Sin_52\t",       fcn_flt_in_flt_out, {.fcn_float = sin_52},                                      0, 0, 0, 0, 0, 0, 0 },
+    { "Sin_73\t",       fcn_dbl_in_dbl_out, {.fcn_double = sin_73},                                     0, 0, 0, 0, 0, 0, 0 },
+    { "Sin_121\t",      fcn_dbl_in_dbl_out, {.fcn_double = sin_121},                                    0, 0, 0, 0, 0, 0, 0 },
     {0}
 };
 ```
@@ -282,7 +286,7 @@ Changing the data type from doubles to floats involved no code changes, except t
 
 ### Adding fixed-point numbers
 
-What's a "fixed-point" number, you ask? Excellent question! Consider, first, an integer: the least significant bit of an integer has the value "1" (or 2<sup>0</sup>), so 0b0001 is equal to "1" and 0b1001 is equal to "9". There are no digits to the right of the lest significant bit, but what if there were? What would 0b0001.00 mean? If we extend the idea that the third bit of a binary number is 2<sup>3</sup>, the second bit is 2<sup>2</sup>, the first bit is 2<sup>1</sup>, and the zeroth bit is 2<sup>0</sup>, then the bit after the decimal (or "radix") point might be 2<sup>-1</sup> (or 0.5), then 2<sup>-2</sup> (or 0.25), and so on. The digits to the left of the radix point become the "integer" bits and those to the right become the "fractional" bits. This is the meaning of a "fixed-point" number: an integer data type whose radix point is redefined to be somewhere other than to the right of the least significant bit. Assuming our example above of a fixed-point number is signed, "0b0001.00", is said to be in "q3.2" format, meaning that there are 3 integer bits (plus an assumed sign bit) and 2 fractional bits. Instead of representing the range [-32, 31], as it would if it were a plain signed integer, our example can now represent the range [-8, 7.75], in increments of 0.25. For a 32-bit processor, such as the STM32F1 we are using in these examples, it makes sense to make all fixed-point numbers 32-bits long and a commonly used format might be "q15.16", allowing for a range of [-65536, 65535.999984741], in increments of 1.5259e-5 (2<sup>-16</sup>). For a processor without a floating-point unit, integer math (including operating on fixed-point numbers, since they are an "integer" data type, just with a different radix position) goes MUCH faster and doesn't require additional code (as would be needed to perform floating-point math). For more information, see [here](https://developer.arm.com/documentation/dai0033/a/).
+What's a "fixed-point" number, you ask? Excellent question! Consider, first, an integer: the least significant bit of an integer has the value "1" (or 2<sup>0</sup>), so 0b0001 is equal to "1" and 0b1001 is equal to "9". There are no digits to the right of the lest significant bit, but what if there were? What would 0b0001.00 mean? If we extend the idea that the third bit of a binary number is 2<sup>3</sup>, the second bit is 2<sup>2</sup>, the first bit is 2<sup>1</sup>, and the zeroth bit is 2<sup>0</sup>, then the bit after the decimal (or "radix") point might be 2<sup>-1</sup> (or 0.5), then 2<sup>-2</sup> (or 0.25), and so on. The digits to the left of the radix point become the "integer" bits and those to the right become the "fractional" bits. This is the meaning of a "fixed-point" number: an integer data type whose radix point is redefined to be somewhere other than to the right of the least significant bit. Assuming our example above of a fixed-point number is signed, "0b0001.00", is said to be in "q3.2" (or "q2") format, meaning that there are 3 integer bits (plus an assumed sign bit) and 2 fractional bits. Instead of representing the range [-32, 31], as it would if it were a plain signed integer, our example can now represent the range [-8, 7.75], in increments of 0.25. For a 32-bit processor, such as the STM32F1 we are using in these examples, it makes sense to make all fixed-point numbers 32-bits long and a commonly used format might be "q15.16" (or "q16"), allowing for a range of [-65536, 65535.999984741], in increments of 1.5259e-5 (2<sup>-16</sup>). For a processor without a floating-point unit, integer math (including operating on fixed-point numbers, since they are an "integer" data type, just with a different radix position) goes MUCH faster and doesn't require additional code (as would be needed to perform floating-point math). For more information, see [here](https://developer.arm.com/documentation/dai0033/a/).
 
 I added the code at the above link into my project directly, adding two typedefs for the fixed-point data types I wanted to use.
 ```
@@ -298,9 +302,34 @@ Since multiplying and dividing fixed-point numbers changes the location of the r
 
 **HOWEVER**, I offer two points of caution when using fixed-point numbers:
 
-1. You are responsible for manually managing the various fixed-point data types you use in your program, which gets harder the more fixed-point data types you use. It was extremely easy while developing these examples for me to write some fixed-point code and only after I encounter a bug to realize that I hadn't updated a single `q` argument which caused the result of a certain function to not come out in the q format that I had thought it would (i.e. I update a line like `q3_28_t x = FMULG( a, b, 28, 22, 28);` to put `x` into `q9_22_t` format and change it to be `q9_22_t x = FMULG( a, b, 28, 22, 28);`, forgetting that the fifth argument to `FMULG` needs to match the q format of the output; the line should read `q9_22_t x = FMULG( a, b, 28, 22, 22);`).
+1. You are responsible for manually managing the various fixed-point data types you use in your program, which gets harder the more fixed-point data types you use. It was extremely easy while developing these examples for me to write some fixed-point code and only after I encountered a bug to realize that I hadn't updated a single `q` argument which caused the result of a certain function to not come out in the q format that I had thought it would (i.e. I would update a line like `q3_28_t x = FMULG( a, b, 28, 22, 28);` to put `x` into `q9_22_t` format and change it to be `q9_22_t x = FMULG( a, b, 28, 22, 28);`, forgetting that the fifth argument to `FMULG` needs to match the q format of the output; the line should read `q9_22_t x = FMULG( a, b, 28, 22, 22);`, assuming a is in q28 and b is in q22 format).
 
-2. Integer overflow/underflow is MUCH easier to fall into with fixed-point numbers, since you're often sizing them to be only exactly as big as you need them, forgetting that multiply/add and divide/subtract operations might cause these integers to exceed their maximum or minimum values. We saw an example of this above, in which the input values for our sin LUTs needed to extend up to at least 403 in order to match our array indices, even though the input values should only ever really be as high as 2\*PI. Addtionally, the fixed-point library at the link above performs all multiplication and divisions BEFORE shifting the result up or down to match the final radix, meaning that even though a result might fit into the fixed-point data type to which an operation is being assigned, the operation may still fail if the intermediary product/sum/dividend/difference is greater than the maximum integer value (or less than the minimum value). This is actually a problem for our application, since even though the y-values in our sin table are in q0.31 format and multiplying them by any other number should yield a result that fits into the other number, because they are integers, the intermediary product may be as large as 64 bits, causing an incorrect value to get returned from the operation! To correct this, I added the `SAFE_` functions to `fixed_point.h`. These functions store the 32-bit operands into 64-bit integers before executing the desired operation; if the result is less than INT32_MAX (or greater than INT32_MIN), then the result is stored in the output variable and a value of `0` (meaning "no error") is returned from the function. However, if the safety check fails, then no value is stored and a `-1` is returned. The LUT code checks this value to make sure no math operations inadvertently overflowed or underflowed. I chose to `ASSERT` that the error code returned is `0`, since I figured that anything else constituted a programming error. However, it is possible to recover from a fault like that, and another developer may simply chose to retry the operation with a larger data type for the return variable.
+2. Integer overflow is MUCH easier to fall into with fixed-point numbers, since you're often sizing them to be only exactly as big as you need them, forgetting that (almost) any math operation might cause these integers to exceed their maximum or minimum values. This happens in two ways:
+
+    1. Forgetting what the maximum value is for a given fixed-point number. As embedded developers, we're used to being able to multiply integers by numbers up to a million or so and not have to worry about overflow. However, it's easy to forget that a number like "1.33..." is actually represented in q3.28 as "357,913,941" and multiplying this number by anything greater than about 5 or 6 would result in an overflow. We saw an example of this above, in which the input values for our sin LUTs needed to extend up to at least 403 in order to match our array indices, even though the input values should only ever really be as high as 2\*PI.
+
+    2. Not leaving enough "head room" for fixed-point multiplications and divisions. The fixed-point library at the link above performs all multiplication and divisions BEFORE shifting the result up or down to match the final radix, meaning that even though a result might fit into the fixed-point data type to which an operation is being assigned, the operation may still fail if the intermediary product/sum/dividend/difference is greater than the maximum integer value (or less than the minimum value). Consider the following multiplication:
+    ```
+    typedef int8_t q3_4_t;
+    q3_4_t x = 0b01100000 * 0b00010000; // x equals 6 * 1; This code produces INCORRECT results
+    ```
+    Here we're using numbers in q3.4 format, so the first binary value equals "6" and the second "1". Although the result of this operation _should_ be "6", the _actual_ result of the binary multiplication is `0b0000011000000000`. Although this looks nothing like "6" in q3.4, it _does_ look like "6" in q7.8. And this is exactly what happens to the radix during multiplications and divisions: it gets shifted by the sum of the radix positions for the two operands. By shifting the result of our multiplication to the right by the value of our initial radix (i.e. `0b0000011000000000 >> 4`), we get the correct final result: `0b01100000`, or "6". The fixed-point library above performs these shifts automatically.
+    ```
+    typedef int8_t q3_4_t;
+    q3_4_t x = FMUL( 0b01100000, 0b00010000, 4 ); // x equals 6 * 1; This code still produces INCORRECT results (see below)
+    ```
+    In fact, however, since we've defined our variables to be signed, 8-bit integers, the result of this multiplication is STILL incorrect. The C language states that the result of a signed integer multiplication which exceeds the maximum value able to be stored by that integer is undefined. Many compilers truncate the answer to the lower bits, as would happen for a multiplication overflow using unsigned integers (but they aren't required to). In our example above, that means that the result of our multiplication _isn't_ `0b0000011000000000` but, more likely, `0b00000000` or "0", which are the lower 8-bits of the resulting multiplication (which is clearly incorrect). The simplest way to fix this is to cast the operands to a larger data type BEFORE multiplying them together, so that the upper bits are preserved.
+    ```
+    typedef int8_t q3_4_t;
+    q3_4_t x = FMUL( (int16_t)0b01100000, (int16_t)0b00010000, 4 ); // x equals 6 * 1; This code FINALLT produces the CORRECT results
+    ```
+    You could also just size the variables larger and make a note to only ever use the lower bits.
+    ```
+    typedef int16_t q3_4_t; // The fixed-point number is in "q3.4", only 8 bits long, though it will get stored as an in16_t.
+    q3_4_t x = FMUL( 0b01100000, 0b00010000, 4 );
+    ```
+
+This is actually a problem for our application, since even though the y-values in our sin table are in q0.31 format and multiplying them by any other number should yield a result that fits into the other number, because they are integers, the intermediary product may be as large as 64 bits, causing an incorrect value to get returned from the operation! There are several ways to To correct this, I added the `SAFE_` functions to `fixed_point.h`. These functions store the 32-bit operands into 64-bit integers before executing the desired operation; if the result is less than INT32_MAX (or greater than INT32_MIN), then the result is stored in the output variable and a value of `0` (meaning "no error") is returned from the function. However, if the safety check fails, then no value is stored and a `-1` is returned. The LUT code checks this value to make sure no math operations inadvertently overflowed or underflowed. I chose to `ASSERT` that the error code returned is `0`, since I figured that anything else constituted a programming error. However, it is possible to recover from a fault like that, and another developer may simply chose to retry the operation with a larger data type for the return variable.
 
 The fixed-point LUTs were significantly smaller and faster than either the double or float LUTs, though at the cost of a fair bit of added complexity.
 
