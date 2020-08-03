@@ -364,11 +364,11 @@ The fixed-point LUTs were significantly smaller and faster than either the doubl
 
 So far our LUTs have done nothing more complicated than map the input value onto the range [0, 403] and perform a simple rounding; a depiction of this type of LUT appears below.
 
-![Midpoint interpolation](https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Interpolation_Midpoint.png)
+![Midpoint interpolation](https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Interpolation_Midpoint.png | width=100)
 
 A look-up table of this type will have a maximum error of EQUATION, which, for our sin LUTs, comes out to around XX near the zero-crossing points and around XX near the local maxima and minima (to understand why, see [here](https://ocw.mit.edu/ans7870/2/2.086/S13/MIT2_086S13_Textbook.pdf)). However, if we assume that each pair of adjacent elements in our LUT is connected with a line, we can get a much more accurate answer for input values that fall in-between the LUT elements by figuring out where on the line the input would fall and returning the resulting y-value. This is called "piecewise linear interpolation" (PwLI) or, simply, "linear interpolation". A depiction of this type of LUT appears below.
 
-![Linear interpolation](https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Interpolation_Piecewise-Linear.png)
+![Linear interpolation](https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Interpolation_Piecewise-Linear.png | width=500)
 
 asdfasdf
 
