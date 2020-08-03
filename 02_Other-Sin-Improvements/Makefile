@@ -207,6 +207,7 @@ DEP_FILES = $(SRC_OBJ_FILES:.o=.d) $(ASM_OBJ_FILES:.o=.d)
 
 # Set the default compiler
 CC := gcc
+# CC := clang
 
 # The CFLAGS variable below is recursively expanded since the variable
 # COMMON_FLAGS isn't defined until later in the Makefile.
@@ -259,6 +260,7 @@ DEPFLAGS = -MMD -MP -MF $(@:.o=.d)
 
 # Set the default assembler
 AS := gcc
+# AS := clang
 
 # The ASFLAGS variable below is recursively expanded since the variables
 # COMMON_FLAGS and MCU_FLAGS aren't defined until later in the Makefile.
@@ -316,6 +318,7 @@ COMMON_FLAGS = \
     -ffunction-sections \
     -fdata-sections \
     -fstack-usage \
+    -fdump-rtl-expand \
     -D__FILENAME__=\"$(notdir $<)\"
 
 # Check value of BUILD and MAKECMDGOALS to determine which CFLAGS we need

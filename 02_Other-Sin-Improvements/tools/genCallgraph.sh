@@ -40,6 +40,9 @@ GETFUNCS="`mktemp -t $prog_name.XXXXXXXXXX`" || exit
 trap 'rm -f -- "$TRACE" "$GETFUNCS"' EXIT
 trap 'trap - EXIT; rm -f -- "$TRACE" "$GETFUNCS"; exit 1' HUP INT QUIT TERM
 
+echo $TRACE
+echo $GETFUNCS
+
 # Find the Entry Point Address
 entryAddr=$(readelf -h $FILE | awk ' /Entry point address/ { print "tbreak *" $4 } ')
 
@@ -59,6 +62,8 @@ echo "start" >> $GETFUNCS
 echo "info function" >> $GETFUNCS
 nm  $FILE |awk ' $2 ~ /^[tT]$/ { print "echo 0x" $1 " " $3 "\\n" } ' >> $GETFUNCS
 nm -D $FILE |awk ' $2 ~ /^[tT]$/ { print "echo 0x" $1 " " $3 "\\n" } ' >> $GETFUNCS
+
+cat $GETFUNCS
 
 # For dynamically linked binaries, we first set a temporary
 # breakpoint on several possible Entry Point Addresses and
@@ -183,3 +188,5 @@ BEGIN {
   }
 }
 ' | uniq
+
+cat $TRACE

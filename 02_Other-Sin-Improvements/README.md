@@ -239,44 +239,46 @@ sinLUT_implementation_t codeUnderTest[] =
 The profiling code was then restructured to be a `while` loop that iterates over the `codeUnderTest` array until the `NULL` struct is found. For each function, the profiling code runs `testIterations` numbers of loops, each time creating a new random input value, calling the function under test (while profiling it), and computing the errors. After all iterations, the average values are computed, the index variable is incremented, and the `while` loop continues. A `switch...case` statement in the body of the `for` loop decides which part of the union to access, based on which part is active (which is indicated by the `function_enum` variable in the `sinLUT_implementation_t` struct).
 ```
 int idx_CUT = 0;
-    while( codeUnderTest[idx_CUT].function_enum != NOT_ASSIGNED )
+while( codeUnderTest[idx_CUT].function_enum != NOT_ASSIGNED )
+{
+    for( int idx_test = 0; idx_test < testIterations; idx_test++ )
     {
-        for( int idx_test = 0; idx_test < testIterations; idx_test++ )
-        {
-
-            ...
-
-            switch( codeUnderTest[idx_CUT].function_enum )
-            {
-                case fcn_scaffolding:
-                    // Run profiling code
-                break;
-
-                case fcn_dbl_in_dbl_out:
-                    // Run profiling code
-                break;
-
-                case fcn_flt_in_flt_out:
-                    // Run profiling code
-                break;
-
-                case fcn_fxd_in_fxd_out:
-                    // Run profiling code
-                break;
-
-                default:
-                    ASSERT(0);
-                // Unreachable
-                break;
-            }           
-            
-            ...
-        }
 
         ...
 
-        idx_CUT++;
+        switch( codeUnderTest[idx_CUT].function_enum )
+        {
+            case fcn_scaffolding:
+                // Run profiling code
+            break;
+
+            case fcn_dbl_in_dbl_out:
+                // Run profiling code
+            break;
+
+            case fcn_flt_in_flt_out:
+                // Run profiling code
+            break;
+
+            case fcn_fxd_in_fxd_out:
+                // Run profiling code
+            break;
+
+            default:
+                ASSERT(0);
+            // Unreachable
+            break;
+        }           
+            
+        ...
+
     }
+
+    ...
+
+    idx_CUT++;
+
+}
 ```
 Adding new functions is now fairly trivial (provided they match one of the three function signatures used for the function pointers): Simply write the function and then add an element to the `codeUnderTest` array with the appropriate information and the test will automatically get run. Removing a test is as simple as commenting out the line of code that puts it in the array.
 
@@ -302,13 +304,13 @@ Since multiplying and dividing fixed-point numbers changes the location of the r
 
 **HOWEVER**, I offer two points of caution when using fixed-point numbers:
 
-1. You are responsible for manually managing the various fixed-point data types you use in your program, which gets harder the more fixed-point data types you use. It was extremely easy while developing these examples for me to write some fixed-point code and only after I encountered a bug to realize that I hadn't updated a single `q` argument which caused the result of a certain function to not come out in the q format that I had thought it would (i.e. I would update a line like `q3_28_t x = FMULG( a, b, 28, 22, 28);` to put `x` into `q9_22_t` format and change it to be `q9_22_t x = FMULG( a, b, 28, 22, 28);`, forgetting that the fifth argument to `FMULG` needs to match the q format of the output; the line should read `q9_22_t x = FMULG( a, b, 28, 22, 22);`, assuming a is in q28 and b is in q22 format).
+1. You are responsible for manually managing the various fixed-point data types you use in your program, which gets harder the more fixed-point data types you use. It was extremely easy while developing these examples for me to write some fixed-point code and only after I encountered a bug to realize that I hadn't updated a single `q` argument which caused the result of a certain function to not come out in the q format that I had thought it would (i.e. I would update a line like `q3_28_t x = FMULG( a, b, 28, 22, 28);` to put `x` into q9.22 format and change it to be `q9_22_t x = FMULG( a, b, 28, 22, 28);`, forgetting that the fifth argument to `FMULG` needs to match the q format of the output; the line should read `q9_22_t x = FMULG( a, b, 28, 22, 22);`, assuming a is in q3.28 and b is in q9.22 format).
 
 2. Integer overflow is MUCH easier to fall into with fixed-point numbers, since you're often sizing them to be only exactly as big as you need them, forgetting that (almost) any math operation might cause these integers to exceed their maximum or minimum values. This happens in two ways:
 
-    1. Forgetting what the maximum value is for a given fixed-point number. As embedded developers, we're used to being able to multiply integers by numbers up to a million or so and not have to worry about overflow. However, it's easy to forget that a number like "1.33..." is actually represented in q3.28 as "357,913,941" and multiplying this number by anything greater than about 5 or 6 would result in an overflow. We saw an example of this above, in which the input values for our sin LUTs needed to extend up to at least 403 in order to match our array indices, even though the input values should only ever really be as high as 2\*PI.
+    1. Forgetting what the maximum value is for a given fixed-point number. As embedded developers, we're used to being able to multiply integers by numbers up to a million or so and not have to worry about overflow. However, it's easy to forget that a number like "1.33..." is actually represented in q3.28 as "357,913,941" and multiplying this number by anything greater than 6 would result in an overflow. We saw an example of this above, in which the input values for our sin LUTs needed to extend up to at least 403 in order to match our array indices, even though the input values should only ever really be as high as 2\*PI.
 
-    2. Not leaving enough "head room" for fixed-point multiplications and divisions. The fixed-point library at the link above performs all multiplication and divisions BEFORE shifting the result up or down to match the final radix, meaning that even though a result might fit into the fixed-point data type to which an operation is being assigned, the operation may still fail if the intermediary product/sum/dividend/difference is greater than the maximum integer value (or less than the minimum value). Consider the following multiplication:
+    2. Not leaving enough "head room" for fixed-point multiplications and divisions. The fixed-point library at the link above performs all multiplication and divisions BEFORE shifting the result up or down to match the final radix, meaning that even though a result might fit into the fixed-point data type to which an operation is being assigned, the operation may still fail if the intermediary result is greater than the maximum integer value (or less than the minimum value). Consider the following multiplication:
     ```
     typedef int8_t q3_4_t;
     q3_4_t x = 0b01100000 * 0b00010000; // x equals 6 * 1; This code produces INCORRECT results
@@ -316,12 +318,12 @@ Since multiplying and dividing fixed-point numbers changes the location of the r
     Here we're using numbers in q3.4 format, so the first binary value equals "6" and the second "1". Although the result of this operation _should_ be "6", the _actual_ result of the binary multiplication is `0b0000011000000000`. Although this looks nothing like "6" in q3.4, it _does_ look like "6" in q7.8. And this is exactly what happens to the radix during multiplications and divisions: it gets shifted by the sum of the radix positions for the two operands. By shifting the result of our multiplication to the right by the value of our initial radix (i.e. `0b0000011000000000 >> 4`), we get the correct final result: `0b01100000`, or "6". The fixed-point library above performs these shifts automatically.
     ```
     typedef int8_t q3_4_t;
-    q3_4_t x = FMUL( 0b01100000, 0b00010000, 4 ); // x equals 6 * 1; This code still produces INCORRECT results (see below)
+    q3_4_t x = FMUL( 0b01100000, 0b00010000, 4 ); // Equivalent to "( 0b01100000 * 0b00010000 ) >> 4"; This code STILL produces INCORRECT results (see below)
     ```
-    In fact, however, since we've defined our variables to be signed, 8-bit integers, the result of this multiplication is STILL incorrect. The C language states that the result of a signed integer multiplication which exceeds the maximum value able to be stored by that integer is undefined. Many compilers truncate the answer to the lower bits, as would happen for a multiplication overflow using unsigned integers (but they aren't required to). In our example above, that means that the result of our multiplication _isn't_ `0b0000011000000000` but, more likely, `0b00000000` or "0", which are the lower 8-bits of the resulting multiplication (which is clearly incorrect). The simplest way to fix this is to cast the operands to a larger data type BEFORE multiplying them together, so that the upper bits are preserved.
+    In fact, however, since we've defined our variables to be signed, 8-bit integers, the result of this multiplication is STILL incorrect. The C language states that the result of a signed integer multiplication which exceeds the maximum value able to be stored by that integer is undefined. Many compilers truncate the answer to the lower bits, as would happen for a multiplication overflow using unsigned integers (but they aren't required to). In our example above, that means that the result of our multiplication _isn't_ `0b0000011000000000` but, more likely, `0b00000000` or "0", which are the lower 8-bits of the resulting multiplication. The simplest way to fix this is to cast the operands to a larger data type BEFORE multiplying them together, so that the upper bits are preserved.
     ```
     typedef int8_t q3_4_t;
-    q3_4_t x = FMUL( (int16_t)0b01100000, (int16_t)0b00010000, 4 ); // x equals 6 * 1; This code FINALLT produces the CORRECT results
+    q3_4_t x = FMUL( (int16_t)0b01100000, (int16_t)0b00010000, 4 ); // This code FINALLY produces the CORRECT results
     ```
     You could also just size the variables larger and make a note to only ever use the lower bits.
     ```
@@ -329,9 +331,9 @@ Since multiplying and dividing fixed-point numbers changes the location of the r
     q3_4_t x = FMUL( 0b01100000, 0b00010000, 4 );
     ```
 
-This is actually a problem for our application, since even though the y-values in our sin table are in q0.31 format and multiplying them by any other number should yield a result that fits into the other number, because they are integers, the intermediary product may be as large as 64 bits, causing an incorrect value to get returned from the operation! There are several ways to To correct this, I added the `SAFE_` functions to `fixed_point.h`. These functions store the 32-bit operands into 64-bit integers before executing the desired operation; if the result is less than INT32_MAX (or greater than INT32_MIN), then the result is stored in the output variable and a value of `0` (meaning "no error") is returned from the function. However, if the safety check fails, then no value is stored and a `-1` is returned. The LUT code checks this value to make sure no math operations inadvertently overflowed or underflowed. I chose to `ASSERT` that the error code returned is `0`, since I figured that anything else constituted a programming error. However, it is possible to recover from a fault like that, and another developer may simply chose to retry the operation with a larger data type for the return variable.
+Integer overflow is a commonly exploited security bug (in very similar ways to a "buffer overflow", in which an array is written to or accessed beyond its bounds), so it's my opinion that integer operations should be checked for overflow after (or as a part of) each operation. To do that, I added the `SAFE_` functions to `fixed_point.h`. These functions store the 32-bit operands into 64-bit integers before executing the desired operation (solving the above problem of fixed-point numbers being truncated before they are able to be shifted down). The `SAFE_` functions also check for overflow AFTER the shift; if the result is less than INT32_MAX (or greater than INT32_MIN), then the result is stored in the output variable and a value of `0` (meaning "no error") is returned from the function. However, if the safety check fails, then no value is stored and a `-1` is returned. The LUT code that uses these functions (which all end in `_safe`) checks this value to make sure no math operations inadvertently overflowed or underflowed. I chose to `ASSERT` that the error code returned is `0`, since I figured that anything else constituted a programming error. However, it is possible to recover from a fault like that, and another developer may simply chose to retry the operation with a larger data type for the return variable.
 
-The fixed-point LUTs were significantly smaller and faster than either the double or float LUTs, though at the cost of a fair bit of added complexity.
+The fixed-point LUTs were significantly smaller and faster than either the double or float LUTs (even after including overflow checks), though at the cost of a fair bit of added complexity.
 
 ### Adding linear interpolation
 
