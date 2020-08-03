@@ -362,15 +362,17 @@ The fixed-point LUTs were significantly smaller and faster than either the doubl
 
 ### Adding linear interpolation
 
-So far our LUTs have done nothing more complicated than map the input value onto the range [0, 403] and perform a simple rounding; a depiction of this type of LUT appears below.
+So far our LUTs have done nothing more complicated than map the input value onto the range [0, 403] and perform a simple rounding; this is called a "midpoint interpolation", since the interpolation is defined in segments for which a midpoint is returned as the approximation of the function within that segment. (The midpoints in our LUTs are the array elements and the segments are the range above and below each midpoint or array element which will map back to that midpoint; effectively +/- 0.5 for us.) A depiction of this type of LUT appears below.
 
 <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Interpolation_Midpoint.png" width="500">
 
-A look-up table of this type will have a maximum error of <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Equation_Error_Midpoint-Interpolation.png" width="100">, which, for our sin LUTs, comes out to around XX near the zero-crossing points and around XX near the local maxima and minima (to understand why, see [here](https://ocw.mit.edu/ans7870/2/2.086/S13/MIT2_086S13_Textbook.pdf)). However, if we assume that each pair of adjacent elements in our LUT is connected with a line, we can get a much more accurate answer for input values that fall in-between the LUT elements by figuring out where on the line the input would fall and returning the resulting y-value. This is called "piecewise linear interpolation" (PwLI) or, simply, "linear interpolation". A depiction of this type of LUT appears below.
+A look-up table of this type will have a maximum error of <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Equation_Error_Midpoint-Interpolation.png" width="150">, which, for our sin LUTs, comes out to 0.0078125 near the zero-crossing points and which approaches 0 near the local maxima and minima (to understand why, see [here](https://ocw.mit.edu/ans7870/2/2.086/S13/MIT2_086S13_Textbook.pdf)). This matches the results of our profiling above, specifically for the implementations called `LUT double`, `LUT float`, `LUT fixed`, and `LUT fixed (safe)`.
+
+However, if we assume that each pair of adjacent elements in our LUT is connected with a line, we can get a much more accurate answer for input values that fall in-between the LUT elements. We do this by figuring out where on the line the input would fall and returning the resulting y-value. This is called "piecewise linear interpolation" (PwLI) or, simply, "linear interpolation". A depiction of this type of LUT appears below.
 
 <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Interpolation_Piecewise-Linear.png" width="500">
 
-asdfasdf
+A look-up table of this type will have a maximum error of <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Equation_Error_Linear-Interpolation.png" width="150">, which, for our sin LUTs, approaches 0 near the zero-crossing points and comes out to about 0.000030518 near the local maxima and minima (to understand why, follow the link above). This also matches the results of our profiling above, specifically for the implementations called `Dbl interp`, `Flt interp`, `Fxd interp`, and `Fxd interp (safe)`.
 
 ### Changing from a uniform to a non-uniform distribution of x-values
 
