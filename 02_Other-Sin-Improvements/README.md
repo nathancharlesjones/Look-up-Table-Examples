@@ -246,9 +246,7 @@ while( codeUnderTest[idx_CUT].function_enum != NOT_ASSIGNED )
 {
     for( int idx_test = 0; idx_test < testIterations; idx_test++ )
     {
-
         ...
-
         switch( codeUnderTest[idx_CUT].function_enum )
         {
             case fcn_scaffolding:
@@ -271,16 +269,11 @@ while( codeUnderTest[idx_CUT].function_enum != NOT_ASSIGNED )
                 ASSERT(0);
             // Unreachable
             break;
-        }           
-            
+        }   
         ...
-
     }
-
     ...
-
     idx_CUT++;
-
 }
 ```
 Adding new functions is now fairly trivial (provided they match one of the three function signatures used for the function pointers): Simply write the function and then add an element to the `codeUnderTest` array with the appropriate information and the test will automatically get run. Removing a test is as simple as commenting out the line of code that puts it in the array.
@@ -305,7 +298,7 @@ void init_sinLUT(void)
     }
 }
 ```
-The upside is that this implementation is far more straightforward and doesn't suffer from the risk of a typo causing errant bugs (as a hand-typed array of many hundreds of elements might be). The downside is that the table must now be stored in RAM, which is often a more precious resource in embedded systems than is ROM. In our case, we can get away with this because we have ample RAM on both processors (as much as my RAM + SSD can hold on my laptop and a full 20kB on the STM32F1) and no other part of our project is competing for this space.
+The upside is that this implementation is far more straightforward and doesn't suffer from the risk of a typo causing errant bugs (as a hand-typed array of many hundreds of elements might). The downside is that the table must now be stored in RAM, which is often a more precious resource in embedded systems than is ROM. In our case, we can get away with this because we have ample RAM on both processors (as much as my RAM + SSD can hold on my laptop and a full 20kB on the STM32F1) and no other part of our project is competing for this space.
 
 ### Adding floats
 
@@ -395,8 +388,69 @@ The linearly-interpolated functions ran only about half as fast as their midpoin
 
 ### Changing from a uniform to a non-uniform distribution of x-values
 
-It may have occurred to you at this point, after reflecting on the sin function for so long, that the slope of sin near it's zero-crossing points is very nearly linear but near it's maxima and minima the slope changes very quickly and it might be possible to spread out the points near the zero-crossing and bunch them up near the maxima and minima, thereby achieving the same or better accuracy with fewer overall points. It is this "spreading out" and "bunching up" of x-values that I call a "non-uniform distribution" and it can, in fact, offer the same or better accuracy with fewer points (though, as usual, at the cost of added complexity).
+It may have occurred to you at this point, after reflecting on the sin function for so long, that the slope of sin near it's zero-crossing points is very nearly linear, but near it's maxima and minima the slope changes very quickly, and it might be possible to spread out the points near the zero-crossing and bunch them up near the maxima and minima, thereby achieving the same or better accuracy with fewer overall points. It is this "spreading out" and "bunching up" of x-values that I call a "non-uniform distribution" and it can, in fact, offer the same or better accuracy with fewer points (though, as usual, at the cost of added complexity).
+```
+// This is how our LUT is indexed right now: evenly spaced points across the range [0, 2*PI*64].
+                                          PI/2 ~= 100.5
+                                               |
+                                              \|/
+    0    1    2    3    4    ....    99    100    101    102    ....    403
+// But since sin changes slowly around 0 and much more rapidly around maxima/minima (like PI/2), we'd like to do something like this:
+                                               PI/2 ~= 100.5
+                                                    |
+                                                   \|/
+    0    3    5    6    7    ....    99.5  100    100.5  101    ....    403
+```
+Of course, an array is incapable of having fractional indices like these. So to implement this new-and-improved LUT, we need to move to a data structure called a "dictionary" or "key-value" list. In those lists, the indices aren't implicit (as they are in an array), they are explicit: a stated value coupled with their "value" or "definition" (or "y-value", in our case). In C, this is usually accomplished by creating a struct (which contains our desired keys and values) and then an array of those structs.
+```
+// Before, using an array: "Keys" are implicit and correspond to the indices of the array. The "values" are stored in the array.
+//
+                                     //          sin(0/64)            sin(1/64)            sin(2/64)
+static double sinTable_double[...] = { 0.00000000000000000, 0.01562436422488340, 0.03124491398532610 ... };
 
-To determine where our points need to be, we need to return to our error equation: <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Equation_Error_Linear-Interpolation.png" width="150"> (we'll assume that we're performing a linear interpolation).
+// After, using a dictionary (implemented as an array of structs): "Keys" are specified by the "x" value in the struct. "Values" are
+// specified by the "y" value in the struct. The array indices aren't used.
+//
+typedef struct point_double_t
+{
+    double x;
+    double y;
+} point_double_t;
+
+static point_double_t nonUniform_double_0dot007error[...] = 
+{
+    //-----x-values-------   --y-values (sin(x))--
+    { 0.000000000000000000,  0.000000000000000000 },
+    { 0.246907827863357000,  0.244406737256656000 },
+    ...
+    { 6.036277748382230000, -0.244406476350662000 },
+    { 6.283185307179590000,  0.000000000000000000 }
+};
+```
+To determine where our points need to be, we need to return to our error equation: <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Equation_Error_Linear-Interpolation.png" width="150"> (we'll assume that we're performing a linear interpolation). Recall that `h` is the difference between our two adjacent x-values, in other words, `x1 - x0`. This time around, "error" is a known quantity (we're trying to determine where to place our points in order to meet a certain maximum error), so what we'll need to do is solve this equation in terms of `e` and either `x0` or `x1` (we assume that at least one of them is known) in order to find the other (either `x1` or `x0`).
+
+Let's assume, to start, that we're either in the range [PI/2, PI] or [3\*PI/2, 0] \(we'll see why this is important in a minute). Blessedly, the absolute value of the double-derivative of sin(x) is just sin(x), so we'll only need to find the maximum value for sin over each segment in order to evaluate the second term. Under the conditions above, the maximum absoulte value for sin over our segment will always be equal to `x0` (since \|sin(x0)\| >  \|sin(x1)\| in the range [PI/2, PI] or [3\*PI/2, 0]). If we substitute `x1 - x0` for `h` above and solve for `x1`, we get the following equation:
+```
+               /-----------
+x1 = x0 +     /  error * 8
+          -  /  ---------
+           \/    sin(x0)
+```
+If we assume that we start with a point at both PI/2 and 3\*PI/2, then all we need to do to get our non-uniform distribution of points (in the ranges above) is to calculate `x1`, set `x0` equal to `x1` and repeat (that is, calculate the n+1 point given the nth point).
+
+Things get a litle tricky, however, if we're in the range [0, PI/2] or [PI, 3\*PI/2]. The reason is this: the maximum value for sin over any of our segments is now not sin(x0) but sin(x1). Substituting as above for our error equation, we get the following result:
+```
+error * 8 = ( ( x1 - x0 )^2 ) * sin( x1 )
+```
+Unfortunately, I couldn't find a way to solve that equation for `x1`. The trick, then, is not to iterate FORWARDS from 0 to PI/2, but BACKWARD from PI/2 to 0. In so doing, we try to solve for `x0` given `x1`, and that is an equation we can solve:
+```
+               /-----------
+x0 = x1 -     /  error * 8
+          -  /  ---------
+           \/    sin(x1)
+```
+If we assume, again, that we start with a point at both PI/2 and 3\*PI/2, then all we need to do to get our non-uniform distribution of points (in the ranges above) is to calculate `x0`, set `x1` equal to `x0` and repeat (that is, calculate the n-1 point given the nth point).
 
 ### Comparing to the polynomial approximations
+
+Another way to implement the sin (and other trig) functions is by approximating it with a high-order polynomial. 
