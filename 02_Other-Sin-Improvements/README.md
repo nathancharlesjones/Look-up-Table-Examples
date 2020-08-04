@@ -374,6 +374,25 @@ However, if we assume that each pair of adjacent elements in our LUT is connecte
 
 A look-up table of this type will have a maximum error of <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Equation_Error_Linear-Interpolation.png" width="150">, which, for our sin LUTs, approaches 0 near the zero-crossing points and comes out to about 0.000030518 near the local maxima and minima (to understand why, follow the link above). This also matches the results of our profiling above, specifically for the implementations called `Dbl interp`, `Flt interp`, `Fxd interp`, and `Fxd interp (safe)`.
 
+The quickest and most straightforward way to perform the linear interpolation is by using the point-slope equation (below), where `x0`/`y0` is a point on our line and `m` is the slope of the line at that point.
+```
+y = m * ( x - x0 ) + y0
+```
+Our LUT is a table of points and by determining the slope between any two of those points, we have all the information we need to compute the linear interpolation. For any input, `x`, we would start by finding the x-values or indices that lay immediately above and below it: `x1` and `x0`. This could be as simple as assigning the integer portion of our input to `x0` (after multiplying by 64, of course) and assigning that number plus one to `x1`.
+```
+int x0 = (int)( radians * 64 );
+int x1 = x0 + 1:
+```
+However, care must be taken to ensure that `x0` doesn't equal the last element in the array, since that would cause `x1` to point to garbage data. I've accounted for that in my implementation by sizing my LUT one element larger than it needs to be: 2\*PI\*64 is roughly 402.123859659 so any input, being constrained to 2\*PI, can't exceed this value and the largest number that can get assigned to `x0` is 402 and to `x1`, 403. Another way to account for this is to check if `x0` is equal to the last index and either move it back one or set `x1` to 0 (assuming the function is periodic).
+
+The slope is the difference in y-values over the difference in x-values (which simplifies to just the difference i y-values when the difference in x-values is 1). The "span" is a term I borrowed from [this](https://www.microchip.com/wwwAppNotes/AppNotes.aspx?appnote=en020511) paper about PwLI which represents the term `( x - x0 )`. And the slope times the span is called the "offset".
+```
+    /--------------------offset--------------\
+    /-----------slope-----------\   /--span--\
+y = ( ( y1 - y0 ) / ( x1 - x0 ) ) * ( x - x0 ) + y0;
+```
+The linearly-interpolated functions ran only about half as fast as their midpoint-interpolated counterparts, but were roughly 250 times as accurate.
+
 ### Changing from a uniform to a non-uniform distribution of x-values
 
 ### Comparing to the polynomial approximations
