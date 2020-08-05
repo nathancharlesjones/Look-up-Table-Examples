@@ -395,6 +395,7 @@ It may have occurred to you at this point, after reflecting on the sin function 
                                                |
                                               \|/
     0    1    2    3    4    ....    99    100    101    102    ....    403
+
 // But since sin changes slowly around 0 and much more rapidly around maxima/minima (like PI/2), we'd like to do something like this:
                                                PI/2 ~= 100.5
                                                     |
@@ -431,25 +432,50 @@ To determine where our points need to be, we need to return to our error equatio
 
 Let's assume, to start, that we're either in the range [PI/2, PI] or [3\*PI/2, 0] \(we'll see why this is important in a minute). Blessedly, the absolute value of the double-derivative of sin(x) is just sin(x), so we'll only need to find the maximum value for sin over each segment in order to evaluate the second term. Under the conditions above, the maximum absoulte value for sin over our segment will always be equal to `x0` (since \|sin(x0)\| >  \|sin(x1)\| in the range [PI/2, PI] or [3\*PI/2, 0]). If we substitute `x1 - x0` for `h` above and solve for `x1`, we get the following equation:
 ```
-               /-----------
-x1 = x0 +     /  error * 8
-          -  /  ---------
-           \/    sin(x0)
+                /-----------
+x1 = x0 +      /  error * 8
+          --  /  ----------
+            \/     sin(x0)
 ```
 If we assume that we start with a point at both PI/2 and 3\*PI/2, then all we need to do to get our non-uniform distribution of points (in the ranges above) is to calculate `x1`, set `x0` equal to `x1` and repeat (that is, calculate the n+1 point given the nth point).
 
-Things get a litle tricky, however, if we're in the range [0, PI/2] or [PI, 3\*PI/2]. The reason is this: the maximum value for sin over any of our segments is now not sin(x0) but sin(x1). Substituting as above for our error equation, we get the following result:
+For example, assume we want to determine our first point (after PI/2) with a maximum error of 0.00003 (not coincidentally the maximum error using our linear interpolations above). We would solve for it like this:
+```
+                /-----------                    /-----------
+x1 = x0 +      /  error * 8   =  (PI/2) +      / 0.00003 * 8  =  1.58628826
+          --  /  ----------               --  /  -----------
+            \/     sin(x0)                  \/    sin(PI/2)
+```
+Then we would set x0 equal to 1.58628826 and solve again for the next point.
+
+Things get a litle tricky, however, if we're in the range [0, PI/2] or [PI, 3\*PI/2]. The reason is this: the maximum value for the absolute value of sin over any of our segments is now not sin(x0) but sin(x1). Substituting as above for our error equation, we get the following result:
 ```
 error * 8 = ( ( x1 - x0 )^2 ) * sin( x1 )
 ```
 Unfortunately, I couldn't find a way to solve that equation for `x1`. The trick, then, is not to iterate FORWARDS from 0 to PI/2, but BACKWARD from PI/2 to 0. In so doing, we try to solve for `x0` given `x1`, and that is an equation we can solve:
 ```
-               /-----------
-x0 = x1 -     /  error * 8
-          -  /  ---------
-           \/    sin(x1)
+                /-----------
+x0 = x1 -      /  error * 8
+          --  /  ----------
+            \/     sin(x1)
 ```
 If we assume, again, that we start with a point at both PI/2 and 3\*PI/2, then all we need to do to get our non-uniform distribution of points (in the ranges above) is to calculate `x0`, set `x1` equal to `x0` and repeat (that is, calculate the n-1 point given the nth point).
+
+For example, assume we want to determine the point BEFORE PI/2, with a maximum error of 0.00003. We would solve for it like this:
+```
+                /-----------                    /-----------
+x0 = x1 -      /  error * 8   =  (PI/2) -      / 0.00003 * 8  =  1.555304393
+          --  /  ----------               --  /  -----------
+            \/     sin(x1)                  \/    sin(PI/2)
+```
+Then we would set x1 equal to 1.555304393 and solve again for the point before THAT.
+
+There is a small program in the `tools` folder called `non-uniform-distribution-helper.c` that performs these steps for you and prints out the LUT for any desired error. There is no Makefile for this; simply change `max_error` to your desired maximum error, compile using GCC with the command `gcc -Og -ggdb -lm non-uniform-distribution-helper.c`, and run the resulting program (called `a.out`). Acheiving the same maximum error as our LUTs with linear interpolation above (0.00003) only requires ### elements instead of 404, a memory savings of around 25%.
+
+For any other function, `f(x)`, here are the steps to repeat what we've done above:
+1. Determine the second derivative of `f(x)` (`f''(x)`).
+2. Identify where the absolute value of the second derivative is DECREASING; compute x1 from x0 (i.e. iterate FORWARD) using the first equation above.
+3. Identify where the absolute value of the second derivative is INCREASING; compute x0 from x1 (i.e. iterate BACKWARD) using the second equation above.
 
 ### Comparing to the polynomial approximations
 
