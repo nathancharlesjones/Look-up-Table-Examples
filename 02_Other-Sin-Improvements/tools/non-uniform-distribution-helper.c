@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "linked_list.h"
 
 #define PI (3.14159265358979000f)
 #define TWO_PI (2.0*PI)
@@ -9,89 +10,68 @@
 
 #define SQ(a) ((a)*(a))
 
-int quadrantOf(double x)
-{
-	double _x = x;
-	int ret;
-
-	while( _x >= TWO_PI ) _x -= TWO_PI;
-	while( _x < 0 ) _x += TWO_PI;
-
-	if( _x <= PI_OVER_TWO ) ret = 1;
-	else if ( _x <= PI ) ret = 2;
-	else if ( _x <= THREE_PI_OVER_TWO ) ret = 3;
-	else ret = 4;
-
-	return ret;
-}
-
 int main(int argc, char * argv[])
 {
-	double max_error, error, x0, x1;
-	int numElements, x0_quadrant, x1_quadrant;
+	double max_error, x0, x1;
+	int numElements;
 
-	fprintf(stderr, "ERROR: This program has a bug; do not use.\n");
-	exit(EXIT_FAILURE);
-
-	max_error = 0.001;
-	x0 = 0;
-	x1 = x0 + PI_OVER_TWO;
+	max_error = 0.00003;
 	numElements = 0;
 
-	do
+	// Hard code inflection points (points where |f''(x)| switches from increasing to decreasing or vice versa)
+	// Artificially place an element in the LUT at each inflection point
+	// Compute in a FORWARD direction (i.e. increasing x) the parts of |f''(x)| which are DECREASING
+	// Compute in a REVERSE direction (i.e. decreasing x) the parts of |f''(x)| which are INCREASING
+	// Reverse the results of the reverse direction so the x values appear in order
+
+	// The inflection points for sin are at PI/2 and 3*PI/2
+
+	// Start at PI/2 and work in REVERSE
+	p_node_t piOverTwoToZero = createNode(PI_OVER_TWO);
+	numElements++;
+	x1 = PI_OVER_TWO;
+	while( ( x0 = x1 - sqrt( ( max_error * 8 ) / ( fabs( sin( x1 ) ) ) ) ) > 0 )
 	{
-		// Detemine which quadrant x0 and x1 in
-		// Q1 and Q1: Max is x1; Use Netwon's method to approximate x1
-		// Q1 and Q2/3: Max is at pi/2; Calculate x1 directly
-		// Q2/3 and Q2/3: Max is x0; Calculate x1 directly
-		// Q2/3 and Q4: Max is at 3pi/2; Calculate x1 directly
-		// Q4 and Q4: Max is x1; Use Newton's method to approximate x1
+		addNode( piOverTwoToZero, x0 );
+		numElements++;
+		x1 = x0;
+	}
+	addNode( piOverTwoToZero, 0 );
+	numElements++;
+	for( int idx = countItems(piOverTwoToZero); idx > 0; idx-- ) printf("{ %1.20f, %1.20f },\n", getItem(piOverTwoToZero, idx-1), sin(getItem(piOverTwoToZero, idx-1)));
 
-		do
-		{
-			x0_quadrant = quadrantOf(x0);
-			x1_quadrant = quadrantOf(x1);
-
-			if( ( ( x0_quadrant == 1 ) || ( x0_quadrant == 4 ) ) && ( x1_quadrant == 1 ) )
-			{
-				double x_prev = x1;
-				double newtonsMethodFcn = ( SQ( x_prev - x0 ) * sin( x_prev ) / 8 ) - ( max_error * 0.9 );
-				double newtonsMethodFcnPrime = ( x_prev * sin( x_prev ) / 4 ) + ( SQ( x_prev ) * cos(x_prev) / 8 ) + ( -2 * x0 * sin( x_prev ) / 8 ) + ( -2 * x0 * x_prev * cos( x_prev ) / 8 ) + ( SQ( x0 ) * cos( x_prev ) );
-				x1 = x_prev - ( newtonsMethodFcn / newtonsMethodFcnPrime );
-				error = SQ( x1 - x0 ) * sin( x1 ) / 8;
-			}
-			else if( ( x0_quadrant == 1 ) && ( ( x1_quadrant == 2 ) || ( x1_quadrant == 3 ) ) )
-			{
-				x1 = sqrt( ( max_error * 0.9 ) * 8 ) + x0;
-				error = SQ( x1 - x0 ) / 8;
-			}
-			else if( ( ( x0_quadrant == 2 ) || ( x0_quadrant == 3 ) ) && ( ( x1_quadrant == 2 ) || ( x1_quadrant == 3 ) ) )
-			{
-				x1 = sqrt( ( max_error * 0.9 ) * 8 / fabs( sin(x0) ) ) + x0;
-				error = SQ( x1 - x0 ) * fabs ( sin(x0) ) / 8;
-			}
-			else if( ( ( x0_quadrant == 2 ) || ( x0_quadrant == 3 ) ) && ( x1_quadrant == 4 ) )
-			{
-				x1 = sqrt( ( max_error * 0.9 ) * 8 ) + x0;
-				error = SQ( x1 - x0 ) / 8;
-			}
-			else if( ( x0_quadrant == 4 ) && ( x1_quadrant == 4 ) )
-			{
-				double x_prev = x1;
-				double newtonsMethodFcn = ( SQ( x_prev - x0 ) * sin( x_prev ) / 8 ) - ( max_error * 0.9 );
-				double newtonsMethodFcnPrime = ( x_prev * sin( x_prev ) / 4 ) + ( SQ( x_prev ) * cos(x_prev) / 8 ) + ( -2 * x0 * sin( x_prev ) / 8 ) + ( -2 * x0 * x_prev * cos( x_prev ) / 8 ) + ( SQ( x0 ) * cos( x_prev ) );
-				x1 = x_prev - ( newtonsMethodFcn / newtonsMethodFcnPrime );
-				error = SQ( x1 - x0 ) * sin( x1 ) / 8;
-			}
-			else
-			{
-				fprintf(stderr, "x0 (quadrant %d) and x1 (quadrant %d) not in consecutive qudarants.\n", quadrantOf(x0), quadrantOf(x1));
-				exit(EXIT_FAILURE);
-			}
-		} while( ( fabs( error ) > ( max_error ) ) || ( x0_quadrant != quadrantOf(x0) ) || ( x1_quadrant != quadrantOf(x1) ) );
-
-		printf("%d:\tx: %1.10f\terror: %1.10f\n", ++numElements, x1, error);
+	// Now start again at PI/2 but, this time, work FORWARDS
+	x0 = PI_OVER_TWO;
+	while( ( x1 = sqrt( ( max_error * 8 ) / ( fabs( sin( x0 ) ) ) ) + x0 ) < PI )
+	{
+		printf("{ %1.20f, %1.20f },\n", x1, sin(x1));
+		numElements++;
 		x0 = x1;
-		x1 = x0 + PI_OVER_TWO;
-	} while( x0 < TWO_PI );
+	}
+
+	// Next, start at 3*PI/2 and work in REVERSE
+	p_node_t threePiOverTwoToPi = createNode(THREE_PI_OVER_TWO);
+	numElements++;
+	x1 = THREE_PI_OVER_TWO;
+	while( ( x0 = x1 - sqrt( ( max_error * 8 ) / ( fabs( sin( x1 ) ) ) ) ) > PI )
+	{
+		addNode( threePiOverTwoToPi, x0 );
+		numElements++;
+		x1 = x0;
+	}
+	addNode( threePiOverTwoToPi, PI );
+	numElements++;
+	for( int idx = countItems(threePiOverTwoToPi); idx > 0; idx-- ) printf("{ %1.20f, %1.20f },\n", getItem(threePiOverTwoToPi, idx-1), sin(getItem(threePiOverTwoToPi, idx-1)));
+
+	// Last, start again at 3*PI/2 but, this time, work FORWARDS
+	x0 = THREE_PI_OVER_TWO;
+	while( ( x1 = sqrt( ( max_error * 8 ) / ( fabs( sin( x0 ) ) ) ) + x0 ) < TWO_PI )
+	{
+		printf("{ %1.20f, %1.20f },\n", x1, sin(x1));
+		numElements++;
+		x0 = x1;
+	}
+	printf("{ %1.20f, %1.20f },\n", TWO_PI, sin(TWO_PI));
+	numElements++;
+	printf("----------------------------------------------------\nTotal number of elements: %d\n", numElements);
 }

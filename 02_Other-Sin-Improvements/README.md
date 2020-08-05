@@ -391,13 +391,13 @@ The linearly-interpolated functions ran only about half as fast as their midpoin
 It may have occurred to you at this point, after reflecting on the sin function for so long, that the slope of sin near it's zero-crossing points is very nearly linear, but near it's maxima and minima the slope changes very quickly, and it might be possible to spread out the points near the zero-crossing and bunch them up near the maxima and minima, thereby achieving the same or better accuracy with fewer overall points. It is this "spreading out" and "bunching up" of x-values that I call a "non-uniform distribution" and it can, in fact, offer the same or better accuracy with fewer points (though, as usual, at the cost of added complexity).
 ```
 // This is how our LUT is indexed right now: evenly spaced points across the range [0, 2*PI*64].
-                                          PI/2 ~= 100.5
+                                       (PI/2)*64 ~= 100.5
                                                |
                                               \|/
     0    1    2    3    4    ....    99    100    101    102    ....    403
 
 // But since sin changes slowly around 0 and much more rapidly around maxima/minima (like PI/2), we'd like to do something like this:
-                                               PI/2 ~= 100.5
+                                            (PI/2)*64 ~= 100.5
                                                     |
                                                    \|/
     0    3    5    6    7    ....    99.5  100    100.5  101    ....    403
@@ -420,6 +420,7 @@ typedef struct point_double_t
 
 static point_double_t nonUniform_double_0dot007error[...] = 
 {
+    //------"keys"--------   ------"values"-------
     //-----x-values-------   --y-values (sin(x))--
     { 0.000000000000000000,  0.000000000000000000 },
     { 0.246907827863357000,  0.244406737256656000 },
@@ -430,7 +431,7 @@ static point_double_t nonUniform_double_0dot007error[...] =
 ```
 To determine where our points need to be, we need to return to our error equation: <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Equation_Error_Linear-Interpolation.png" width="150"> (we'll assume that we're performing a linear interpolation). Recall that `h` is the difference between our two adjacent x-values, in other words, `x1 - x0`. This time around, "error" is a known quantity (we're trying to determine where to place our points in order to meet a certain maximum error), so what we'll need to do is solve this equation in terms of `e` and either `x0` or `x1` (we assume that at least one of them is known) in order to find the other (either `x1` or `x0`).
 
-Let's assume, to start, that we're either in the range [PI/2, PI] or [3\*PI/2, 0] \(we'll see why this is important in a minute). Blessedly, the absolute value of the double-derivative of sin(x) is just sin(x), so we'll only need to find the maximum value for sin over each segment in order to evaluate the second term. Under the conditions above, the maximum absoulte value for sin over our segment will always be equal to `x0` (since \|sin(x0)\| >  \|sin(x1)\| in the range [PI/2, PI] or [3\*PI/2, 0]). If we substitute `x1 - x0` for `h` above and solve for `x1`, we get the following equation:
+Let's assume, to start, that we're either in the range [PI/2, PI] or [3\*PI/2, 0] \(we'll see why this is important in a minute). Blessedly, the absolute value of the double-derivative of sin(x) is just sin(x), so we'll only need to find the maximum value for sin over each segment in order to evaluate the second term. Under the conditions above, the maximum absoulte value for sin over our segment will always be equal to `x0` (since \|sin(x0)\| >  \|sin(x1)\| for x0 < x1 in the range [PI/2, PI] or [3\*PI/2, 0]). If we substitute `x1 - x0` for `h` above and solve for `x1`, we get the following equation:
 ```
                 /-----------
 x1 = x0 +      /  error * 8
@@ -452,7 +453,7 @@ Things get a litle tricky, however, if we're in the range [0, PI/2] or [PI, 3\*P
 ```
 error * 8 = ( ( x1 - x0 )^2 ) * sin( x1 )
 ```
-Unfortunately, I couldn't find a way to solve that equation for `x1`. The trick, then, is not to iterate FORWARDS from 0 to PI/2, but BACKWARD from PI/2 to 0. In so doing, we try to solve for `x0` given `x1`, and that is an equation we can solve:
+Unfortunately, I couldn't find a way to solve that equation for `x1`. The trick, then, is not to iterate FORWARDS from 0 to PI/2, but BACKWARD from PI/2 to 0. In so doing, we try to solve for `x0` given `x1`, and that is an equation we can solve, since now \|sin(x1)\| >  \|sin(x0)\| for x0 < x1 in the range [0, PI/2] or [PI, 3\*PI/2]:
 ```
                 /-----------
 x0 = x1 -      /  error * 8
@@ -470,13 +471,29 @@ x0 = x1 -      /  error * 8   =  (PI/2) -      / 0.00003 * 8  =  1.555304393
 ```
 Then we would set x1 equal to 1.555304393 and solve again for the point before THAT.
 
-There is a small program in the `tools` folder called `non-uniform-distribution-helper.c` that performs these steps for you and prints out the LUT for any desired error. There is no Makefile for this; simply change `max_error` to your desired maximum error, compile using GCC with the command `gcc -Og -ggdb -lm non-uniform-distribution-helper.c`, and run the resulting program (called `a.out`). Acheiving the same maximum error as our LUTs with linear interpolation above (0.00003) only requires ### elements instead of 404, a memory savings of around 25%.
+There is a small program in the `tools` folder called `non-uniform-distribution-helper.c` that performs these steps for you and prints out the LUT for any desired error, formatted for easy copy/paste into an array definition. There is no Makefile for this; simply change `max_error` to your desired maximum error, compile using GCC with the command `gcc -I./ -Og -ggdb non-uniform-distribution-helper.c -lm`, and run the resulting program (called `a.out`).
+
+Acheiving the same maximum error as our LUTs with linear interpolation above (0.00003) only requires 317 elements instead of 404, a memory savings of around 21.5%. To save myself the time of implementing those LUTs, however, I built tables with a maximum error of 0.007, on par with our "standard" LUTs using midpoint interpolation (not a fair comparison, I know, since we used midpoint interpolation before and linear interpolation with the non-uniform LUTs). Those tables only required 25 elements, a memory savings of almost 94%! They ran quite a bit more slowly than the LUTs using linear interpolation (I'm guessing mostly as a result of needing to perform a binary search to match each input before the linear interpolation could be performed).
 
 For any other function, `f(x)`, here are the steps to repeat what we've done above:
 1. Determine the second derivative of `f(x)` (`f''(x)`).
-2. Identify where the absolute value of the second derivative is DECREASING; compute x1 from x0 (i.e. iterate FORWARD) using the first equation above.
-3. Identify where the absolute value of the second derivative is INCREASING; compute x0 from x1 (i.e. iterate BACKWARD) using the second equation above.
+2. Identify where the absolute value of the second derivative is DECREASING; compute x1 from x0 (i.e. iterate FORWARD) using the following equation:
+```
+                /-----------
+x1 = x0 +      /  error * 8
+          --  /  ----------
+            \/     sin(x0)
+```
+3. Identify where the absolute value of the second derivative is INCREASING; compute x0 from x1 (i.e. iterate BACKWARD) using the following equation:
+```
+                /-----------
+x0 = x1 -      /  error * 8
+          --  /  ----------
+            \/     sin(x1)
+```
 
 ### Comparing to the polynomial approximations
 
-Another way to implement the sin (and other trig) functions is by approximating it with a high-order polynomial. 
+Another way to implement the sin (and other trig) function is by approximating it with a high-order polynomial. This is conceptually similar to the idea of a linear interpolation except that higher-order polynomials can be accurate over a much wider range than a simple line can be. Jack Ganssle discusses this approach in-depth [here](http://www.ganssle.com/approx.htm) and I'll not reiterate it. They were included mostly for my own curiousity.
+
+From the table above, we can see that the primary benefit to using a polynomial approximation as compared to the library sin is a reduction in memory size, since the functions all ran about as quickly as the library sin function. They also offer much greater accuracy than could be reasonably achieved with one of our LUTs. If the precision of the library sin function is limited only by the precision of the double data type (roughly 1.1e-16 in the range [-1, 1]), then the final polynomial approximation, `Sin_121`, is the only one to come close to achieving a similar level of accuracy (and a LUT with that level of accuracy would be many hundreds of thousands or millions of elements long!).

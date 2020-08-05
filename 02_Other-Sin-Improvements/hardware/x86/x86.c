@@ -29,7 +29,7 @@ errno_t initHardware(void)
 
 p_systemTime_t systemTime_create(void)
 {
-	p_systemTime_t this = calloc(1, sizeof(struct systemTime_t));
+	p_systemTime_t this = (p_systemTime_t)calloc(1, sizeof(struct systemTime_t));
 	ASSERT(this != NULL);
 	
 	return this;
