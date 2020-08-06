@@ -287,8 +287,8 @@ double sin_LUT_double_nonUniform(double radians)
 	{
 		mid = ( low + high ) / 2;
 		if( ( radians > nonUniform_double_0dot007error[mid].x ) && ( radians < nonUniform_double_0dot007error[mid+1].x ) ) break;
-		if( radians < nonUniform_double_0dot007error[mid].x ) high = mid - 1;
-		else low = mid + 1;
+		if( radians < nonUniform_double_0dot007error[mid].x ) high = mid;
+		else low = mid;
 	}
 
 	// Set "ret" equal to the y value of the last table element if "mid" came out to be the last element. Otherwise, compute
@@ -373,8 +373,8 @@ float sin_LUT_float_nonUniform(float radians)
 	{
 		mid = ( low + high ) / 2;
 		if( ( radians > nonUniform_float_0dot007error[mid].x ) && ( radians < nonUniform_float_0dot007error[mid+1].x ) ) break;
-		if( radians < nonUniform_float_0dot007error[mid].x ) high = mid - 1;
-		else low = mid + 1;
+		if( radians < nonUniform_float_0dot007error[mid].x ) high = mid;
+		else low = mid;
 	}
 
 	// Set "ret" equal to the y value of the last table element if "mid" came out to be the last element. Otherwise, compute
@@ -549,8 +549,8 @@ q0_31_t sin_LUT_fixedPoint_nonUniform_safe(q9_22_t radians)
 	{
 		mid = ( low + high ) / 2;
 		if( ( radians > nonUniform_fixed_0dot007error[mid].x ) && ( radians < nonUniform_fixed_0dot007error[mid+1].x ) ) break;
-		if( radians < nonUniform_fixed_0dot007error[mid].x ) high = mid - 1;
-		else low = mid + 1;
+		if( radians < nonUniform_fixed_0dot007error[mid].x ) high = mid;
+		else low = mid;
 	}
 
 	// Set "ret" equal to the y value of the last table element if "mid" came out to be the last element. Otherwise, compute

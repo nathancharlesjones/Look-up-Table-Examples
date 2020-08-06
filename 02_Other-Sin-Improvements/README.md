@@ -169,7 +169,7 @@ For the sake of brevity, I'll not reiterate what was discussed in the ["How does
 
 Adding tests to or subtracting tests from the code in "01_Fast-Sin" was already getting tedious, and with many more functions to add, I decided to first refactor `main` to make that easier. I wanted to make two major changes: (1) Put the variables that hold the profiling information for each function (e.g. `absoluteError_avg`, `executionTime_ns_sum`, etc) into a struct for each function being tested (so that I don't need to keep changing the input parameters to `printResults` every time I change which functions are being tested) and (2) Put a pointer to the functions being tested into that struct so that the profiling code (which doesn't change) can be put in one spot and simply called multiple times with function pointers for each of the functions being tested.
 
-To accomplish (1), I created a struct in `main.h` called `sinLUT_implementation_t` that included a `const char *` for the function name and several variables of type `double` to hold the various pieces of profiling information. Eventually, I could create different instances of `sinLUT_implementation_t` for each function being tested and then simply pass this array to `printResults` (which I renamed `printResults_CUT`). I used an empty struct (`{0}`) to signal the end of the array.
+To accomplish (1), I created a struct in `main.h` called `sinLUT_implementation_t` that included a `const char *` for the function name and several variables of type `double` to hold the various pieces of profiling information. Eventually, I could create different instances of `sinLUT_implementation_t` for each function being tested and then simply pass this array to `printResults` (which I renamed `printResults_CUT`).
 ```
 typedef struct sinLUT_implementation_t
 {
@@ -214,7 +214,7 @@ typedef struct sinLUT_implementation_t
     ...
 } sinLUT_implementation_t;
 ```
-In `main`, now, we start by initializing the array of functions to test. Each function gets a name, a function type, a pointer to the function to call, and zeros for the profiling data.
+In `main`, now, we start by initializing the array of functions to test. Each function gets a name, a function type, a pointer to the function to call, and zeros for the profiling data. I used an empty struct (`{0}`) to signal the end of the array.
 ```
 sinLUT_implementation_t codeUnderTest[] = 
 {
@@ -298,7 +298,7 @@ void init_sinLUT(void)
     }
 }
 ```
-The upside is that this implementation is far more straightforward and doesn't suffer from the risk of a typo causing errant bugs (as a hand-typed array of many hundreds of elements might). The downside is that the table must now be stored in RAM, which is often a more precious resource in embedded systems than is ROM. In our case, we can get away with this because we have ample RAM on both processors (as much as my RAM + SSD can hold on my laptop and a full 20kB on the STM32F1) and no other part of our project is competing for this space.
+The upside is that this implementation is far more straightforward and doesn't suffer from the risk of a typo causing errant bugs (as a hand-typed array of many hundreds of elements might). The downside is that the table must now be stored in RAM, which is often a more precious resource in embedded systems than is ROM. In our case, we can get away with this because we have ample RAM on both processors (as much as my RAM + SSD can hold on my laptop and 20kB on the STM32F1) and no other part of our project is competing for this space.
 
 ### Adding floats
 
@@ -306,7 +306,7 @@ Changing the data type from doubles to floats involved no code changes, except t
 
 ### Adding fixed-point numbers
 
-What's a "fixed-point" number, you ask? Excellent question! Consider, first, an integer: the least significant bit of an integer has the value "1" (or 2<sup>0</sup>), so 0b0001 is equal to "1" and 0b1001 is equal to "9". There are no digits to the right of the lest significant bit, but what if there were? What would 0b0001.00 mean (notice the decimal point)? If we extend the idea that the third bit of a binary number is 2<sup>3</sup>, the second bit is 2<sup>2</sup>, the first bit is 2<sup>1</sup>, and the zeroth bit is 2<sup>0</sup>, then the bit after the decimal (or "radix") point might be 2<sup>-1</sup> (or 0.5), then 2<sup>-2</sup> (or 0.25), and so on. The digits to the left of the radix point become the "integer" bits and those to the right become the "fractional" bits. This is the meaning of a "fixed-point" number: an integer data type whose radix point is redefined to be somewhere other than to the right of the least significant bit. Assuming our example above of a fixed-point number, "0b0001.00", is a signed integer (in two's-complement), it is said to be in "q3.2" (or "q2") format. This means that there are 3 integer bits (plus an assumed sign bit) and 2 fractional bits. Instead of representing the range [-32, 31], as it would if it were a plain signed integer, our example can now represent the range [-8, 7.75], in increments of 0.25. For a 32-bit processor, such as the STM32F1 we are using in these examples, it makes sense to make all fixed-point numbers 32-bits long and a commonly used format might be "q15.16" (or "q16"), allowing for a range of [-65536, 65535.999984741], in increments of 1.5259e-5 (2<sup>-16</sup>). For a processor without a floating-point unit, integer math (including operating on fixed-point numbers, since they are an "integer" data type, just with a different radix position) goes MUCH faster and doesn't require additional code (as would be needed to perform floating-point math). For more information, see [here](https://developer.arm.com/documentation/dai0033/a/).
+What's a "fixed-point" number, you ask? Excellent question! Consider, first, an integer: the least significant bit of an integer has the value "1" (or 2<sup>0</sup>), so 0b0001 is equal to "1" and 0b1001 is equal to "9". There are no digits to the right of the lest significant bit, but what if there were? What would 0b0001.00 mean (notice the decimal point)? If we extend the idea that the third bit of a binary number is 2<sup>3</sup>, the second bit is 2<sup>2</sup>, the first bit is 2<sup>1</sup>, and the zeroth bit is 2<sup>0</sup>, then the bit after the decimal (or "radix") point might be 2<sup>-1</sup> (or 0.5), then 2<sup>-2</sup> (or 0.25), and so on. The digits to the left of the radix point become the "integer" bits and those to the right become the "fractional" bits. This is the meaning of a "fixed-point" number: an integer data type whose radix point is redefined to be somewhere other than to the right of the least significant bit. Assuming our example above of a fixed-point number, "0b0001.00", is a signed integer (in two's-complement), it is said to be in "q3.2" (or "q2") format. This means that there are 3 integer bits (plus an assumed sign bit) and 2 fractional bits. Instead of representing the range [-32, 31], as it would if it were a plain signed integer, our example can now represent the range [-8, 7.75], in increments of 0.25. For a 32-bit processor, such as the STM32F1 we are using in these examples, it makes sense to make all fixed-point numbers 32-bits long and a commonly used format might be "q15.16" (or "q16"), allowing for a range of [-65536, 65535.999984741], in increments of 1.5259e-5 (2<sup>-16</sup>). For a processor without a floating-point unit, integer math (including operating on fixed-point numbers, since they are an integer data type, just with a different radix position) goes MUCH faster and doesn't require additional code (as would be needed to perform floating-point math). For more information, see [here](https://developer.arm.com/documentation/dai0033/a/).
 
 I added the code at the above link into my project directly, adding two typedefs for the fixed-point data types I wanted to use.
 ```
@@ -316,7 +316,7 @@ typedef int32_t q0_31_t;
 // Define a fixed-point type with 1 sign bit (implied), 9 integer bits, and 22 fractional bits
 typedef int32_t q9_22_t;
 ```
-The first covers a range from [-1, 0.99999999976] in increments of 2.3283064e-10, perfect for representing the output values of our sin LUTs. The second covers a range from [-512, 511.999999762] in increments of 2.38418579e-7; it's used to represent the input values. Why is the integer portion so large if the input will only be as large as 2\*PI? Because for two of the fixed-point LUTs, the input is multiplied by 64 in order to get the array index and any fixed-point number with less than 9 integer bits could possible overflow, causing erroneous results.
+The first covers a range from [-1, 0.99999999976] in increments of 2.3283064e-10, perfect for representing the output values of our sin LUTs. The second covers a range from [-512, 511.999999762] in increments of 2.38418579e-7; it's used to represent the input values. Why is the integer portion so large if the input will only be as large as 2\*PI? Because for two of the fixed-point LUTs, the input is multiplied by 64 in order to get the array index and any fixed-point number with less than 9 integer bits could possibly overflow, causing erroneous results.
 
 Since multiplying and dividing fixed-point numbers changes the location of the radix point (see the link above for an explanation why), special operations are needed in order to preserve the position of the radix (or, more accurately, special operations are needed in order for the developer to specify what they want the final position of the radix to be). The code at that link provides these functions for us (such as `FDIV` and `FSUBG`), including a few that may seem redundant but which provide for a consistent interface (such as `FADD` and `FMULI`), as well as a few really useful operations (`TOFLT`, `TOFIX`, and `FCONV`). These functions can (mostly) be used as direct stand-ins for the normal integer or floating-point operations in our LUT functions (i.e. `double x = radians * 64` could be replaced with `q9_22_t x = FMULI(radians, 64)`).
 
@@ -331,17 +331,20 @@ Since multiplying and dividing fixed-point numbers changes the location of the r
     2. Not leaving enough "head room" for fixed-point multiplications and divisions. The fixed-point library at the link above performs all multiplication and divisions BEFORE shifting the result up or down to match the final radix, meaning that even though a result might fit into the fixed-point data type to which an operation is being assigned, the operation may still fail if the intermediary result is greater than the maximum integer value (or less than the minimum value). Consider the following multiplication:
         ```
         typedef int8_t q3_4_t;
-        q3_4_t x = 0b01100000 * 0b00010000; // x equals 6 * 1; This code produces INCORRECT results
+        // This code produces INCORRECT results
+        q3_4_t x = 0b01100000 * 0b00010000; // x equals 6 * 1;
         ```
-        Here we're using numbers in q3.4 format, so the first binary value equals "6" and the second "1". Although the result of this operation _should_ be "6", the _actual_ result of the binary multiplication is `0b0000011000000000`. Although this looks nothing like "6" in q3.4, it _does_ look like "6" in q7.8. And this is exactly what happens to the radix during multiplications and divisions: it gets shifted by the sum of the radix positions for the two operands. By shifting the result of our multiplication to the right by the value of our initial radix (i.e. `0b0000011000000000 >> 4`), we get the correct final result: `0b01100000`, or "6". The fixed-point library above performs these shifts automatically.
+        Here we're using numbers in q3.4 format, so the first binary value equals "6" and the second "1". Although the result of this operation _should_ be "6", the _actual_ result of the binary multiplication is `0b0000011000000000`. Although this looks nothing like "6" in q3.4, it _does_ look like "6" in q7.8. And this is exactly what happens to the radix during multiplications (and divisions): it gets shifted by the sum (or difference) of the radix positions for the two operands. By shifting the result of our multiplication to the right by the value of our initial radix (i.e. `0b0000011000000000 >> 4`), we get the correct final result: `0b01100000`, or "6". The fixed-point library above performs these shifts automatically.
         ```
         typedef int8_t q3_4_t;
-        q3_4_t x = FMUL( 0b01100000, 0b00010000, 4 ); // Equivalent to "( 0b01100000 * 0b00010000 ) >> 4"; This code STILL produces INCORRECT results (see below)
+        // This code STILL produces INCORRECT results (see below)
+        q3_4_t x = FMUL( 0b01100000, 0b00010000, 4 ); // Equivalent to "( 0b01100000 * 0b00010000 ) >> 4"
         ```
         In fact, however, since we've defined our variables to be signed, 8-bit integers, the result of this multiplication is STILL incorrect. The C language states that the result of a signed integer multiplication which exceeds the maximum value able to be stored by that integer is undefined. Many compilers truncate the answer to the lower bits, as would happen for a multiplication overflow using unsigned integers (but they aren't required to). In our example above, that means that the result of our multiplication _isn't_ `0b0000011000000000` but, more likely, `0b00000000` or "0", which are the lower 8-bits of the resulting multiplication. The simplest way to fix this is to cast the operands to a larger data type BEFORE multiplying them together, so that the upper bits are preserved.
         ```
         typedef int8_t q3_4_t;
-        q3_4_t x = FMUL( (int16_t)0b01100000, (int16_t)0b00010000, 4 ); // This code FINALLY produces the CORRECT results
+        // This code FINALLY produces the CORRECT results
+        q3_4_t x = FMUL( (int16_t)0b01100000, (int16_t)0b00010000, 4 );
         ```
         You could also just size the variables larger and make a note to only ever use the lower bits.
         ```
@@ -359,24 +362,24 @@ So far our LUTs have done nothing more complicated than map the input value onto
 
 <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Interpolation_Midpoint.png" width="500">
 
-A look-up table of this type will have a maximum error of <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Equation_Error_Midpoint-Interpolation.png" width="150"> (where `h` is the difference in x-values between two elements in the LUT), which, for our sin LUTs, comes out to 0.0078125 near the zero-crossing points and which approaches 0 near the local maxima and minima (to understand why, see Chapter 2 [here](https://ocw.mit.edu/ans7870/2/2.086/S13/MIT2_086S13_Textbook.pdf)). This matches the results of our profiling above, specifically for the implementations called `LUT double`, `LUT float`, `LUT fixed`, and `LUT fixed (safe)`.
+A look-up table of this type will have a maximum error of <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Equation_Error_Midpoint-Interpolation.png" width="150"> (where `h` is the difference in x-values between two elements in the LUT), which, for our sin LUTs, comes out to be 0.0078125 near the zero-crossing points and which approaches 0 near the local maxima and minima (to understand why, see Chapter 2 [here](https://ocw.mit.edu/ans7870/2/2.086/S13/MIT2_086S13_Textbook.pdf)). This matches the results of our profiling above, specifically for the implementations called `LUT double`, `LUT float`, `LUT fixed`, and `LUT fixed (safe)`.
 
 However, if we assume that each pair of adjacent elements in our LUT is connected with a line, we can get a much more accurate answer for input values that fall in-between the LUT elements. We do this by figuring out where on the line the input would fall and returning the resulting y-value. This is called "piecewise linear interpolation" (PwLI) or, simply, "linear interpolation". A depiction of this type of LUT appears below.
 
 <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Interpolation_Piecewise-Linear.png" width="500">
 
-A look-up table of this type will have a maximum error of <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Equation_Error_Linear-Interpolation.png" width="150"> (with `h` as above), which, for our sin LUTs, approaches 0 near the zero-crossing points and comes out to about 0.000030518 near the local maxima and minima (to understand why, follow the link above). This also matches the results of our profiling above, specifically for the implementations called `Dbl interp`, `Flt interp`, `Fxd interp`, and `Fxd interp (safe)`.
+A look-up table of this type will have a maximum error of <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Equation_Error_Linear-Interpolation.png" width="150"> (with `h` as above), which, for our sin LUTs, approaches 0 near the zero-crossing points and comes out to about 0.000030518 near the local maxima and minima (to understand why, follow the link above). This also matches the results of our profiling above, specifically for the implementations called `Dbl interp`, `Flt interp`, `Fxd interp`, and `Fxd interp (safe)`. The error for a linear interpolation is 0.4% of that for a midpoint interpretation, representing an increase in accuracy of nearly 256 times that for the midpoint interpolation, for the exact same LUT.
 
-The quickest and most straightforward way to perform the linear interpolation is by using the point-slope equation (below), where `x0`/`y0` is a point on our line and `m` is the slope of the line at that point.
+The quickest and most straightforward way to perform the linear interpolation is by using the point-slope equation (below), where `x0` and `y0` represent a point on our line and `m` is the slope of the line at that point.
 ```
 y = m * ( x - x0 ) + y0
 ```
-Our LUT is a table of points and by determining the slope between any two of those points, we have all the information we need to compute the linear interpolation. For any input, `x`, we would start by finding the x-values or indices that lay immediately above and below it: `x1` and `x0`. This could be as simple as assigning the integer portion of our input to `x0` (after multiplying by 64, of course) and assigning that number plus one to `x1`.
+Our LUT is a table of points and by determining the slope between any two of those points, we have all the information we need to compute the linear interpolation. For any input, `x`, we would start by finding the x-values or indices that lay immediately above and below it: `x1` and `x0` (`x0` < `x1`). This could be as simple as assigning the integer portion of our input to `x0` (after multiplying by 64, of course) and assigning that number plus one to `x1`.
 ```
 int x0 = (int)( radians * 64 );
 int x1 = x0 + 1:
 ```
-However, care must be taken to ensure that `x0` doesn't equal the last element in the array, since that would cause `x1` to point to garbage data. I've accounted for that in my implementation by sizing my LUT one element larger than it needs to be: 2\*PI\*64 is roughly 402.123859659 so any input, being constrained to 2\*PI, can't exceed this value and the largest number that can get assigned to `x0` is 402 and to `x1`, 403. Another way to account for this is to check if `x0` is equal to the last index and either move it back one or set `x1` to 0 (assuming the function is periodic).
+However, care must be taken to ensure that `x0` doesn't equal the last element in the array, since that would cause `x1` to point to garbage data. I've accounted for that in my implementation by sizing my LUT one element larger than it needs to be: 2\*PI\*64 is roughly 402.123859659 so any input, being constrained to 2\*PI, can't exceed this value and the largest number that can get assigned to `x0` is 402 and to `x1`, 403. Thus, for an array that has an element at index 403 (like ours), there is no way for `x1` to point past the array. Another way to account for this is to check if `x0` is equal to the last index and either move it back one or set `x1` to 0 (assuming the function is periodic).
 
 The slope is the difference in y-values over the difference in x-values (which simplifies to just the difference in y-values when the difference in x-values is 1). The "span" is a term I borrowed from [this](https://www.microchip.com/wwwAppNotes/AppNotes.aspx?appnote=en020511) paper about PwLI which represents the term `( x - x0 )`. And the slope times the span is called the "offset".
 ```
@@ -397,6 +400,7 @@ It may have occurred to you at this point, after reflecting on the sin function 
     0    1    2    3    4    ....    99    100    101    102    ....    403
 
 // But since sin changes slowly around 0 and much more rapidly around maxima/minima (like PI/2), we'd like to do something like this:
+// (Notice how the index changes quickly around 0, where sin is very linear, and slowly around PI/2, where sin is changing quickly)
                                             (PI/2)*64 ~= 100.5
                                                     |
                                                    \|/
@@ -429,47 +433,85 @@ static point_double_t nonUniform_double_0dot007error[...] =
     { 6.283185307179590000,  0.000000000000000000 }
 };
 ```
+We can't simply convert our input to an integer now to get the correct array element, though; we'll need to search for it in the LUT. Since the LUT is ordered by x-value from least to greatest, however, we get the small benefit of being able to perform a binary seach (instead of a linear search). To do this, the code uses placeholders for the smallest, greatest, and middle array indeices called `low`, `high`, and `mid`. First the code checks if the x-value at `mid` is less than the input AND if the x-value at `mid + 1` is GREATER than the input; if it is, then we've found our point and we can `break` out of the `while` loop. If not, the code checks if the value at `mid` is GREATER than our input and, if it is, it moves `high` to `mid`, effectively cutting off the top half of our LUT. If the value at `mid` is LESS than our input, then the code moves `low` to `mid`, effectively cutting off the top half of our LUT. In this manner, the code "cuts" the LUT in half after every search until it finds the correct value. Ex:
+```
+1) Assume we have a LUT with 12 elements; the values low, mid, and high start out as below.
+   low                           mid                           high
+    |                             |                             |
+   \|/                           \|/                           \|/
+    0    1    2    3    4    5    6    7    8    9   10   11   12
+
+2) Assume our input is in between the values at locations 2 & 3.
+       low             input(0.11)               mid                                       high
+        |               |                         |                                         |
+       \|/             \|/                       \|/                                       \|/
+Index:  0      1      2      3      4      5      6      7      8      9     10     11     12
+Value:  0    0.1    0.1    0.2    0.3    0.5    0.8    1.3    2.1    3.4    5.5    8.9   14.4
+
+3) The first iteration of the while loop finds that the value of input is less than the value of the array at mid. So it "cuts" the table in half by moving "high" to mid.
+       low     input(0.11)   mid                high
+        |               |    |                    |
+       \|/             \|/  \|/                  \|/
+Index:  0      1      2      3      4      5      6      7      8      9     10     11     12
+Value:  0    0.1    0.1    0.2    0.3    0.5    0.8    1.3    2.1    3.4    5.5    8.9   14.4
+
+4) The second iteration of the while loop finds again that the value of input is less than the value of the array at mid. So it "cuts" the table in half again.
+       low           mid         input(0.11)     high
+        |             |                |          |
+       \|/           \|/              \|/        \|/
+Index:  0             1             2             3             4             5             6
+Value:  0           0.1           0.1           0.2           0.3           0.5           0.8
+
+5) The third iteration of the while loop finds that, now, the value of the input is greater than the value of the array at mid. So it "cuts" the table in half again, this time moving "low" to mid.
+                     low          mid input(0.11) high
+                      |             |  |          |
+                     \|/           \|/\|/        \|/
+Index:  0             1             2             3             4             5             6
+Value:  0           0.1           0.1           0.2           0.3           0.5           0.8
+
+6) Finally, since array[mid] < input AND array[mid+1] > input, we've found our desired indices.
+```
 To determine where our points need to be, we need to return to our error equation: <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Equation_Error_Linear-Interpolation.png" width="150"> (we'll assume that we're performing a linear interpolation). Recall that `h` is the difference between our two adjacent x-values, in other words, `x1 - x0`. This time around, "error" is a known quantity (we're trying to determine where to place our points in order to meet a certain maximum error), so what we'll need to do is solve this equation in terms of `e` and either `x0` or `x1` (we assume that at least one of them is known) in order to find the other (either `x1` or `x0`).
 
-Let's assume, to start, that we're either in the range [PI/2, PI] or [3\*PI/2, 0] \(we'll see why this is important in a minute). Blessedly, the absolute value of the double-derivative of sin(x) is just sin(x), so we'll only need to find the maximum value for sin over each segment in order to evaluate the second term. Under the conditions above, the maximum absoulte value for sin over our segment will always be equal to `x0` (since \|sin(x0)\| >  \|sin(x1)\| for x0 < x1 in the range [PI/2, PI] or [3\*PI/2, 0]). If we substitute `x1 - x0` for `h` above and solve for `x1`, we get the following equation:
+Let's assume, to start, that we're either in the range `[PI/2, PI]` or `[3*PI/2, 0]` (we'll see why this is important in a minute). Blessedly, the absolute value of the double-derivative of sin(x) is just sin(x) (`|sin''(x)| == sin(x)`), so we'll only need to find the maximum value for sin over each segment in order to evaluate the second term. Under the conditions above, the maximum absoulte value for sin over our segment will always be equal to `x0` (since `|sin(x0)| >  |sin(x1)|` for `x0 < x1` in the range `[PI/2, PI]` or `[3*PI/2, 0]`). If we substitute `x1 - x0` for `h` above and solve for `x1`, we get the following equation:
 ```
                 /-----------
 x1 = x0 +      /  error * 8
           --  /  ----------
             \/     sin(x0)
 ```
-If we assume that we start with a point at both PI/2 and 3\*PI/2, then all we need to do to get our non-uniform distribution of points (in the ranges above) is to calculate `x1`, set `x0` equal to `x1` and repeat (that is, calculate the n+1 point given the nth point).
+If we assume that we start with a point at both `PI/2` and `3*PI/2`, then all we need to do to get our non-uniform distribution of points (in the ranges above) is to calculate `x1`, set `x0` equal to `x1` and repeat (that is, calculate the n+1 point given the nth point).
 
-For example, assume we want to determine our first point (after PI/2) with a maximum error of 0.00003 (not coincidentally the maximum error using our linear interpolations above). We would solve for it like this:
+For example, assume we want to determine our first point (after `PI/2`) with a maximum error of 0.00003 (not coincidentally the maximum error using our linear interpolations above). We would solve for it like this:
 ```
                 /-----------                    /-----------
 x1 = x0 +      /  error * 8   =  (PI/2) +      / 0.00003 * 8  =  1.58628826
           --  /  ----------               --  /  -----------
             \/     sin(x0)                  \/    sin(PI/2)
 ```
-Then we would set x0 equal to 1.58628826 and solve again for the next point.
+Then we would set `x0` equal to 1.58628826 and solve again for the next point.
 
-Things get a litle tricky, however, if we're in the range [0, PI/2] or [PI, 3\*PI/2]. The reason is this: the maximum value for the absolute value of sin over any of our segments is now not sin(x0) but sin(x1). Substituting as above for our error equation, we get the following result:
+Things get a litle tricky, however, if we're in the range `[0, PI/2]` or `[PI, 3*PI/2]`. The reason is this: the maximum value for the absolute value of sin over any of our segments is now not `sin(x0)` but `sin(x1)`. Substituting as above for our error equation, we get the following result:
 ```
 error * 8 = ( ( x1 - x0 )^2 ) * sin( x1 )
 ```
-Unfortunately, I couldn't find a way to solve that equation for `x1`. The trick, then, is not to iterate FORWARDS from 0 to PI/2, but BACKWARD from PI/2 to 0. In so doing, we try to solve for `x0` given `x1`, and that is an equation we can solve, since now \|sin(x1)\| >  \|sin(x0)\| for x0 < x1 in the range [0, PI/2] or [PI, 3\*PI/2]:
+Unfortunately, I couldn't find a way to solve that equation for `x1`. The trick, then, is not to iterate FORWARDS from `0` to `PI/2`, but BACKWARD from `PI/2` to `0`. In so doing, we try to solve for `x0` given `x1`, and that is an equation we can solve, since now `|sin(x1)| >  |sin(x0)|` for `x0 < x1` in the range `[0, PI/2]` or `[PI, 3*PI/2]`:
 ```
                 /-----------
 x0 = x1 -      /  error * 8
           --  /  ----------
             \/     sin(x1)
 ```
-If we assume, again, that we start with a point at both PI/2 and 3\*PI/2, then all we need to do to get our non-uniform distribution of points (in the ranges above) is to calculate `x0`, set `x1` equal to `x0` and repeat (that is, calculate the n-1 point given the nth point).
+If we assume, again, that we start with a point at both `PI/2` and `3*PI/2`, then all we need to do to get our non-uniform distribution of points (in the ranges above) is to calculate `x0`, set `x1` equal to `x0` and repeat (that is, calculate the n-1 point given the nth point).
 
-For example, assume we want to determine the point BEFORE PI/2, with a maximum error of 0.00003. We would solve for it like this:
+For example, assume we want to determine the point BEFORE `PI/2`, with a maximum error of 0.00003. We would solve for it like this:
 ```
                 /-----------                    /-----------
 x0 = x1 -      /  error * 8   =  (PI/2) -      / 0.00003 * 8  =  1.555304393
           --  /  ----------               --  /  -----------
             \/     sin(x1)                  \/    sin(PI/2)
 ```
-Then we would set x1 equal to 1.555304393 and solve again for the point before THAT.
+Then we would set `x1` equal to 1.555304393 and solve again for the point before THAT.
 
 There is a small program in the `tools` folder called `non-uniform-distribution-helper.c` that performs these steps for you and prints out the LUT for any desired error, formatted for easy copy/paste into an array definition. There is no Makefile for this; simply change `max_error` to your desired maximum error, compile using GCC with the command `gcc -I./ -Og -ggdb non-uniform-distribution-helper.c -lm`, and run the resulting program (called `a.out`).
 
