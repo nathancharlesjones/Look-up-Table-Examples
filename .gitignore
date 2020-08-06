@@ -2,3 +2,4 @@
 01_Fast-Sin/docs/*.~*
 02_Other-Sin-Improvements/build/
 02_Other-Sin-Improvements/docs/*.~*
+02_Other-Sin-Improvements/tools/*.out

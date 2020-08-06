@@ -433,13 +433,14 @@ static point_double_t nonUniform_double_0dot007error[...] =
     { 6.283185307179590000,  0.000000000000000000 }
 };
 ```
-We can't simply convert our input to an integer now to get the correct array element, though; we'll need to search for it in the LUT. Since the LUT is ordered by x-value from least to greatest, however, we get the small benefit of being able to perform a binary seach (instead of a linear search). To do this, the code uses placeholders for the smallest, greatest, and middle array indeices called `low`, `high`, and `mid`. First the code checks if the x-value at `mid` is less than the input AND if the x-value at `mid + 1` is GREATER than the input; if it is, then we've found our point and we can `break` out of the `while` loop. If not, the code checks if the value at `mid` is GREATER than our input and, if it is, it moves `high` to `mid`, effectively cutting off the top half of our LUT. If the value at `mid` is LESS than our input, then the code moves `low` to `mid`, effectively cutting off the top half of our LUT. In this manner, the code "cuts" the LUT in half after every search until it finds the correct value. Ex:
+We can't simply convert our input to an integer now to get the correct array element, though; we'll need to search for it in the LUT. Since the LUT is ordered by x-value from least to greatest, however, we get the small benefit of being able to perform a binary seach (instead of a linear search). To do this, the code uses placeholders for the smallest, greatest, and middle array indices called `low`, `high`, and `mid`. First the code checks if the x-value at `mid` is less than the input AND if the x-value at `mid + 1` is GREATER than the input; if it is, then we've found our point and we can `break` out of the `while` loop. If not, the code checks if the value at `mid` is GREATER than our input and, if it is, it moves `high` to `mid`, effectively cutting off the top half of our LUT. If the value at `mid` is LESS than our input, then the code moves `low` to `mid`, effectively cutting off the top half of our LUT. In this manner, the code "cuts" the LUT in half after every search until it finds the correct value. Ex:
 ```
 1) Assume we have a LUT with 12 elements; the values low, mid, and high start out as below.
-   low                           mid                           high
-    |                             |                             |
-   \|/                           \|/                           \|/
-    0    1    2    3    4    5    6    7    8    9   10   11   12
+       low                                       mid                                       high
+        |                                         |                                         |
+       \|/                                       \|/                                       \|/
+Index:  0      1      2      3      4      5      6      7      8      9     10     11     12
+Value:  0    0.1    0.1    0.2    0.3    0.5    0.8    1.3    2.1    3.4    5.5    8.9   14.4
 
 2) Assume our input is in between the values at locations 2 & 3.
        low             input(0.11)               mid                                       high
@@ -471,7 +472,9 @@ Value:  0           0.1           0.1           0.2           0.3           0.5 
 
 6) Finally, since array[mid] < input AND array[mid+1] > input, we've found our desired indices.
 ```
-To determine where our points need to be, we need to return to our error equation: <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Equation_Error_Linear-Interpolation.png" width="150"> (we'll assume that we're performing a linear interpolation). Recall that `h` is the difference between our two adjacent x-values, in other words, `x1 - x0`. This time around, "error" is a known quantity (we're trying to determine where to place our points in order to meet a certain maximum error), so what we'll need to do is solve this equation in terms of `e` and either `x0` or `x1` (we assume that at least one of them is known) in order to find the other (either `x1` or `x0`).
+At this point, we would compute the linear interpolation as above.
+
+To determine what the points in our LUT need to be, we need to return to our error equation: <img src="https://github.com/nathancharlesjones/Look-up-Table-Examples/blob/master/02_Other-Sin-Improvements/docs/Equation_Error_Linear-Interpolation.png" width="150"> (we'll assume that we're performing a linear interpolation). Recall that `h` is the difference between our two adjacent x-values, in other words, `x1 - x0`. This time around, "error" is a known quantity (we're trying to determine where to place our points in order to meet a certain maximum error), so what we'll need to do is solve this equation in terms of `e` and either `x0` or `x1` (we assume that at least one of them is known) in order to find the other (either `x1` or `x0`).
 
 Let's assume, to start, that we're either in the range `[PI/2, PI]` or `[3*PI/2, 0]` (we'll see why this is important in a minute). Blessedly, the absolute value of the double-derivative of sin(x) is just sin(x) (`|sin''(x)| == sin(x)`), so we'll only need to find the maximum value for sin over each segment in order to evaluate the second term. Under the conditions above, the maximum absoulte value for sin over our segment will always be equal to `x0` (since `|sin(x0)| >  |sin(x1)|` for `x0 < x1` in the range `[PI/2, PI]` or `[3*PI/2, 0]`). If we substitute `x1 - x0` for `h` above and solve for `x1`, we get the following equation:
 ```
@@ -536,6 +539,6 @@ x0 = x1 -      /  error * 8
 
 ### Comparing to the polynomial approximations
 
-Another way to implement the sin (and other trig) function is by approximating it with a high-order polynomial. This is conceptually similar to the idea of a linear interpolation except that higher-order polynomials can be accurate over a much wider range than a simple line can be. Jack Ganssle discusses this approach in-depth [here](http://www.ganssle.com/approx.htm) and I'll not reiterate it. They were included mostly for my own curiousity.
+Another way to implement the sin (and other trig) function is by approximating it with a high-order polynomial. This is conceptually similar to the idea of a linear interpolation except that higher-order polynomials can be accurate over a much wider range than a simple line can be. Jack Ganssle discusses this approach in-depth [here](http://www.ganssle.com/approx.htm) and I'll not reiterate it. They were included to mostly for my own curiousity about their relative performance.
 
 From the table above, we can see that the primary benefit to using a polynomial approximation as compared to the library sin is a reduction in memory size, since the functions all ran about as quickly as the library sin function. They also offer much greater accuracy than could be reasonably achieved with one of our LUTs. If the precision of the library sin function is limited only by the precision of the double data type (roughly 1.1e-16 in the range [-1, 1]), then the final polynomial approximation, `Sin_121`, is the only one to come close to achieving a similar level of accuracy (and a LUT with that level of accuracy would be many hundreds of thousands or millions of elements long!).
