@@ -11,10 +11,10 @@
 "Fast Sin" is a demonstration of using a simple look-up table (LUT) to improve the execution time of the library sin function. It also demonstrates several aspects of professional quality code, such as using asserts, enforcing various compiler optimizations, building for multiple targets, and having a well-structured Makefile.
 
 The following table summarizes the results. This code was compiled for an STM32F1 running at 72 MHz using GCC 6.3.1 on Ubuntu (there’s also code to run this same example on an x86 so you don’t need an STM32F1 in order to test it, though the results are less drastic).
-|Function|Memory usage (bytes)|Maximum Absolute Error|Percent Error|Execution time|
-|---|---|---|---|---|
-|sin|5368|N/A|N/A|\~45.8 us|
-|sin_LUT|3272|\~0.0025|\~1.7|\~3.79 us|
+|Function|Memory usage (bytes)|Max Absolute Error|Percent Error|Execution time|Speed-up Factor|
+|---|---|---|---|---|---|
+|Library sin|5368|N/A|N/A|\~45.8 us|N/A|
+|LUT sin|3272|\~0.0076|\~1.7|\~3.79 us|12.08x|
 
 ## How do I use it?
 

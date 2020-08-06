@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "sin_lut.h"
 
-#define SIN_LUT_SIZE 402
+#define SIN_LUT_SIZE 404
 
 // Sin look-up table using doubles at integer steps of "radians * 64"
 static const double sin_table[SIN_LUT_SIZE] =
@@ -73,23 +73,25 @@ static const double sin_table[SIN_LUT_SIZE] =
 	-0.36807266012236700, -0.35350024284096100, -0.33884152354517000, -0.32410008095107600, -0.30927951397046500, -0.29438344083221000,
 	-0.27941549819892600, -0.26437934027913800, -0.24927863793515200, -0.23411707778687300, -0.21889836131176100, -0.20362620394117900,
 	-0.18830433415331500, -0.17293649256293000, -0.15752643100814300, -0.14207791163447200, -0.12659470597635800, -0.11108059403640400,
-	-0.09553936336253460, -0.07997480812332720, -0.06439072818171630, -0.04879092816731250, -0.03317921654755680, -0.01755940469793780
+	-0.09553936336253460, -0.07997480812332720, -0.06439072818171630, -0.04879092816731250, -0.03317921654755680, -0.01755940469793780,
+	-0.00193530597149897,  0.01368926523213660
 };
 
 double sin_LUT(double radians)
 {
-	// Multiply "radians" by 64 to map the range [0,2*PI] to the range [0,402] (the size of our LUT). Round "radians" by adding 0.5 
+	// Ensure "radians" is within a valid range. Takes advantage of the fact that sin is periodic to merely "wrap" radians 
+	// to a valid  value instead of throwing an error.
+	//
+	while( radians >= TWO_PI ) radians -= TWO_PI;
+	while( radians < 0 ) radians += TWO_PI;
+	
+
+	// Multiply "radians" by 64 to map the range [0,2*PI] to the range [0,403] (the size of our LUT). Round "radians" by adding 0.5 
 	// and truncating. In this manner, all values between radian.0 and radian.49 become radian.5 to radian.99 and are truncated 
 	// to radian (i.e. they are rounded down). However, all values between radian.5 and radian.99 become radian+1.0 to
 	// radian+1.49, and are truncated to radian+1 (i.e. they are rounded up).
 	//
 	int idx = (int)( ( radians * 64 ) + 0.5 );
-
-	// Ensure "idx" is within a valid range. Takes advantage of the fact that sin is periodic to merely "wrap" idx to a valid 
-	// value instead of throwing an error.
-	//
-	while( idx >= SIN_LUT_SIZE ) idx -= SIN_LUT_SIZE;
-	while( idx < 0 ) idx += SIN_LUT_SIZE;
 
 	return sin_table[ idx ];
 }
