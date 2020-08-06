@@ -54,6 +54,7 @@ Lest the idea of a 1.7% error disagree with you, consider this (semi)realistic s
 	5. [Jump Tables and Table-driven Finite State Machines](https://github.com/nathancharlesjones/Look-up-Table-Examples#jump-tables-and-table-driven-finite-state-machines)
 	6. [Fast Output](https://github.com/nathancharlesjones/Look-up-Table-Examples#fast-output)
 	7. [Dictionaries](https://github.com/nathancharlesjones/Look-up-Table-Examples#dictionaries)
+5. [References](https://github.com/nathancharlesjones/Look-up-Table-Examples#references)
 
 ## Defining a Look-up Table
 
@@ -89,13 +90,14 @@ double sin_LUT( double degrees )
 //
 const double sin_table[360] = {...};
 
-// This is a suitable alternative.
+// This is a suitable alternative. "sin_table" is declared "static",
+// meaning that only functions inside "sin_LUT.c" have access to it.
 // sin_LUT.c:
 // 
 static const double sin_table[360] = {...};
 double sin_LUT( double degrees ){...};
 ```
-Also, always ensure index values fall within a valid range before accessing the LUT. This is called "bounds checking" and it ensures you don't accidentally read from memory that lies beyond the table. The only exception to this is if the size of your LUT exactly matches the max size for a standard unsigned integer data type (i.e. it has exactly 2<sup>8</sup>, 2<sup>16</sup>, or 2<sup>32</sup> elements) AND an unsigned integer of the same width is used to access the table (i.e. a uint8_t is used to access a table with 256 elements). In that case, it can be said that the compiler performs the bounds checking for you.
+Also, always ensure index values fall within a valid range before accessing the LUT. This is called "bounds checking" and it ensures you don't accidentally read from memory that lies beyond the table. The only exception to this is if the size of your LUT exactly matches the max size for a standard unsigned integer data type (i.e. it has exactly 2<sup>8</sup>, 2<sup>16</sup>, or 2<sup>32</sup> elements) AND an unsigned integer of the same width is used to access the table (i.e. a uint8_t is used to access a table with 256 elements). In that case, every possible input value is a valid index and bounds-checking is superfluous.
 ```
 // The above function should have been written like this:
 //
@@ -120,14 +122,16 @@ Whether the look-up table is placed in RAM or ROM depends on (1) how much space 
 Use the "const" qualifier to inform the linker it should place the LUT in ROM. This is the most common scenario. Ex:
 ```
 // Placed in ROM
-const int something
+const int myLUT[NUMBER_OF_ELEMENTS] = {...};
 ```
-Use the "static" qualifier, absent any "const", to inform the linker it should place the LUT in RAM. Take care not to use BOTH "static" and "const" together, since "const" will take precedence and the array will be placed in ROM. Ex:
+Leave off "const" entirely in order to inform the linker to place the LUT in RAM. It's recommended, however, to add the "static" qualifier, in this case, for two reasons: (1) if the LUT is defined in a file, but not inside any function, the "static" qualifier helps encapsulate the implementation of the LUT (by only allowing functions inside the file to reference it, but not any others) and (2) if the LUT is defined in a function, the "static" qualifier informs the compiler that the LUT retains its values between function calls, so the compiler won't allocate room on the stack for the LUT every time the function gets called.
 ```
-// Placed in RAM
-static int something
+// Placed in RAM (but not recommended)
+int myLUT[NUMBER_OF_ELEMENTS] = {...};
+
+// Recommended
+static int myLUT[NUMBER_OF_ELEMENTS] = {...};
 ```
-Without either qualifier, the LUT will be placed in RAM and space will be allocated on the stack for it
 
 ### Data type
 
@@ -214,3 +218,6 @@ Asdf
 
 asdf
 
+## References
+
+- 
