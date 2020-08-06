@@ -13,7 +13,7 @@
 
 The following table summarizes the results, though it should be noted that all of the LUTs could be made larger/smaller and more/less accurate by simply increasing or decreasing the number of elements in the table (though care should be taken to ensure that the resulting size allows for a quick and simple hash function, as execution time may be negatively affected if the hash becomes non-trivial). This code was compiled for an STM32F1 running at 72 MHz using GCC 6.3.1 on Ubuntu (there’s also code to run this same example on an x86 so you don’t need an STM32F1 in order to test it, though the results are less drastic). The rest of this README should explain each part of the table, so don't fret if parts of it don't make sense at this time.
 |Function|Memory usage<sup>1</sup> (bytes)|Max Absolute Error|Error improvement factor<sup>2</sup>|Percent Error|Execution time|Speed-up factor|
-|---|---|---|---|---|
+|---|---|---|---|---|---|---|
 |Library sin|5480|N/A|N/A|\~47 us|
 |LUT double<sup>4</sup>|3484<sup>3</sup>|\~0.0076<sup>3</sup>|N/A|\~2.5<sup>1</sup>|\~6.7 us|7.04x|
 |LUT float<sup>5</sup>|2736<sup>3</sup>|\~0.0076<sup>3</sup>|N/A|\~1.5<sup>1</sup>|\~6.4 us|7.38x|
