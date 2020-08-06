@@ -12,45 +12,46 @@
 "Other Sin Improvements" builds on the demonstration in "01_Fast-Sin" of using a simple look-up table (LUT) to improve the execution time of the library sin function. These LUT examples add different data types, linear interpolation, and arbitrary-input tables in order to improve the execution time, accuracy, or memory size of the LUT in "01_Fast-Sin". It also profiles and compares to the LUT implementations four different implementations of "sin" that utilize various polynomial approximations. Lastly, it builds upon the the professional quality code from "01_Fast-Sin" by parameterizing the test code (to more easily change which functions are being tested).
 
 The following table summarizes the results, though it should be noted that all of the LUTs could be made larger/smaller and more/less accurate by simply increasing or decreasing the number of elements in the table (though care should be taken to ensure that the resulting size allows for a quick and simple hash function, as execution time may be negatively affected if the hash becomes non-trivial). This code was compiled for an STM32F1 running at 72 MHz using GCC 6.3.1 on Ubuntu (there’s also code to run this same example on an x86 so you don’t need an STM32F1 in order to test it, though the results are less drastic). The rest of this README should explain each part of the table, so don't fret if parts of it don't make sense at this time.
-|Function|Memory usage<sup>1</sup> (bytes)|Max Absolute Error|Percent Error|Execution time|
+|Function|Memory usage<sup>1</sup> (bytes)|Max Absolute Error|Error improvement factor<sup>2</sup>|Percent Error|Execution time|Speed-up factor|
 |---|---|---|---|---|
 |Library sin|5480|N/A|N/A|\~47 us|
-|LUT double<sup>3</sup>|3484<sup>2</sup>|\~0.0076<sup>2</sup>|\~2.5<sup>1</sup>|\~6.7 us|
-|LUT float<sup>4</sup>|2736<sup>2</sup>|\~0.0076<sup>2</sup>|\~1.5<sup>1</sup>|\~6.4 us|
-|LUT fixed<sup>5</sup>|1808<sup>2</sup>|\~0.0077<sup>2</sup>|\~1.6<sup>1</sup>|\~0.73 us|
-|LUT fixed (safe)<sup>6</sup>|2060<sup>2</sup>|\~0.0077<sup>2</sup>|\~1.5<sup>1</sup>|\~1.3 us|
-|Dbl interp<sup>7</sup>|3548<sup>2</sup>|\~0.00003<sup>2</sup>|\~0.002<sup>1</sup>|\~13.9 us|
-|Flt interp<sup>8</sup>|2848<sup>2</sup>|\~0.00003<sup>2</sup>|\~0.002<sup>1</sup>|\~9.9 us|
-|Fxd interp<sup>9</sup>|1840<sup>2</sup>|\~0.00003<sup>2</sup>|\~0.002<sup>1</sup>|\~1.0 us|
-|Fxd interp (safe)<sup>10</sup>|2284<sup>2</sup>|\~0.00003<sup>2</sup>|\~0.002<sup>1</sup>|\~2.6 us|
-|Dbl Non-Uni<sup>11</sup>|824<sup>2</sup>|\~0.007<sup>2</sup>|\~0.62<sup>1</sup>|\~40.9 us|
-|Flt Non-Uni<sup>12</sup>|1432<sup>2</sup>|\~0.007<sup>2</sup>|\~0.63<sup>1</sup>|\~25.8 us|
-|Fxd Non-Uni<sup>13</sup>|1376<sup>2</sup>|\~0.007<sup>2</sup>|\~0.61<sup>1</sup>|\~6.5 us|
-|Fxd Non-Uni (safe)<sup>14</sup>|1916<sup>2</sup>|\~0.007<sup>2</sup>|\~0.61<sup>1</sup>|\~8.8 us|
-|Sin_32<sup>15</sup>|2128|\~0.0006|\~0.44|\~19.7 us|
-|Sin_52<sup>16</sup>|2144|\~0.000007|\~0.0016|\~22.0 us|
-|Sin_73<sup>17</sup>|1280|\~0.00000005|\~0.00002|\~28.1 us|
-|Sin_121<sup>18</sup>|1344|\~0.0000000000007|\~0.0000000006|\~35.1 us|
+|LUT double<sup>4</sup>|3484<sup>3</sup>|\~0.0076<sup>3</sup>|N/A|\~2.5<sup>1</sup>|\~6.7 us|7.04x|
+|LUT float<sup>5</sup>|2736<sup>3</sup>|\~0.0076<sup>3</sup>|N/A|\~1.5<sup>1</sup>|\~6.4 us|7.38x|
+|LUT fixed<sup>6</sup>|1808<sup>3</sup>|\~0.0077<sup>3</sup>|N/A|\~1.6<sup>1</sup>|\~0.73 us|64.14x|
+|LUT fixed (safe)<sup>7</sup>|2060<sup>3</sup>|\~0.0077<sup>3</sup>|N/A|\~1.5<sup>1</sup>|\~1.3 us|34.95x|
+|Dbl interp<sup>8</sup>|3548<sup>3</sup>|\~0.00003<sup>3</sup>|250x|\~0.002<sup>1</sup>|\~13.9 us|3.37x|
+|Flt interp<sup>9</sup>|2848<sup>3</sup>|\~0.00003<sup>3</sup>|249x|\~0.002<sup>1</sup>|\~9.9 us|4.74x|
+|Fxd interp<sup>10</sup>|1840<sup>3</sup>|\~0.00003<sup>3</sup>|254x|\~0.002<sup>1</sup>|\~1.0 us|46.59x|
+|Fxd interp (safe)<sup>11</sup>|2284<sup>3</sup>|\~0.00003<sup>3</sup>|254x|\~0.002<sup>1</sup>|\~2.6 us|18.01x|
+|Dbl Non-Uni<sup>12</sup>|824<sup>3</sup>|\~0.007<sup>3</sup>|1x|\~0.62<sup>1</sup>|\~40.9 us|1.15x|
+|Flt Non-Uni<sup>13</sup>|1432<sup>3</sup>|\~0.007<sup>3</sup>|1x|\~0.63<sup>1</sup>|\~25.8 us|1.83x|
+|Fxd Non-Uni<sup>14</sup>|1376<sup>3</sup>|\~0.007<sup>3</sup>|1x|\~0.61<sup>1</sup>|\~6.5 us|7.27x|
+|Fxd Non-Uni (safe)<sup>15</sup>|1916<sup>3</sup>|\~0.007<sup>3</sup>|1x|\~0.61<sup>1</sup>|\~8.8 us|5.30x|
+|Sin_32<sup>16</sup>|2128|\~0.0006|N/A|\~0.44|\~19.7 us|2.39x|
+|Sin_52<sup>17</sup>|2144|\~0.000007|85x|\~0.0016|\~22.0 us|2.14x|
+|Sin_73<sup>18</sup>|1280|\~0.00000005|150x|\~0.00002|\~28.1 us|1.67x|
+|Sin_121<sup>19</sup>|1344|\~0.0000000000007|62189x|\~0.0000000006|\~35.1 us|1.34x|
 
 ### Notes:
 1. Memory usage was measured very non-academically, by observing the difference in the output of the `size` tool with each function included and them removed. In particular, I wasn't sure if certain external library functions such as type conversions were included when I didn't want them to be. It seems possible to glean this information from the map file. I'd love to hear any better suggestions!
-2. This LUT could be made larger/smaller and more/less accurate by simply increasing or decreasing the number of elements in the table (though care should be taken to ensure that the resulting size allows for a quick and simple hash function, as execution time may be negatively affected if the hash becomes non-trivial).
-3. "LUT double" is a LUT of doubles with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
-4. "LUT float" is a LUT of floats with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
-5. "LUT fixed" is a LUT of fixed-point numbers (in q0_31 format) with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
-6. "LUT fixed (safe)" is a LUT of fixed-point numbers (in q0_31 format) with uniform distribution which uses no interpolation. It includes checks for integer overflow, which "LUT fixed" does not. It was stored in RAM in my tests.
-7. "Dbl interp" is a LUT of doubles with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
-8. "Flt interp" is a LUT of floats with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
-9. "Fxd interp" is a LUT of fixed-point numbers (in q0_31 format) with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
-10. "Fxd interp (safe)" is a LUT of fixed-point numbers (in q0_31 format) with uniform distribution which uses linear interpolation. It includes checks for integer overflow, which "Fxd interp" does not. It was stored in RAM in my tests.
-11. "Dbl Non-Uni" is a LUT of doubles with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
-12. "Flt Non-Uni" is a LUT of floats with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
-13. "Fxd Non-Uni" is a LUT of fixed-point numbers (x-vales in q9_22 format and y-values in q0_31 format) with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
-14. "Fxd Non-Uni (safe)" is a LUT of fixed-point numbers (x-vales in q9_22 format and y-values in q0_31 format) with non-uniform distribution which uses linear interpolation. It includes checks for integer overflow, which "Fxd Non-Uni" does not. It was stored in ROM in my tests.
-15. "Sin_32" is a polynomial approximation of sin which uses 3 terms. For more information, see [here](http://www.ganssle.com/approx.htm).
-16. "Sin_52" is a polynomial approximation of sin which uses 4 terms. For more information, see [here](http://www.ganssle.com/approx.htm).
-17. "Sin_73" is a polynomial approximation of sin which uses 5 terms. For more information, see [here](http://www.ganssle.com/approx.htm).
-18. "Sin_121" is a polynomial approximation of sin which uses 7 terms. For more information, see [here](http://www.ganssle.com/approx.htm).
+2. The "X interp" and "X Non-Uni" functions are compared against their "basic" counterparts (i.e. "LUT X"). The polynomial approximations are compared to `Sin_32`.
+3. This LUT could be made larger/smaller and more/less accurate by simply increasing or decreasing the number of elements in the table (though care should be taken to ensure that the resulting size allows for a quick and simple hash function, as execution time may be negatively affected if the hash becomes non-trivial).
+4. "LUT double" is a LUT of doubles with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
+5. "LUT float" is a LUT of floats with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
+6. "LUT fixed" is a LUT of fixed-point numbers (in q0_31 format) with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
+7. "LUT fixed (safe)" is a LUT of fixed-point numbers (in q0_31 format) with uniform distribution which uses no interpolation. It includes checks for integer overflow, which "LUT fixed" does not. It was stored in RAM in my tests.
+8. "Dbl interp" is a LUT of doubles with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
+9. "Flt interp" is a LUT of floats with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
+10. "Fxd interp" is a LUT of fixed-point numbers (in q0_31 format) with uniform distribution which uses linear interpolation. It was stored in RAM in my tests.
+11. "Fxd interp (safe)" is a LUT of fixed-point numbers (in q0_31 format) with uniform distribution which uses linear interpolation. It includes checks for integer overflow, which "Fxd interp" does not. It was stored in RAM in my tests.
+12. "Dbl Non-Uni" is a LUT of doubles with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
+13. "Flt Non-Uni" is a LUT of floats with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
+14. "Fxd Non-Uni" is a LUT of fixed-point numbers (x-vales in q9_22 format and y-values in q0_31 format) with non-uniform distribution which uses linear interpolation. It was stored in ROM in my tests.
+15. "Fxd Non-Uni (safe)" is a LUT of fixed-point numbers (x-vales in q9_22 format and y-values in q0_31 format) with non-uniform distribution which uses linear interpolation. It includes checks for integer overflow, which "Fxd Non-Uni" does not. It was stored in ROM in my tests.
+16. "Sin_32" is a polynomial approximation of sin which uses 3 terms. For more information, see [here](http://www.ganssle.com/approx.htm).
+17. "Sin_52" is a polynomial approximation of sin which uses 4 terms. For more information, see [here](http://www.ganssle.com/approx.htm).
+18. "Sin_73" is a polynomial approximation of sin which uses 5 terms. For more information, see [here](http://www.ganssle.com/approx.htm).
+19. "Sin_121" is a polynomial approximation of sin which uses 7 terms. For more information, see [here](http://www.ganssle.com/approx.htm).
 
 ## What's it telling me?
 
