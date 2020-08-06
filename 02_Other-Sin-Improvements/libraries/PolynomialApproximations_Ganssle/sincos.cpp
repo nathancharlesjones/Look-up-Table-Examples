@@ -1,3 +1,10 @@
+//******************************************************//
+//                                                      //
+//  Downloaded from "A Guide to Approximations", by     //
+//  Jack Ganssle (http://www.ganssle.com/approx.htm)    //
+//                                                      //
+//******************************************************//
+
 //  The following code implements approximations to various trig functions.
 //
 //  This is demo code to guide developers in implementing their own approximation

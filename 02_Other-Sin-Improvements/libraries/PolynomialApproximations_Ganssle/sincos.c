@@ -1,3 +1,25 @@
+//******************************************************//
+//                                                      //
+//  Downloaded from "A Guide to Approximations", by     //
+//  Jack Ganssle (http://www.ganssle.com/approx.htm).   //
+//                                                      //
+//  The following edits were made in order for the code //
+//  to be compiled by the GCC C compiler:               //
+//    - Added pragmas (top and bottom) to suppress      //
+//      warnings about function return type (generated  //
+//      as a result of the functions' early return      //
+//      statements)                                     //
+//    - Deleted "#include <iostream>" and "using        //
+//      namespace std;"                                 //
+//    - Changed "const" variable to "#define" to allow  //
+//      the use of function calls (i.e. "tan")          //
+//    - Changed C++ typecast (i.e. "int(x)") to C       //
+//      typecast (i.e. "(int)x")                        //
+//    - Added "sincos.h" so that "main" could call the  //
+//      functions below.                                //
+//                                                      //
+//******************************************************//
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wreturn-type"
 
@@ -6,29 +28,14 @@
 //  This is demo code to guide developers in implementing their own approximation
 // software. This code is merely meant to illustrate algorithms.
 
-//#include <iostream>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-//using namespace std;
 
 #define TRUE 1
 #define FALSE 0
 
 // Math constants we'll use
-/*
-double const pi=3.1415926535897932384626433;	// pi
-double const twopi=2.0*pi;			// pi times 2
-double const two_over_pi= 2.0/pi;		// 2/pi
-double const halfpi=pi/2.0;			// pi divided by 2
-double const threehalfpi=3.0*pi/2.0;  		// pi times 3/2, used in tan routines
-double const four_over_pi=4.0/pi;		// 4/pi, used in tan routines
-double const qtrpi=pi/4.0;			// pi/4.0, used in tan routines
-double const sixthpi=pi/6.0;			// pi/6.0, used in atan routines
-double const tansixthpi=tan(sixthpi);		// tan(pi/6), used in atan routines
-double const twelfthpi=pi/12.0;			// pi/12.0, used in atan routines
-double const tantwelfthpi=tan(twelfthpi);	// tan(pi/12), used in atan routines
-*/
 #define pi (3.1415926535897932384626433)	// pi
 #define twopi (2.0*pi)			// pi times 2
 #define two_over_pi (2.0/pi)		// 2/pi
