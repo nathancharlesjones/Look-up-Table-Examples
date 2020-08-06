@@ -23,10 +23,10 @@ The following table summarizes the results, though it should be noted that all o
 |Flt interp<sup>9</sup>|2848<sup>3</sup>|\~0.00003<sup>3</sup>|249x|\~0.002<sup>1</sup>|\~9.9 us|4.74x|
 |Fxd interp<sup>10</sup>|1840<sup>3</sup>|\~0.00003<sup>3</sup>|254x|\~0.002<sup>1</sup>|\~1.0 us|46.59x|
 |Fxd interp (safe)<sup>11</sup>|2284<sup>3</sup>|\~0.00003<sup>3</sup>|254x|\~0.002<sup>1</sup>|\~2.6 us|18.01x|
-|Dbl Non-Uni<sup>12</sup>|824<sup>3</sup>|\~0.007<sup>3</sup>|1x|\~0.62<sup>1</sup>|\~40.9 us|1.15x|
-|Flt Non-Uni<sup>13</sup>|1432<sup>3</sup>|\~0.007<sup>3</sup>|1x|\~0.63<sup>1</sup>|\~25.8 us|1.83x|
-|Fxd Non-Uni<sup>14</sup>|1376<sup>3</sup>|\~0.007<sup>3</sup>|1x|\~0.61<sup>1</sup>|\~6.5 us|7.27x|
-|Fxd Non-Uni (safe)<sup>15</sup>|1916<sup>3</sup>|\~0.007<sup>3</sup>|1x|\~0.61<sup>1</sup>|\~8.8 us|5.30x|
+|Dbl Non-Uni<sup>12</sup>|824<sup>3</sup>|\~0.007<sup>3</sup>|1.1x|\~0.62<sup>1</sup>|\~40.9 us|1.15x|
+|Flt Non-Uni<sup>13</sup>|1432<sup>3</sup>|\~0.007<sup>3</sup>|1.1x|\~0.63<sup>1</sup>|\~25.8 us|1.83x|
+|Fxd Non-Uni<sup>14</sup>|1376<sup>3</sup>|\~0.007<sup>3</sup>|1.1x|\~0.61<sup>1</sup>|\~6.5 us|7.27x|
+|Fxd Non-Uni (safe)<sup>15</sup>|1916<sup>3</sup>|\~0.007<sup>3</sup>|1.1x|\~0.61<sup>1</sup>|\~8.8 us|5.30x|
 |Sin_32<sup>16</sup>|2128|\~0.0006|N/A|\~0.44|\~19.7 us|2.39x|
 |Sin_52<sup>17</sup>|2144|\~0.000007|85x|\~0.0016|\~22.0 us|2.14x|
 |Sin_73<sup>18</sup>|1280|\~0.00000005|150x|\~0.00002|\~28.1 us|1.67x|
@@ -34,7 +34,7 @@ The following table summarizes the results, though it should be noted that all o
 
 ### Notes:
 1. Memory usage was measured very non-academically, by observing the difference in the output of the `size` tool with each function included and them removed. In particular, I wasn't sure if certain external library functions such as type conversions were included when I didn't want them to be. It seems possible to glean this information from the map file. I'd love to hear any better suggestions!
-2. The "X interp" and "X Non-Uni" functions are compared against their "basic" counterparts (i.e. "LUT X"). The polynomial approximations are compared to `Sin_32`.
+2. The "X interp" and "X Non-Uni" functions are compared to their "basic" counterparts (i.e. "LUT X"). The polynomial approximations are compared to `Sin_32`.
 3. This LUT could be made larger/smaller and more/less accurate by simply increasing or decreasing the number of elements in the table (though care should be taken to ensure that the resulting size allows for a quick and simple hash function, as execution time may be negatively affected if the hash becomes non-trivial).
 4. "LUT double" is a LUT of doubles with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
 5. "LUT float" is a LUT of floats with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
