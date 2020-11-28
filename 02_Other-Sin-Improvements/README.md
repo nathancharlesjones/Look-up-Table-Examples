@@ -534,8 +534,8 @@ x1 = x0 +      /   error * 8
 ```
                 /-------------
 x0 = x1 -      /   error * 8
-          --  /  ------------
-            \/   max(|f''(x)|
+          --  /  -------------
+            \/   max(|f''(x)|)
 ```
 
 ### Comparing to the polynomial approximations
