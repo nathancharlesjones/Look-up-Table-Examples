@@ -14,7 +14,7 @@
 The following table summarizes the results, though it should be noted that all of the LUTs could be made larger/smaller and more/less accurate by simply increasing or decreasing the number of elements in the table (though care should be taken to ensure that the resulting size allows for a quick and simple hash function, as execution time may be negatively affected if the hash becomes non-trivial). This code was compiled for an STM32F1 running at 72 MHz using GCC 6.3.1 on Ubuntu (there’s also code to run this same example on an x86 so you don’t need an STM32F1 in order to test it, though the results are less drastic). The rest of this README should explain each part of the table, so don't fret if parts of it don't make sense at this time.
 |Function|Memory usage<sup>1</sup> (bytes)|Max Absolute Error|Error improvement factor<sup>2</sup>|Percent Error|Execution time|Speed-up factor|
 |---|---|---|---|---|---|---|
-|Library sin|5480|N/A|N/A|\~47 us|
+|Library sin|5480|N/A|N/A|N/A|\~47 us|
 |LUT double<sup>4</sup>|3484<sup>3</sup>|\~0.0076<sup>3</sup>|N/A|\~2.5<sup>1</sup>|\~6.7 us|7.04x|
 |LUT float<sup>5</sup>|2736<sup>3</sup>|\~0.0076<sup>3</sup>|N/A|\~1.5<sup>1</sup>|\~6.4 us|7.38x|
 |LUT fixed<sup>6</sup>|1808<sup>3</sup>|\~0.0077<sup>3</sup>|N/A|\~1.6<sup>1</sup>|\~0.73 us|64.14x|
@@ -33,7 +33,7 @@ The following table summarizes the results, though it should be noted that all o
 |Sin_121<sup>19</sup>|1344|\~0.0000000000007|62189x|\~0.0000000006|\~35.1 us|1.34x|
 
 ### Notes:
-1. Memory usage was measured very non-academically, by observing the difference in the output of the `size` tool with each function included and them removed. In particular, I wasn't sure if certain external library functions such as type conversions were included when I didn't want them to be. It seems possible to glean this information from the map file. I'd love to hear any better suggestions!
+1. Memory usage was measured very non-academically, by observing the difference in the output of the `size` tool with each function included and then removed. In particular, I wasn't sure if certain external library functions such as type conversions were included when I didn't want them to be. It seems possible to glean this information from the map file. I'd love to hear any better suggestions!
 2. The "X interp" and "X Non-Uni" functions are compared to their "basic" counterparts (i.e. "LUT X"). The polynomial approximations are compared to `Sin_32`.
 3. This LUT could be made larger/smaller and more/less accurate by simply increasing or decreasing the number of elements in the table (though care should be taken to ensure that the resulting size allows for a quick and simple hash function, as execution time may be negatively affected if the hash becomes non-trivial).
 4. "LUT double" is a LUT of doubles with uniform distribution which uses no interpolation. It was stored in RAM in my tests.
