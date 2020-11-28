@@ -94,7 +94,7 @@ static const double sin_table[SIN_LUT_SIZE] =
     -0.06439072818171630, -0.04879092816731250, -0.03317921654755680, -0.01755940469793780, -0.00193530597149897,  0.01368926523213660
 };
 ```
-At each index X is stored the value of sin(X/64), allowing us to find the value of any radian angle from zero to 2\*PI simply by accessing the array (e.g. `sin[50]` is equivalent to `sin(50/64)`; notice how the first statement is merely an array access while the second is a library function call). The array size (which may seem odd) was chosen to be an integer which was slightly greater than a power-of-two multiple of 2\*PI whose value was in the low-hundreds. The "power-of-two multiple" criteria was imposed to make converting from radians to array indices easier (power-of-two multplies or divides are far easier to execute in software than any of type of multiplication or division). The "value in the low-hundreds" criteria was imposed in order to have enough data points to keep the average error low (a table with only 10 elements will have a lot of error for values that lie in between the elements, since the data points are so far apart; however, a table with 1000 elements or more would take up too much space in memory). The process of converting an input in radians into an array index is called "hashing" and the function or code that does the conversion is called the "hash function" or, simply, the "hash". Our hash looks like this:
+At each index X is stored the value of sin(X/64), allowing us to find the value of any radian angle from zero to 2\*PI simply by accessing the array (e.g. `sin[50]` is equivalent to `sin(50/64)`; notice how the first statement is merely an array access while the second is a library function call). The array size (which may seem odd) was chosen to be an integer which was slightly greater than a power-of-two multiple of 2\*PI whose value was in the low-hundreds. The "power-of-two multiple" criteria was imposed to make converting from radians to array indices easier (power-of-two multplies or divides are far easier to execute in software than any other type of multiplication or division). The "value in the low-hundreds" criteria was imposed in order to have enough data points to keep the average error low (a table with only 10 elements will have a lot of error for values that lie in between the elements, since the data points are so far apart; however, a table with 1000 elements or more would take up too much space in memory). The process of converting an input in radians into an array index is called "hashing" and the function or code that does the conversion is called the "hash function" or, simply, the "hash". Our hash looks like this:
 ```
 int table_index = (int)( radians * 64 );
 ```
@@ -106,10 +106,10 @@ The array is made `const` so that it is stored in ROM, not RAM; either is fine, 
 ```
 double sin_LUT(double radians)
 {
-	...
+    ...
     // Not shown: Converting "radians" to an array index and also ensuring that it's a valid index
     ...
-	return sin_table[ idx ];
+    return sin_table[ idx ];
 }
 ```
 This function converts the input to an appropriate integer and also makes sure that it falls within the array bounds (see the code comments for additional details).
