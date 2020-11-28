@@ -523,23 +523,23 @@ Acheiving the same maximum error as our LUTs with linear interpolation above (0.
 
 For any other function, `f(x)`, here are the steps to repeat what we've done above:
 1. Determine the second derivative of `f(x)` (`f''(x)`).
-2. Identify where the absolute value of the second derivative is DECREASING; compute x1 from x0 (i.e. iterate FORWARD) using the following equation:
+2. Identify where the absolute value of the second derivative is DECREASING; compute x1 from x0 (i.e. iterate FORWARD) using the following equation (where `max(|f''(x)|)` is only evaluated over the range `[x0, x1]`):
 ```
-                /-----------
-x1 = x0 +      /  error * 8
-          --  /  ----------
-            \/     sin(x0)
+                /-------------
+x1 = x0 +      /   error * 8
+          --  /  -------------
+            \/   max(|f''(x)|)
 ```
-3. Identify where the absolute value of the second derivative is INCREASING; compute x0 from x1 (i.e. iterate BACKWARD) using the following equation:
+3. Identify where the absolute value of the second derivative is INCREASING; compute x0 from x1 (i.e. iterate BACKWARD) using the following equation (where `max(|f''(x)|)` is only evaluated over the range `[x0, x1]`):
 ```
-                /-----------
-x0 = x1 -      /  error * 8
-          --  /  ----------
-            \/     sin(x1)
+                /-------------
+x0 = x1 -      /   error * 8
+          --  /  ------------
+            \/   max(|f''(x)|
 ```
 
 ### Comparing to the polynomial approximations
 
-Another way to implement the sin (and other trig) function is by approximating it with a high-order polynomial. This is conceptually similar to the idea of a linear interpolation except that higher-order polynomials can be accurate over a much wider range than a simple line can be. Jack Ganssle discusses this approach in-depth [here](http://www.ganssle.com/approx.htm) and I'll not reiterate it. They were included to mostly for my own curiousity about their relative performance.
+Another way to implement the sin (and other trig) function is by approximating it with a high-order polynomial. This is conceptually similar to the idea of a linear interpolation except that higher-order polynomials can be accurate over a much wider range than a simple line can be. Jack Ganssle discusses this approach in-depth [here](http://www.ganssle.com/approx.htm) and I'll not reiterate it. They were included mostly for my own curiousity about their relative performance.
 
 From the table above, we can see that the primary benefit to using a polynomial approximation as compared to the library sin is a reduction in memory size, since the functions all ran about as quickly as the library sin function. They also offer much greater accuracy than could be reasonably achieved with one of our LUTs. If the precision of the library sin function is limited only by the precision of the double data type (roughly 1.1e-16 in the range [-1, 1]), then the final polynomial approximation, `Sin_121`, is the only one to come close to achieving a similar level of accuracy (and a LUT with that level of accuracy would be many hundreds of thousands or millions of elements long!).
