@@ -69,7 +69,6 @@ int main(int argc, char * argv[])
 		err = getSystemTime(p_start);
 		ASSERT( err == 0 );
 		output = sin( input );
-		output = 0;
 		err = getSystemTime(p_end);
 		ASSERT( err == 0 );
 		executionTime_sin_ns += systemTimeDiff_ns(p_start, p_end);
