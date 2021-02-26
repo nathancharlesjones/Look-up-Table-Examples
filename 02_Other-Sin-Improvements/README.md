@@ -12,25 +12,25 @@
 "Other Sin Improvements" builds on the demonstration in "01_Fast-Sin" of using a simple look-up table (LUT) to improve the execution time of the library sin function. These LUT examples add different data types, linear interpolation, and arbitrary-input tables in order to improve the execution time, accuracy, or memory size of the LUT in "01_Fast-Sin". It also profiles and compares to the LUT implementations four different implementations of "sin" that utilize various polynomial approximations. Lastly, it builds upon the the professional quality code from "01_Fast-Sin" by parameterizing the test code (to more easily change which functions are being tested).
 
 The following table summarizes the results, though it should be noted that all of the LUTs could be made larger/smaller and more/less accurate by simply increasing or decreasing the number of elements in the table (though care should be taken to ensure that the resulting size allows for a quick and simple hash function, as execution time may be negatively affected if the hash becomes non-trivial). This code was compiled for an STM32F1 running at 72 MHz using GCC 6.3.1 on Ubuntu (there’s also code to run this same example on an x86 so you don’t need an STM32F1 in order to test it, though the results are less drastic). The rest of this README should explain each part of the table, so don't fret if parts of it don't make sense at this time.
-|Function|Memory usage<sup>1</sup> (bytes)|Max Absolute Error|Error improvement factor<sup>2</sup>|Percent Error|Execution time|Speed-up factor|
-|---|---|---|---|---|---|---|
-|Library sin|5480|N/A|N/A|N/A|\~47 us|
-|LUT double<sup>4</sup>|3484<sup>3</sup>|\~0.0076<sup>3</sup>|N/A|\~2.5<sup>1</sup>|\~6.7 us|7.04x|
-|LUT float<sup>5</sup>|2736<sup>3</sup>|\~0.0076<sup>3</sup>|N/A|\~1.5<sup>1</sup>|\~6.4 us|7.38x|
-|LUT fixed<sup>6</sup>|1808<sup>3</sup>|\~0.0077<sup>3</sup>|N/A|\~1.6<sup>1</sup>|\~0.73 us|64.14x|
-|LUT fixed (safe)<sup>7</sup>|2060<sup>3</sup>|\~0.0077<sup>3</sup>|N/A|\~1.5<sup>1</sup>|\~1.3 us|34.95x|
-|Dbl interp<sup>8</sup>|3548<sup>3</sup>|\~0.00003<sup>3</sup>|250x|\~0.002<sup>1</sup>|\~13.9 us|3.37x|
-|Flt interp<sup>9</sup>|2848<sup>3</sup>|\~0.00003<sup>3</sup>|249x|\~0.002<sup>1</sup>|\~9.9 us|4.74x|
-|Fxd interp<sup>10</sup>|1840<sup>3</sup>|\~0.00003<sup>3</sup>|254x|\~0.002<sup>1</sup>|\~1.0 us|46.59x|
-|Fxd interp (safe)<sup>11</sup>|2284<sup>3</sup>|\~0.00003<sup>3</sup>|254x|\~0.002<sup>1</sup>|\~2.6 us|18.01x|
-|Dbl Non-Uni<sup>12</sup>|824<sup>3</sup>|\~0.007<sup>3</sup>|1.1x|\~0.62<sup>1</sup>|\~40.9 us|1.15x|
-|Flt Non-Uni<sup>13</sup>|1432<sup>3</sup>|\~0.007<sup>3</sup>|1.1x|\~0.63<sup>1</sup>|\~25.8 us|1.83x|
-|Fxd Non-Uni<sup>14</sup>|1376<sup>3</sup>|\~0.007<sup>3</sup>|1.1x|\~0.61<sup>1</sup>|\~6.5 us|7.27x|
-|Fxd Non-Uni (safe)<sup>15</sup>|1916<sup>3</sup>|\~0.007<sup>3</sup>|1.1x|\~0.61<sup>1</sup>|\~8.8 us|5.30x|
-|Sin_32<sup>16</sup>|2128|\~0.0006|N/A|\~0.44|\~19.7 us|2.39x|
-|Sin_52<sup>17</sup>|2144|\~0.000007|85x|\~0.0016|\~22.0 us|2.14x|
-|Sin_73<sup>18</sup>|1280|\~0.00000005|150x|\~0.00002|\~28.1 us|1.67x|
-|Sin_121<sup>19</sup>|1344|\~0.0000000000007|62189x|\~0.0000000006|\~35.1 us|1.34x|
+|Function                       |Memory usage<sup>1</sup> (bytes)|Max Absolute Error   |Error improvement factor<sup>2</sup>|Percent Error      |Execution time|Speed-up factor|
+|-------------------------------|--------------------------------|---------------------|------------------------------------|-------------------|--------------|---------------|
+|Library sin                    |5480                            |N/A                  |N/A                                 |N/A                |\~47 us       |               |
+|LUT double<sup>4</sup>         |3484<sup>3</sup>                |\~0.0076<sup>3</sup> |N/A                                 |\~2.5<sup>1</sup>  |\~6.7 us      |7.04x          |
+|LUT float<sup>5</sup>          |2736<sup>3</sup>                |\~0.0076<sup>3</sup> |N/A                                 |\~1.5<sup>1</sup>  |\~6.4 us      |7.38x          |
+|LUT fixed<sup>6</sup>          |1808<sup>3</sup>                |\~0.0077<sup>3</sup> |N/A                                 |\~1.6<sup>1</sup>  |\~0.73 us     |64.14x         |
+|LUT fixed (safe)<sup>7</sup>   |2060<sup>3</sup>                |\~0.0077<sup>3</sup> |N/A                                 |\~1.5<sup>1</sup>  |\~1.3 us      |34.95x         |
+|Dbl interp<sup>8</sup>         |3548<sup>3</sup>                |\~0.00003<sup>3</sup>|250x                                |\~0.002<sup>1</sup>|\~13.9 us     |3.37x          |
+|Flt interp<sup>9</sup>         |2848<sup>3</sup>                |\~0.00003<sup>3</sup>|249x                                |\~0.002<sup>1</sup>|\~9.9 us      |4.74x          |
+|Fxd interp<sup>10</sup>        |1840<sup>3</sup>                |\~0.00003<sup>3</sup>|254x                                |\~0.002<sup>1</sup>|\~1.0 us      |46.59x         |
+|Fxd interp (safe)<sup>11</sup> |2284<sup>3</sup>                |\~0.00003<sup>3</sup>|254x                                |\~0.002<sup>1</sup>|\~2.6 us      |18.01x         |
+|Dbl Non-Uni<sup>12</sup>       |824<sup>3</sup>                 |\~0.007<sup>3</sup>  |1.1x                                |\~0.62<sup>1</sup> |\~40.9 us     |1.15x          |
+|Flt Non-Uni<sup>13</sup>       |1432<sup>3</sup>                |\~0.007<sup>3</sup>  |1.1x                                |\~0.63<sup>1</sup> |\~25.8 us     |1.83x          |
+|Fxd Non-Uni<sup>14</sup>       |1376<sup>3</sup>                |\~0.007<sup>3</sup>  |1.1x                                |\~0.61<sup>1</sup> |\~6.5 us      |7.27x          |
+|Fxd Non-Uni (safe)<sup>15</sup>|1916<sup>3</sup>                |\~0.007<sup>3</sup>  |1.1x                                |\~0.61<sup>1</sup> |\~8.8 us      |5.30x          |
+|Sin_32<sup>16</sup>            |2128                            |\~0.0006             |N/A                                 |\~0.44             |\~19.7 us     |2.39x          |
+|Sin_52<sup>17</sup>            |2144                            |\~0.000007           |85x                                 |\~0.0016           |\~22.0 us     |2.14x          |
+|Sin_73<sup>18</sup>            |1280                            |\~0.00000005         |150x                                |\~0.00002          |\~28.1 us     |1.67x          |
+|Sin_121<sup>19</sup>           |1344                            |\~0.0000000000007    |62189x                              |\~0.0000000006     |\~35.1 us     |1.34x          |
 
 ### Notes:
 1. Memory usage was measured very non-academically, by observing the difference in the output of the `size` tool with each function included and then removed. In particular, I wasn't sure if certain external library functions such as type conversions were included when I didn't want them to be. It seems possible to glean this information from the map file. I'd love to hear any better suggestions!
@@ -353,7 +353,7 @@ Since multiplying and dividing fixed-point numbers changes the location of the r
         q3_4_t x = FMUL( 0b01100000, 0b00010000, 4 );
         ```
 
-Integer overflow is a commonly exploited security bug (in very similar ways to a "buffer overflow", in which an array is written to or accessed beyond its bounds), so it's my opinion that integer operations should be checked for overflow after (or as a part of) each operation. To do that, I added the `SAFE_` functions to `fixed_point.h`. These functions store the 32-bit operands into 64-bit integers before executing the desired operation (solving problem 2.ii. above of fixed-point numbers being truncated before they are able to be shifted down). The `SAFE_` functions also check for overflow AFTER the shift; if the result is GREATER than INT32_MAX or LESS than INT32_MIN, then no value is stored in the output variable and a `-1` is returned, indicating an error. However, if the safety check passes, then the result of the math operation is stored in the output variable and a value of `0` is returned, indicating "no error". The LUT code that uses these functions (which all end in `_safe`) checks this value to make sure no math operations inadvertently overflowed. I chose to `ASSERT` that the error code returned is `0`, since I figured that anything else constituted a programming error. However, it is possible to recover from a fault like that, and another developer may simply chose to retry the operation with a larger data type for the return variable.
+Integer overflow is a commonly exploited security bug (in very similar ways to a "buffer overflow", in which an array is written to or accessed beyond its bounds), so it's my opinion that integer operations should be checked for overflow after (or as a part of) each operation. To do that, I added the `SAFE_` functions to `fixed_point.h`. These functions store the 32-bit operands into 64-bit integers before executing the desired operation (solving problem 2.2 above of fixed-point numbers being truncated before they are able to be shifted down). The `SAFE_` functions also check for overflow AFTER the shift; if the result is GREATER than INT32_MAX or LESS than INT32_MIN, then no value is stored in the output variable and a `-1` is returned, indicating an error. However, if the safety check passes, then the result of the math operation is stored in the output variable and a value of `0` is returned, indicating "no error". The LUT code that uses these functions (which all end in `_safe`) checks this value to make sure no math operations inadvertently overflowed. I chose to `ASSERT` that the error code returned is `0`, since I figured that anything else constituted a programming error. However, it is possible to recover from a fault like that, and another developer may simply chose to retry the operation with a larger data type for the return variable.
 
 The fixed-point LUTs were significantly smaller and faster than either the double or float LUTs (even after including overflow checks), though at the cost of a fair bit of added complexity.
 
